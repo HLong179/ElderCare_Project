@@ -1,0 +1,3 @@
+rootProject.name = 'Elder_Care'
+
+include ':app'
