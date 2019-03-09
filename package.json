@@ -7,8 +7,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "moment": "^2.24.0",
     "react": "16.6.3",
-    "react-native": "0.58.4"
+    "react-native": "0.58.4",
+    "rn-samsung-health": "^0.1.4"
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",

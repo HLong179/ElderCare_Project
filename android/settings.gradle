@@ -1,3 +1,5 @@
 rootProject.name = 'Elder_Care'
 
 include ':app'
+include ':rn-samsung-health'
+        project(':rn-samsung-health').projectDir = new File(settingsDir, '../node_modules/rn-samsung-health/android')
