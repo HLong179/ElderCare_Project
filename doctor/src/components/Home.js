@@ -1,17 +1,31 @@
 import React, { Component } from "react"
-import { Link } from "react-router-dom"
-import { Divider } from "antd"
+import { Layout } from "antd"
+import { Switch, Route } from "react-router-dom"
+import ASider from "./Layout/Sider"
+import AHeader from "./Layout/Header"
+import AFooter from "./Layout/AFooter"
+import "./Home.css"
+import DashboardContent from "./Contents/DashboardContent"
+import ListPatients from "./Contents/ListPatients";
+import Schedules from "./Contents/Schedules";
 
-export default class Home extends Component {
+class Home extends Component {
   render() {
     return (
-      <div>
-        Home Page
-        <Divider />
-        <Link to="/login">Login</Link>
-        <Divider />
-        <Link to="/register">Register</Link>
-      </div>
+      <Layout style={{ minHeight: "100vh" }}>
+        <ASider />
+        <Layout>
+          <AHeader />
+          <Switch>
+            <Route exact path="/dashboard" component={DashboardContent} />
+            <Route exact path="/list-patients" component={ListPatients} />
+            <Route exact path="/schedule" component={Schedules} />
+          </Switch>
+          <AFooter />
+        </Layout>
+      </Layout>
     )
   }
 }
+
+export default Home
