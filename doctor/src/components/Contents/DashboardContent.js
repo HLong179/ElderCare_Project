@@ -12,7 +12,7 @@ class DashboardContent extends Component {
             <Row gutter={16}>
               <Col className="gutter-row" span={6}>
                 <div className="gutter-box">
-                  <Card title="Lịch hẹn" bordered={false} />
+                  <Card title="Lịch khám bệnh" bordered={false} />
                 </div>
               </Col>
               <Col className="gutter-row" span={6}>

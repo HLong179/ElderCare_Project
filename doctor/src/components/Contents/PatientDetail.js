@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import data from "../../data"
 import { Line } from "react-chartjs-2"
-import { Layout, Typography, Row, Col, AutoComplete } from "antd"
+import { Layout, Typography, Row, Col } from "antd"
 import "../Home.css"
 
 import patientAvatar from "../../assets/avatar.jpg"

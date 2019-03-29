@@ -6,12 +6,17 @@ import AHeader from "./Layout/Header"
 import AFooter from "./Layout/AFooter"
 import "./Home.css"
 import DashboardContent from "./Contents/DashboardContent"
-import ListPatients from "./Contents/ListPatients";
-import Schedules from "./Contents/Schedules";
-import PatientDetail from "./Contents/PatientDetail";
-import Statictis from "./Contents/Statictis";
+import ListPatients from "./Contents/ListPatients"
+import Schedules from "./Contents/Schedules"
+import PatientDetail from "./Contents/PatientDetail"
+import Statictis from "./Contents/Statictis"
 
 class Home extends Component {
+  componentWillMount() {
+    if ((this.props.location.pathname === "/")) {
+      this.props.history.push("/dashboard")
+    }
+  }
   render() {
     return (
       <Layout style={{ minHeight: "100vh" }}>
@@ -19,11 +24,11 @@ class Home extends Component {
         <Layout>
           <AHeader />
           <Switch>
-            <Route exact path="/dashboard" component={DashboardContent} />
-            <Route exact path="/list-patients" component={ListPatients} />
-            <Route exact path="/schedule" component={Schedules} />
-            <Route exact path="/patient/:id" component={PatientDetail} />
-            <Route exact path="/statistic" component={Statictis} />
+            <Route path="/dashboard" component={DashboardContent} />
+            <Route path="/list-patients" component={ListPatients} />
+            <Route path="/schedule" component={Schedules} />
+            <Route path="/patient/:id" component={PatientDetail} />
+            <Route path="/statistic" component={Statictis} />
           </Switch>
           <AFooter />
         </Layout>
