@@ -177,9 +177,7 @@ class AHeader extends Component {
             transform: "translateY(-50%)",
             marginLeft: "20px"
           }}
-        >
-          <Title level={3}>Tổng quan</Title>
-        </div>
+        />
         <div
           className="header-right"
           style={{ float: "right", marginRight: "20px" }}

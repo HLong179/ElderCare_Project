@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { Layout, Menu, Icon } from "antd"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 const { Sider } = Layout
 
 class ASider extends Component {
@@ -27,22 +27,22 @@ class ASider extends Component {
           style={{ paddingTop: "60px" }}
         >
           <Menu.Item key="1">
-            <Link to={"/dashboard"}>
+            <NavLink to={"/dashboard"}>
               <Icon type="home" />
               <span>Tổng quan</span>
-            </Link>
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="2">
-            <Link to={"/list-patients"}>
+            <NavLink to={"/list-patients"}>
               <Icon type="user" />
               <span>Danh sách bệnh nhân</span>
-            </Link>
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="3">
-            <Link to={"/schedule"}>
+            <NavLink to={"/schedule"}>
               <Icon type="schedule" />
               <span>Lịch khám bệnh</span>
-            </Link>
+            </NavLink>
           </Menu.Item>
         </Menu>
       </Sider>
