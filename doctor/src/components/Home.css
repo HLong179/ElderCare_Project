@@ -12,3 +12,7 @@
 .clearfix {
   overflow: auto;
 }
+
+.patientDetails-title {
+  font-weight: 500;
+}

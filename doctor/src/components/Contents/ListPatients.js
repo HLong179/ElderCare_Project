@@ -11,7 +11,7 @@ class ListPatients extends Component {
   state = {
     searchText: ""
   }
-  getColumnSearchProps = (dataIndex) => ({
+  getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -93,6 +93,10 @@ class ListPatients extends Component {
       {
         title: "Địa chỉ",
         dataIndex: "address"
+      },
+      {
+        title: "Số ĐT",
+        dataIndex: "phone_number"
       },
       {
         title: "Tình trạng bệnh lý",

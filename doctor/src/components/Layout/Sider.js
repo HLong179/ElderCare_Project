@@ -44,6 +44,12 @@ class ASider extends Component {
               <span>Lịch khám bệnh</span>
             </NavLink>
           </Menu.Item>
+          <Menu.Item key="4">
+            <NavLink to={"/statistic"}>
+              <Icon type="line-chart" />
+              <span>Thống kê</span>
+            </NavLink>
+          </Menu.Item>
         </Menu>
       </Sider>
     )

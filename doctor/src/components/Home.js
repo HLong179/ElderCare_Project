@@ -8,6 +8,8 @@ import "./Home.css"
 import DashboardContent from "./Contents/DashboardContent"
 import ListPatients from "./Contents/ListPatients";
 import Schedules from "./Contents/Schedules";
+import PatientDetail from "./Contents/PatientDetail";
+import Statictis from "./Contents/Statictis";
 
 class Home extends Component {
   render() {
@@ -20,6 +22,8 @@ class Home extends Component {
             <Route exact path="/dashboard" component={DashboardContent} />
             <Route exact path="/list-patients" component={ListPatients} />
             <Route exact path="/schedule" component={Schedules} />
+            <Route exact path="/patient/:id" component={PatientDetail} />
+            <Route exact path="/statistic" component={Statictis} />
           </Switch>
           <AFooter />
         </Layout>
