@@ -64,8 +64,12 @@ class PatientDetail extends Component {
           <div className="list-drug">
             <Title level={3}>Danh sách thuốc</Title>
             <ul>
-              <li className="list-drug-item">YESOM 40 40mg (Esomeprazol 40mg)</li>
-              <li className="list-drug-item">SUCRATE GEL (Sucralfate 1g (goi))</li>
+              <li className="list-drug-item">
+                YESOM 40 40mg (Esomeprazol 40mg)
+              </li>
+              <li className="list-drug-item">
+                SUCRATE GEL (Sucralfate 1g (goi))
+              </li>
               <li className="list-drug-item">ARTHUR (Trimebutine 200)</li>
               <li className="list-drug-item">PAPAZE</li>
               <li className="list-drug-item">BIOCID MH 3.5+2g</li>
@@ -141,6 +145,7 @@ class PatientDetail extends Component {
       //   backgroundColor: "#007bff"
     }
     const chartOption = {
+      responsive: true,
       title: {
         display: true,
         text: "Nhịp tim của bệnh nhân trong ngày",

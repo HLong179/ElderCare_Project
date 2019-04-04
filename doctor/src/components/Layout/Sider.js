@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Layout, Menu, Icon } from "antd"
 import { NavLink } from "react-router-dom"
+
 const { Sider } = Layout
 
 class ASider extends Component {
@@ -20,12 +21,8 @@ class ASider extends Component {
         onCollapse={this.onCollapse}
         theme="light"
       >
-        <Menu
-          theme="light"
-          defaultSelectedKeys={["1"]}
-          mode="inline"
-          style={{ paddingTop: "60px" }}
-        >
+        <div className="logo" style={{fontSize: this.state.collapsed ? '16px' : '22px'}}>LOGO</div>
+        <Menu theme="light" defaultSelectedKeys={["1"]} mode="inline">
           <Menu.Item key="1">
             <NavLink to={"/dashboard"}>
               <Icon type="home" />

@@ -1,12 +1,15 @@
 .logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
+  height: 60px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 60px;
 }
 
 .user-avatar {
-    cursor: pointer;
-    margin-left: 50px;
+  cursor: pointer;
+  margin-left: 50px;
 }
 
 .clearfix {
@@ -15,4 +18,17 @@
 
 .patientDetails-title {
   font-weight: 500;
+}
+
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.events .ant-badge-status {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-overflow: ellipsis;
+  font-size: 12px;
 }

@@ -23,7 +23,7 @@ const notify = (
       style={{
         borderBottom: "1px solid #e8e8e8",
         maxWidth: "400px",
-        marginTop: "10px"
+
       }}
     >
       <div className="clearfix">
@@ -64,8 +64,7 @@ const notify = (
       key="1"
       style={{
         borderBottom: "1px solid #e8e8e8",
-        maxWidth: "400px",
-        marginTop: "10px"
+        maxWidth: "400px"
       }}
     >
       <div className="clearfix">
@@ -106,8 +105,7 @@ const notify = (
       key="2"
       style={{
         borderBottom: "1px solid #e8e8e8",
-        maxWidth: "400px",
-        marginTop: "10px"
+        maxWidth: "400px"
       }}
     >
       <div className="clearfix">
@@ -182,11 +180,11 @@ class AHeader extends Component {
           className="header-right"
           style={{ float: "right", marginRight: "20px" }}
         >
-          <Search
+          {/* <Search
             placeholder="Tìm kiếm..."
             onSearch={value => console.log(value)}
             style={{ width: 200 }}
-          />
+          /> */}
           <Dropdown overlay={notify}>
             <Badge dot>
               <Icon
