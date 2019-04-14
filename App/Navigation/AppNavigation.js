@@ -27,9 +27,9 @@ const PrimaryNav = StackNavigator(
 		Login: {
 			screen: Login
 		},
-		// FormResetPass: {
-		// 	screen: ResetPassword
-		// }
+		ResetPass: {
+			screen: ResetPassword
+		}
 	},
 	{
 		initialRouteName: "Login",
