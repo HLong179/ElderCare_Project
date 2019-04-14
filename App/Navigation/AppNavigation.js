@@ -7,7 +7,7 @@ import styles from "./Styles/NavigationStyles";
 import NavigationDrawer from "./NavigationDrawer";
 import Home from "../Containers/Home";
 import Login from "../Containers/AuthPage/FormLogin";
-// import ResetPassword from "../Containers/AuthPage/FormResetPass"
+import ResetPassword from "../Containers/AuthPage/FormResetPass"
 import FormHeartRate from "../Containers/HeartCard/FormHeartRate";
 
 const PrimaryNav = StackNavigator(

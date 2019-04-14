@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {TextInput, View, StyleSheet, Text, TouchableHighlight, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Button } from 'react-native-elements';
+import { Button } from 'native-base';
 
 class resetPass extends Component {
     static navigationOptions = {
