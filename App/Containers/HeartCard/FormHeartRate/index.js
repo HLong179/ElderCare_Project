@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import firebase from 'react-native-firebase';
 
 export default class DateTimePickerTester extends Component {
   state = {
@@ -12,6 +13,12 @@ export default class DateTimePickerTester extends Component {
   _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
 
   _handleDatePicked = (date) => {
+    // do something with firebase here!!
+
+    const ref = firebase.database().ref('Users/Devices/S1mdk2XxXg/Interval');
+    ref.set()
+
+
     console.log('A date has been picked: ', date);
     this._hideDateTimePicker();
   };
