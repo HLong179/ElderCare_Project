@@ -6,27 +6,35 @@ import styles from "./Styles/NavigationStyles";
 
 import NavigationDrawer from "./NavigationDrawer";
 import Home from "../Containers/Home";
-import FormHeartRate from "../Containers/HeartCard/FormHeartRate"
+import Login from "../Containers/AuthPage/FormLogin";
+// import ResetPassword from "../Containers/AuthPage/FormResetPass"
+import FormHeartRate from "../Containers/HeartCard/FormHeartRate";
 
 const PrimaryNav = StackNavigator(
-  {
-    Home: {
-      screen: Home,
+	{
+		Home: {
+			screen: Home,
+		},
+		FormHeartRate: {
+			screen: FormHeartRate,
+			navigationOptions: {
+				headerTitleStyle: {
+					fontWeight: "bold",
+					color: "#fff",
+				},
+			}
+		},
+		Login: {
+			screen: Login
+		},
+		// FormResetPass: {
+		// 	screen: ResetPassword
+		// }
 	},
-	FormHeartRate: {
-		screen: FormHeartRate,
-		navigationOptions: {
-			headerTitleStyle: {
-			  fontWeight: "bold",
-			  color: "#fff",
-			},
-		  }
-	},
-  },
-  {
-    initialRouteName: "Home",
-    headerMode: "none"
-  }
+	{
+		initialRouteName: "Login",
+		headerMode: "none"
+	}
 );
 
 export default PrimaryNav;
