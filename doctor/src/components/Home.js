@@ -26,9 +26,9 @@ class Home extends Component {
           <Switch>
             <Route path="/dashboard" component={DashboardContent} />
             <Route path="/list-patients" component={ListPatients} />
-            <Route path="/schedule" component={Schedules} />
+            <Route path="/schedules" component={Schedules} />
             <Route path="/patient/:id" component={PatientDetail} />
-            <Route path="/statistic" component={Statictis} />
+            <Route path="/statistics" component={Statictis} />
           </Switch>
           <AFooter />
         </Layout>

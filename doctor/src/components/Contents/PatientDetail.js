@@ -1,16 +1,67 @@
 import React, { Component } from "react"
 import data from "../../data"
 import { Line } from "react-chartjs-2"
-import { Layout, Typography, Row, Col } from "antd"
+import {
+  Layout,
+  Typography,
+  Row,
+  Col,
+  Button,
+  Icon,
+  Modal,
+  Form,
+  Input,
+  InputNumber
+} from "antd"
 import "../Home.css"
 
 import patientAvatar from "../../assets/avatar.jpg"
 
 const { Content } = Layout
 const { Title } = Typography
+const { TextArea } = Input
 
-class PatientDetail extends Component {
+class PatientDetailWithForm extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      subcribe: false,
+      modaVvisible: false,
+      drugs: []
+    }
+  }
+  handleSubcribe = () => {
+    this.setState({
+      subcribe: !this.state.subcribe
+    })
+  }
+  showModal = () => {
+    this.props.form.resetFields()
+    this.setState({
+      visible: true
+    })
+  }
+
+  handleCancel = e => {
+    this.setState({
+      visible: false
+    })
+  }
+  handleSubmit = e => {
+    e.preventDefault()
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.setState({
+          drugs: [...this.state.drugs, values],
+          visible: false
+        })
+      } else {
+        console.log(err)
+      }
+    })
+  }
   displayPatientDetails() {
+    const { getFieldDecorator } = this.props.form
     let newData = data.filter(
       patient => Number(patient.key) === Number(this.props.match.params.id)
     )[0]
@@ -63,17 +114,46 @@ class PatientDetail extends Component {
           </Row>
           <div className="list-drug">
             <Title level={3}>Danh sách thuốc</Title>
-            <ul>
-              <li className="list-drug-item">
-                YESOM 40 40mg (Esomeprazol 40mg)
-              </li>
-              <li className="list-drug-item">
-                SUCRATE GEL (Sucralfate 1g (goi))
-              </li>
-              <li className="list-drug-item">ARTHUR (Trimebutine 200)</li>
-              <li className="list-drug-item">PAPAZE</li>
-              <li className="list-drug-item">BIOCID MH 3.5+2g</li>
-              <li className="list-drug-item">DIGLUMISAN</li>
+            <Button
+              type="dashed"
+              style={{ width: "40%" }}
+              onClick={this.showModal}
+            >
+              <Icon type="plus" /> Thêm thuốc
+            </Button>
+            <Modal
+              title="Thêm thuốc"
+              visible={this.state.visible}
+              onOk={this.handleSubmit}
+              onCancel={this.handleCancel}
+            >
+              <Form onSubmit={this.handleSubmit}>
+                <Form.Item label="Tên thuốc">
+                  {getFieldDecorator("drugName", {
+                    rules: [
+                      { required: true, message: "Please input drug name!" }
+                    ]
+                  })(<Input />)}
+                </Form.Item>
+                <Form.Item label="Số lượng">
+                  {getFieldDecorator("drugNumber", {
+                    rules: [{ required: true }],
+                    initialValue: 1
+                  })(<InputNumber min={1} max={10} />)}
+                </Form.Item>
+                <Form.Item label="Ghi chú">
+                  {getFieldDecorator("drugNote", {})(<TextArea />)}
+                </Form.Item>
+              </Form>
+            </Modal>
+            <ul style={{ marginTop: "20px", fontWeight: "500" }}>
+              {this.state.drugs.map((drug, index) => {
+                return (
+                  <li className="list-drug-item" key={index}>
+                    {drug.drugName} {"  -  "} {drug.drugNumber + " viên"}
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </React.Fragment>
@@ -168,12 +248,47 @@ class PatientDetail extends Component {
         ]
       }
     }
+
+    console.log(this.state.drugs)
+
     return (
       <Content style={{ margin: "16px 16px" }}>
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
-          <Title level={3} style={{ marginBottom: 20 }}>
-            Thông tin chi tiết của bệnh nhân
-          </Title>
+          <Row>
+            <Col span={20}>
+              <Title level={3} style={{ marginBottom: 20 }}>
+                Thông tin chi tiết của bệnh nhân
+              </Title>
+            </Col>
+            <Col span={4}>
+              {this.state.subcribe ? (
+                <Button
+                  icon="eye-invisible"
+                  type="primary"
+                  onClick={this.handleSubcribe}
+                  style={{
+                    width: "9em",
+                    backgroundColor: "tomato",
+                    border: "none"
+                  }}
+                >
+                  Bỏ theo dõi
+                </Button>
+              ) : (
+                <Button
+                  icon="eye"
+                  type="primary"
+                  onClick={this.handleSubcribe}
+                  style={{
+                    width: "9em"
+                  }}
+                >
+                  Theo dõi
+                </Button>
+              )}
+            </Col>
+          </Row>
+
           {this.displayPatientDetails()}
           <Line data={chartData} options={chartOption} />
         </div>
@@ -182,4 +297,7 @@ class PatientDetail extends Component {
   }
 }
 
+const PatientDetail = Form.create({ name: "patient_detail" })(
+  PatientDetailWithForm
+)
 export default PatientDetail

@@ -54,7 +54,7 @@ export default class Schedules extends Component {
           <Title level={3} style={{ marginBottom: 20 }}>
             Lịch khám bệnh
           </Title>
-          <Calendar dateCellRender={this.dateCellRender} />
+          <Calendar dateCellRender={this.dateCellRender} style={{ backgroundColor: "#FAFAFA" }} />
         </div>
       </Content>
     )

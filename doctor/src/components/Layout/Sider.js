@@ -36,17 +36,17 @@ class ASider extends Component {
             </NavLink>
           </Menu.Item>
           <Menu.Item key="3">
-            <NavLink to={"/schedule"}>
+            <NavLink to={"/schedules"}>
               <Icon type="schedule" />
               <span>Lịch khám bệnh</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="4">
-            <NavLink to={"/statistic"}>
+          {/* <Menu.Item key="4">
+            <NavLink to={"/statistics"}>
               <Icon type="line-chart" />
               <span>Thống kê</span>
             </NavLink>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
       </Sider>
     )
