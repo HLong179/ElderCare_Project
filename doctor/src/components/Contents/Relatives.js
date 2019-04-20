@@ -30,12 +30,12 @@ const { Title } = Typography
 //   })
 // }
 
-const IconText = ({ type, text }) => (
-  <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-    {text}
-  </span>
-)
+// const IconText = ({ type, text }) => (
+//   <span>
+//     <Icon type={type} style={{ marginRight: 8 }} />
+//     {text}
+//   </span>
+// )
 
 const findPatient = value => {
   const res = data.filter(patient => patient.key.toString() === value)[0]
