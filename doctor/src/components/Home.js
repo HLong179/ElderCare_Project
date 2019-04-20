@@ -9,11 +9,11 @@ import DashboardContent from "./Contents/DashboardContent"
 import ListPatients from "./Contents/ListPatients"
 import Schedules from "./Contents/Schedules"
 import PatientDetail from "./Contents/PatientDetail"
-import Statictis from "./Contents/Statictis"
+import Relatives from "./Contents/Relatives"
 
 class Home extends Component {
   componentWillMount() {
-    if ((this.props.location.pathname === "/")) {
+    if (this.props.location.pathname === "/") {
       this.props.history.push("/dashboard")
     }
   }
@@ -28,7 +28,7 @@ class Home extends Component {
             <Route path="/list-patients" component={ListPatients} />
             <Route path="/schedules" component={Schedules} />
             <Route path="/patient/:id" component={PatientDetail} />
-            <Route path="/statistics" component={Statictis} />
+            <Route path="/relatives" component={Relatives} />
           </Switch>
           <AFooter />
         </Layout>

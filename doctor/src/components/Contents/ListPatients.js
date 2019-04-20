@@ -75,6 +75,10 @@ class ListPatients extends Component {
   render() {
     const columns = [
       {
+        title: "ID",
+        dataIndex: "key"
+      },
+      {
         title: "Họ và tên",
         dataIndex: "name",
         render: (text, record) => (
