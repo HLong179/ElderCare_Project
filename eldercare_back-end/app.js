@@ -8,13 +8,13 @@ app.use(bodyParser.json());
  }));
 
  var accountController = require('./controllers/accountController');
- var healthIndexesController = require('./controllers/healthIndexesController');
+//  var healthIndexesController = require('./controllers/healthIndexesController');
  // default route
  app.get('/', function (req, res) {
      return res.send({ error: true, message: 'hello' })
  });
  app.use('/account', accountController);
- app.use('/healthIndexes', healthIndexesController);
+//  app.use('/healthIndexes', healthIndexesController);
  // set port
  const port = process.env.PORT || 3000;
  app.listen(port, () => {

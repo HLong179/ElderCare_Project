@@ -6,15 +6,40 @@ var md5 = require('crypto-js/md5')
 
 var router = express.Router();
 
-router.post('/addUser', (req, res) => {
+router.post('/addMainUser', (req, res) => {
     try {
         var user = {
+            elder_id: req.body.elder_id,
             name: req.body.name,
             email: req.body.email,
             phone: req.body.phone,
             address: req.body.address,
             username: req.body.username,
-            password: md5(req.body.password).toString()
+            password: md5(req.body.password).toString(),
+            permission: "Main"
+        };
+        accountRepo.addUser(user)
+        .then(result => {
+            console.log("User number", result ,"was added");
+            res.json(user);
+        })
+    }
+    catch (err) {
+        console.log(">>>>> Error:", err);
+    }
+})
+
+router.post('/addSubUser', (req, res) => {
+    try {
+        var user = {
+            elder_id: req.body.elder_id,
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            username: req.body.username,
+            password: md5(req.body.password).toString(),
+            permission: "Sub"
         };
         accountRepo.addUser(user)
         .then(result => {
