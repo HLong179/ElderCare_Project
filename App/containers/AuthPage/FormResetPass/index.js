@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import {TextInput, View, StyleSheet, Text, TouchableHighlight, Platform } from 'react-native';
+import {TextInput, View, StyleSheet, Text, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Button } from 'native-base';
 
 class resetPass extends Component {
-    static navigationOptions = {
-        title: 'Reset Password',
-    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -20,14 +18,14 @@ class resetPass extends Component {
             <View style={styles.container}>
             <Text style={{marginBottom: 20}}>Please enter your information below.</Text>
                 <View style={styles.inputContainer}>
-                    <TextInput placeholder="ID (Email or phone number)" style={styles.textInput} keyboardType="email-address" underlineColorAndroid="transparent" auto-capitalization={false} ></TextInput>
-                    <Icon name={Platform.OS === "ios" ? "ios-mail" : "md-mail"} style={styles.inputIcon} size={25} ></Icon>
+                    <TextInput placeholder="ID (Email or phone number)" style={styles.textInput} keyboardType="email-address" underlineColorAndroid="transparent" auto-capitalization={false} />
+                    <Icon name={Platform.OS === "ios" ? "ios-mail" : "md-mail"} style={styles.inputIcon} size={25} />
                 </View>
-                <View style={{flexDirection:"row"}}>    
-                    <Button buttonStyle={styles.buttonStyle} titleStyle={styles.titleStyle} type="clear" title="Cancel" onPress={() => navigate("Login")}></Button>
-                    <Button buttonStyle={styles.buttonStyle} titleStyle={styles.titleStyle} type="clear" title="Confirm" disabled={!this.state.isIdEmpty}></Button>
+                <View style={{flexDirection:"row"}}>
+                    <Button buttonStyle={styles.buttonStyle} titleStyle={styles.titleStyle} type="clear" title="Cancel" onPress={() => navigate("Login")}/>
+                    <Button buttonStyle={styles.buttonStyle} titleStyle={styles.titleStyle} type="clear" title="Confirm" disabled={!this.state.isIdEmpty}/>
                 </View>
-            </View>            
+            </View>
         );
     }
 }

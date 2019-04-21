@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import PrimaryNav from "../Navigation/AppNavigation"
+import PrimaryNav from "../navigation/AppNavigation"
 import { Container, Header, Content } from 'native-base';
 import HeaderWithIcon from "./Header";
 import FooterTabs from "./FooterTabs";
+import { MenuProvider } from 'react-native-popup-menu';
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -15,7 +17,9 @@ const instructions = Platform.select({
 export default class App extends Component {
   render() {
     return (
-      <View style={{flex: 1}}>
+        <MenuProvider>
+
+        <View style={{flex: 1}}>
         <PrimaryNav>
           <Container>
             <HeaderWithIcon />
@@ -23,7 +27,9 @@ export default class App extends Component {
           </Container>
 
         </PrimaryNav>
-        </View>
+      </View>
+        </MenuProvider>
+
     );
   }
 }
