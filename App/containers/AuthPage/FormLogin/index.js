@@ -23,12 +23,14 @@ class Login extends Component {
 
     handleLogin = e => {
         const {navigate} = this.props.navigation;
-        const {email, password} = this.state;
-        console.log(this.state);
-
-        if (email === 'test@gmail.com' && password === 'test') {
+        // const {email, password} = this.state;
+        // console.log(this.state);
+        //
+        // if (email === 'test@gmail.com' && password === 'test') {
+        //     navigate('Home');
+        // }
             navigate('Home');
-        }
+
     };
 
     render() {

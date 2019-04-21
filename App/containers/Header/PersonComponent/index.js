@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import CommonIcon from '../../../components/CommonIcon';
-import {Text } from 'react-native';
+import {Text, View} from 'react-native';
 import {Button,} from 'native-base';
 import Menu, {MenuItem} from "react-native-material-menu";
 
@@ -23,6 +23,7 @@ export default class Bulb extends  Component {
 
     render() {
         return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 20, maginBottom: 100}}>
             <Button transparent>
                 <Menu
                     ref={this.setMenuRef}
@@ -30,9 +31,9 @@ export default class Bulb extends  Component {
                     }
                 >
                     <MenuItem onPress={this.hideMenu}>Log out</MenuItem>
-
                 </Menu>
             </Button>
+            </View>
         )
     }
 };

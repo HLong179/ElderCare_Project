@@ -30,6 +30,7 @@ export default class Bulb extends  Component {
                     }
                 >
                     <MenuItem onPress={this.hideMenu}>bulb</MenuItem>
+
                 </Menu>
             </Button>
         )

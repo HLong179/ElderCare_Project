@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { BackHandler, View } from 'react-native'
 import { Col, Row, Grid } from 'react-native-easy-grid';
 
-import HeaderWithIcon from "./Header";
+// import HeaderWithIcon from "./Header";
 import FooterTabs from "./FooterTabs";
 
 import { Container, Header, Content } from 'native-base';
@@ -26,7 +26,7 @@ class Home extends Component {
     render () {
         return (
             <Container >
-                <HeaderWithIcon />
+                {/*<HeaderWithIcon />*/}
                 <Content padder>
                     <Grid >
                         <Row>

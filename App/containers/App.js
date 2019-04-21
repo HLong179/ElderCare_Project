@@ -4,7 +4,6 @@ import PrimaryNav from "../navigation/AppNavigation"
 import { Container, Header, Content } from 'native-base';
 import HeaderWithIcon from "./Header";
 import FooterTabs from "./FooterTabs";
-import { MenuProvider } from 'react-native-popup-menu';
 
 
 const instructions = Platform.select({
@@ -17,7 +16,6 @@ const instructions = Platform.select({
 export default class App extends Component {
   render() {
     return (
-        <MenuProvider>
 
         <View style={{flex: 1}}>
         <PrimaryNav>
@@ -28,7 +26,6 @@ export default class App extends Component {
 
         </PrimaryNav>
       </View>
-        </MenuProvider>
 
     );
   }

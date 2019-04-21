@@ -14,9 +14,7 @@ export default class HeaderMultipleIconExample extends Component {
         return (
             <Header>
                 <Left>
-                    <Button transparent>
-                        <CommonIcon name="arrow-back"/>
-                    </Button>
+
                 </Left>
                 <Body>
                     <Title>Health App</Title>
