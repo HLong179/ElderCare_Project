@@ -11,6 +11,7 @@ import {
   Form
 } from "antd"
 import { Link } from "react-router-dom"
+import axios from "axios"
 import userAvatar from "../../assets/user.png"
 import data from "../../data"
 
@@ -116,6 +117,31 @@ class RelativesWithForm extends Component {
           listData: [...this.state.listData, values],
           visible: false
         })
+        const data = {
+          elder_id: values.patientID,
+          name: values.name,
+          email: values.email,
+          phone: values.phone,
+          address: values.address,
+          username: values.username,
+          password: values.password
+        }
+          try {
+            let options = {
+              method: 'post',
+              baseURL: 'http://localhost:3001',
+              url: '/account/addMainUser',
+              data: data
+            };
+            console.log('> call API options: ', options);
+            let res = await axios(options);
+            if (res.status === 200 && res.statusText === 'OK') {
+              return res.data;
+            }
+          } catch (e) {
+            console.log('Call API error: ', e.message);
+            return null;
+          }
       } else {
         console.log(err)
       }
