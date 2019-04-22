@@ -2,6 +2,7 @@ import React from "react";
 import { StackNavigator, createStackNavigator, createAppContainer } from "react-navigation";
 import HeaderWithIcon from '../containers/Header';
 import CommonHeader from '../components/CommonHeader';
+import AddRelative from '../containers/AddRelative';
 
 // screens identified by the router
 
@@ -31,11 +32,21 @@ const PrimaryNav = createStackNavigator(
 
         },
         ResetPass: {
-            screen: ResetPassword
+            screen: ResetPassword,
+            header: <CommonHeader title="Reset Password" />
+        },
+        AddRelative: {
+            screen: AddRelative,
         }
+
     },
     {
         initialRouteName: "Login",
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: "#DCDCDC"
+            }
+        }
         // headerMode: "none"
     }
 );

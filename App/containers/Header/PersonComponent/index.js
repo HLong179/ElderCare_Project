@@ -3,10 +3,9 @@ import CommonIcon from '../../../components/CommonIcon';
 import {Text, View} from 'react-native';
 import {Button,} from 'native-base';
 import Menu, {MenuItem} from "react-native-material-menu";
+import { withNavigation } from 'react-navigation'
 
-
-
-export default class Bulb extends  Component {
+class Bulb extends  Component {
     _menu = null;
 
     setMenuRef = ref => {
@@ -19,9 +18,19 @@ export default class Bulb extends  Component {
 
     showMenu = () => {
         this._menu.show();
+        console.log('show men')
+    };
+    onSelectMenu = e => {
+        const {navigate} = this.props.navigation;
+        navigate('AddRelative');
+        this.hideMenu()
+
     };
 
     render() {
+        const {navigate} = this.props.navigation;
+        console.log(navigate);
+
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 20, maginBottom: 100}}>
             <Button transparent>
@@ -30,6 +39,7 @@ export default class Bulb extends  Component {
                     button={<Text onPress={this.showMenu}><CommonIcon name="person"/></Text>
                     }
                 >
+                    <MenuItem onPress={this.onSelectMenu}>Add relative</MenuItem>
                     <MenuItem onPress={this.hideMenu}>Log out</MenuItem>
                 </Menu>
             </Button>
@@ -37,3 +47,4 @@ export default class Bulb extends  Component {
         )
     }
 };
+export default withNavigation(Bulb);

@@ -23,7 +23,6 @@ export default class App extends Component {
             <HeaderWithIcon />
             <FooterTabs></FooterTabs>
           </Container>
-
         </PrimaryNav>
       </View>
 

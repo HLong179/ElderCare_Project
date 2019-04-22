@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         // padding: 10,
         marginRight: 10,
-        color: "blue"
+        color: "gray"
     },
     buttonStyle: {
         marginRight: 50,
