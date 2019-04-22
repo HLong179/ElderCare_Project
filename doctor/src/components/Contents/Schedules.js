@@ -23,8 +23,8 @@ export default class Schedules extends Component {
     if (listData) {
       const content = (
         <div style={{ padding: 5 }}>
-          {listData.map(item => (
-            <p>
+          {listData.map((item,index) => (
+            <p key={index}>
               <Badge status={"success"} text={`${item.time} - ${item.name}`} />
             </p>
           ))}

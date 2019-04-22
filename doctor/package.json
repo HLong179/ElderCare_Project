@@ -34,5 +34,9 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "create-react-app": "^2.1.8",
+    "nodemon": "^1.18.11"
+  }
 }

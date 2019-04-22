@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Layout, Menu, Icon } from "antd"
 import { NavLink } from "react-router-dom"
+import { withRouter } from "react-router-dom";
 
 const { Sider } = Layout
 
@@ -14,6 +15,7 @@ class ASider extends Component {
   }
 
   render() {
+    let path = this.props.history.location.pathname.slice(1)
     return (
       <Sider
         collapsible
@@ -22,26 +24,26 @@ class ASider extends Component {
         theme="light"
       >
         <div className="logo" style={{fontSize: this.state.collapsed ? '16px' : '22px'}}>LOGO</div>
-        <Menu theme="light" defaultSelectedKeys={["1"]} mode="inline">
-          <Menu.Item key="1">
+        <Menu theme="light" selectedKeys={[path]} mode="inline">
+          <Menu.Item key="dashboard">
             <NavLink to={"/dashboard"}>
               <Icon type="home" />
               <span>Tổng quan</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="2">
+          <Menu.Item key="list-patients">
             <NavLink to={"/list-patients"}>
               <Icon type="user" />
               <span>Danh sách bệnh nhân</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="3">
+          <Menu.Item key="schedules">
             <NavLink to={"/schedules"}>
               <Icon type="schedule" />
               <span>Lịch khám bệnh</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="4">
+          <Menu.Item key="relatives">
             <NavLink to={"/relatives"}>
               <Icon type="team" />
               <span>Quản lý người thân</span>
@@ -53,4 +55,4 @@ class ASider extends Component {
   }
 }
 
-export default ASider
+export default withRouter(ASider)
