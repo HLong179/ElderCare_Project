@@ -1,7 +1,21 @@
-import React, { Component } from 'react';
-import {TextInput, View, StyleSheet, Text, TouchableHighlight, Platform} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React, {Component} from 'react';
+import {Text} from 'react-native';
 import translate from '../../../utils/language.utils';
+import styled from "styled-components";
+import {Content, Form, Label, Icon} from "native-base";
+import Item from "../../../components/CommonItemInput";
+import Button from "../../../components/CommonButton";
+import Input from "../../../components/CommonInput";
+import Wrapper from "../../../components/CommonWrapper";
+
+const StyleHeader = styled(Text)`
+    font-size: 30;
+    font-weight: bold;
+    margin-bottom: 20;
+    color: darkslategray;
+    align-self: center;
+
+`;
 
 class Login extends Component {
 
@@ -24,103 +38,45 @@ class Login extends Component {
     handleLogin = e => {
         const {navigate} = this.props.navigation;
         // const {email, password} = this.state;
-        // console.log(this.state);
+        console.log(this.state);
         //
         // if (email === 'test@gmail.com' && password === 'test') {
         //     navigate('Home');
         // }
-            navigate('Home');
+        navigate('Home');
 
     };
+    handleForgotPassword = e => {
+        const {navigate} = this.props.navigation;
+        navigate('ResetPass');
+    }
 
     render() {
-        const {navigate} = this.props.navigation;
         return (
-            <View style={styles.container}>
-                <Text style={styles.textHeader}>{translate('LOGIN_header')}</Text>
+            <Wrapper>
+                <Content>
+                    <Form>
+                        <StyleHeader>{translate('LOGIN_header')}</StyleHeader>
+                        <Item >
+                            <Input placeholder={translate('LOGIN_email')} onChangeText={this.handleChangeEmail}/>
+                            <Icon active name="mail"/>
 
-                <View style={styles.inputContainer}>
-                    <TextInput placeholder={translate('LOGIN_email')} style={styles.textInput} keyboardType="email-address"
-                               underlineColorAndroid="transparent" auto-capitalization={false}
-                               onChangeText={this.handleChangeEmail} autoCapitalize="none" isFocused="true"/>
-                    <Icon name={Platform.OS === "ios" ? "ios-mail" : "md-mail"} style={styles.inputIcon}
-                          size={25}/>
-                </View>
 
-                <View style={styles.inputContainer}>
-                    <TextInput placeholder={translate('LOGIN_password')} style={styles.textInput} secureTextEntry={true}
-                               onChangeText={this.handleChangePassword}/>
-                    <Icon name={Platform.OS === "ios" ? "ios-lock" : "md-lock"} style={styles.inputIcon} size={27}
-                    />
-                </View>
+                        </Item>
+                        <Item>
+                            <Input placeholder={translate('LOGIN_password')} onChangeText={this.handleChangePassword}/>
+                            <Icon active name="key"/>
+                        </Item>
+                        <Button onPress={this.handleLogin} title={translate('LOGIN_loginButton')}/>
+                        <Button transparent color="gray" title={translate('LOGIN_forgotPassword')}
+                                onPress={this.handleForgotPassword}></Button>
+                    </Form>
+                </Content>
+            </Wrapper>
 
-                <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]}
-                                    onPress={this.handleLogin}>
-                    <Text style={styles.loginText}>{translate('LOGIN_loginButton')}</Text>
-                </TouchableHighlight>
-
-                <TouchableHighlight style={styles.buttonContainer} onPress={() => navigate('ResetPass')}>
-                    <Text>{ translate('LOGIN_forgotPassword')}</Text>
-                </TouchableHighlight>
-
-            </View>
         );
     }
 }
 
 export default Login;
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#DCDCDC',
-    },
-
-    inputContainer: {
-        borderBottomColor: '#F5FCFF',
-        backgroundColor: '#FFFFFF',
-        borderRadius: 30,
-        width: 300,
-        height: 45,
-        marginBottom: 20,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    textInput: {
-        marginLeft: 16,
-        flex: 1,
-    },
-    buttonContainer: {
-        height: 45,
-        marginBottom: 20,
-        width: 150,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 30
-
-
-    },
-    loginButton: {
-        backgroundColor: "#00b5ec"
-    },
-    loginText: {
-        color: "white",
-        fontWeight: "bold"
-    },
-    inputIcon: {
-        justifyContent: "center",
-        // padding: 10,
-        marginRight: 10,
-        color: "gray"
-    },
-    textHeader: {
-        fontSize: 30,
-        fontWeight: "bold",
-        marginBottom: 20,
-        color: "darkslategray"
-
-    }
-});
-  

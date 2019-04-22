@@ -41,7 +41,7 @@ class AddRelative extends Component {
                             <Label>Relatives Email/Phone</Label>
                             <Input onChangeText={this.handleTextChange}/>
                         </CommonItem>
-                        <CommonButton style={{alignSelf: 'center'}}  onPress={this.handleSubmit} title="Add Relative"/>
+                        <CommonButton  onPress={this.handleSubmit} title="Add Relative"/>
                     </Form>
                 </Content>
             </Wrapper>
