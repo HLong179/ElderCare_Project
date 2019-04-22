@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 import Wrapper from '../../../components/CommonWrapper';
-import { Content, Form, Icon} from 'native-base';
+import { Content, Form, Icon, Input} from 'native-base';
 import Item from "../../../components/CommonItemInput";
-import Input from "../../../components/CommonInput";
 
 class resetPass extends Component {
 
