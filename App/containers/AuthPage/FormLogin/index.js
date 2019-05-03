@@ -1,10 +1,24 @@
-import React, { Component } from 'react';
-import {TextInput, View, Button, StyleSheet, Text, TouchableHighlight, Platform } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React, {Component} from 'react';
+import {Text} from 'react-native';
+import translate from '../../../utils/language.utils';
+import styled from "styled-components";
+import {Content, Form, Label, Icon, Input} from "native-base";
+import Item from "../../../components/CommonItemInput";
+import Button from "../../../components/CommonButton";
+import Wrapper from "../../../components/CommonWrapper";
 import firebase from 'react-native-firebase';
 import config from '../../../Constant'
+const StyleHeader = styled(Text)`
+    font-size: 30;
+    font-weight: bold;
+    margin-bottom: 20;
+    color: darkslategray;
+    align-self: center;
+
+`;
+
 class Login extends Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -12,17 +26,14 @@ class Login extends Component {
             password: ''
         }
     }
-    componentDidMount() {
-        
-    }
-    
-    handleChangeEmail = e => {
 
-    }
+    handleChangeEmail = (value) => {
+        this.setState({email: value});
+    };
 
-    handleChangePassword = e => {
-
-    }
+    handleChangePassword = (value) => {
+        this.setState({password: value});
+    };
 
     handleLogin = () => {
         const {navigate} = this.props.navigation;
@@ -73,87 +84,41 @@ class Login extends Component {
     }
   
     render() {
-        const { navigate } = this.props.navigation;
         return (
-            <View style={styles.container}>
-                <Text style={styles.textHeader}>Login</Text>
+            <Wrapper>
+                <Content>
+                    <Form>
+                        <StyleHeader>{translate('LOGIN_header')}</StyleHeader>
+                        <Item >
+                            <Input placeholder={translate('LOGIN_email')}
+                                   onChangeText={this.handleChangeEmail}
+                                   ref={(input) => this._email = input }
+                                   returnKeyType={"next"}
+                                   onSubmitEditing={(event) => {this._password._root.focus()}}
+                                   autoCapitalize={"none"}
+                            />
+                            <Icon active name="mail"/>
 
-                <View style={styles.inputContainer}>
-                    <TextInput placeholder="Email" style={styles.textInput} keyboardType="email-address" underlineColorAndroid="transparent" onChangeText={(text) => this.setState({'username': text})} auto-capitalization={false}></TextInput>
-                    <Icon name={Platform.OS === "ios" ? "ios-mail" : "md-mail"} style={styles.inputIcon} size={25} ></Icon>
-                </View>
-                <View style={styles.inputContainer}>
-                    <TextInput placeholder="Password" onChangeText={(text) => this.setState({'password': text})} style={styles.textInput}  secureTextEntry={true} ></TextInput>
-                    <Icon name={Platform.OS === "ios" ? "ios-lock" : "md-lock"} style={styles.inputIcon} size={27} ></Icon>
-                </View>
-               
-                <Button style={[styles.buttonContainer, styles.loginButton]} title="Login" onPress={() => this.handleLogin()} >
-                   
-                </Button>
+                        </Item>
+                        <Item >
+                            <Input placeholder={translate('LOGIN_password')}
+                                   onChangeText={this.handleChangePassword}
+                                   ref={(input) => this._password = input }
+                                   onSubmitEditing={(event) => {this._email._root.focus()}}
+                                   autoCapitalize={"none"}
+                            />
+                            <Icon active name="key"/>
+                        </Item>
+                        <Button onPress={this.handleLogin} title={translate('LOGIN_loginButton')}/>
+                        <Button transparent color="gray" title={translate('LOGIN_forgotPassword')}
+                                onPress={this.handleForgotPassword}/>
+                    </Form>
+                </Content>
+            </Wrapper>
 
-                <TouchableHighlight style={styles.buttonContainer} onPress={() => navigate('ResetPass')} >
-                    <Text >Forgot password</Text>
-                </TouchableHighlight>
-                <View>
-
-                </View>
-            </View>            
         );
     }
 }
 
 export default Login;
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#DCDCDC',
-      },
-
-    inputContainer: {
-        borderBottomColor: '#F5FCFF',
-        backgroundColor: '#FFFFFF',
-        borderRadius:30,
-        width:300,
-        height:45,
-        marginBottom:20,
-        flexDirection: 'row',
-        alignItems:'center'
-    },
-    textInput: {
-        marginLeft: 16, 
-        flex: 1,
-    },
-    buttonContainer: {
-        height: 45,
-        marginBottom: 20,
-        width: 150,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 30
-
-
-    },
-    loginButton: {
-        backgroundColor: "#00b5ec"
-    },
-    loginText: {
-        color: "white",
-        fontWeight: "bold"
-    },
-    inputIcon: {
-        justifyContent: "center",
-        // padding: 10,
-        marginRight: 10,
-        color: "blue"
-    },
-    textHeader: {
-        fontSize: 30,
-        fontWeight: "bold",
-        marginBottom: 20
-
-    }
-  });
-  

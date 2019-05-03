@@ -1,5 +1,8 @@
 import React from "react";
 import { StackNavigator, createStackNavigator, createAppContainer } from "react-navigation";
+import HeaderWithIcon from '../containers/Header';
+import CommonHeader from '../components/CommonHeader';
+import AddRelative from '../containers/AddRelative';
 
 // screens identified by the router
 
@@ -13,26 +16,38 @@ const PrimaryNav = createStackNavigator(
     {
         Home: {
             screen: Home,
+            navigationOptions: () => ({
+                header: <HeaderWithIcon/>
+            })
         },
         FormHeartRate: {
             screen: FormHeartRate,
-            navigationOptions: {
-                headerTitleStyle: {
-                    fontWeight: "bold",
-                    color: "#fff",
-                },
-            }
+            navigationOptions: () => ({
+                header: <CommonHeader title="Heart Rate" />
+            }),
         },
         Login: {
-            screen: Login
+            screen: Login,
+            navigationOptions: () => ({header: null})
+
         },
         ResetPass: {
-            screen: ResetPassword
+            screen: ResetPassword,
+            header: <CommonHeader title="Reset Password" />
+        },
+        AddRelative: {
+            screen: AddRelative,
         }
+
     },
     {
         initialRouteName: "Login",
-        headerMode: "none"
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: "#DCDCDC"
+            }
+        }
+        // headerMode: "none"
     }
 );
 

@@ -12,6 +12,9 @@
     "react-native": "0.59.4",
     "react-native-firebase": "^5.3.1",
     "react-native-gesture-handler": "^1.1.0",
+    "react-native-i18n": "^2.0.15",
+    "react-native-material-menu": "^0.4.2",
+    "react-native-popup-menu": "^0.15.5",
     "react-navigation": "^3.8.1",
     "styled-components": "^4.2.0"
   },

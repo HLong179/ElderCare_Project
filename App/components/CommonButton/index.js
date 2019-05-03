@@ -6,8 +6,8 @@ import StyledText from './styled/StyledText'
 
 function CommonButton(props) {
     return (
-      <StyledButton onPress={props.onPress}>
-        <StyledText>{props.title}</StyledText>
+      <StyledButton primary {...props} >
+        <StyledText color={props.color}>{props.title}</StyledText>
       </StyledButton>
     )
 }

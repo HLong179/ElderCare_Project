@@ -1,75 +1,38 @@
 import React, { Component } from 'react';
-import {TextInput, View, StyleSheet, Text, TouchableHighlight, Platform } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Button } from 'native-base';
+import { Text } from 'react-native';
+import Wrapper from '../../../components/CommonWrapper';
+import { Content, Form, Icon, Input} from 'native-base';
+import Item from "../../../components/CommonItemInput";
 
 class resetPass extends Component {
-    static navigationOptions = {
-        title: 'Reset Password',
-    }
+
     constructor(props) {
         super(props);
         this.state = {
             idString: ''
         }
     }
-   
+
     render() {
-        const { navigate } = this.props.navigation;
         return (
-            <View style={styles.container}>
-            <Text style={{marginBottom: 20}}>Please enter your information below.</Text>
-                <View style={styles.inputContainer}>
-                    <TextInput placeholder="ID (Email or phone number)" style={styles.textInput} keyboardType="email-address" underlineColorAndroid="transparent" auto-capitalization={false} ></TextInput>
-                    <Icon name={Platform.OS === "ios" ? "ios-mail" : "md-mail"} style={styles.inputIcon} size={25} ></Icon>
-                </View>
-                <View style={{flexDirection:"row"}}>    
-                    <Button buttonStyle={styles.buttonStyle} titleStyle={styles.titleStyle} type="clear" title="Cancel" onPress={() => navigate("Login")}></Button>
-                    <Button buttonStyle={styles.buttonStyle} titleStyle={styles.titleStyle} type="clear" title="Confirm" disabled={!this.state.isIdEmpty}></Button>
-                </View>
-            </View>            
+            <Wrapper>
+                <Content>
+                    <Text style={{alignSelf: "center"}}>Please enter your information below</Text>
+                    <Form>
+                        <Item >
+                            <Input placeholder="ID (Email or phone number)" onChangeText={this.handleChangeEmail}/>
+                            <Icon active name="mail"/>
+                        </Item>
+                    </Form>
+
+                </Content>
+
+
+            </Wrapper>
+
         );
     }
 }
 
 export default resetPass;
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#DCDCDC',
-      },
-
-    inputContainer: {
-        borderBottomColor: '#F5FCFF',
-        backgroundColor: '#FFFFFF',
-        borderRadius:30,
-        width:300,
-        height:45,
-        marginBottom:20,
-        flexDirection: 'row',
-        alignItems:'center'
-    },
-    textInput: {
-        marginLeft: 16, 
-        flex: 1,
-        fontSize: 12
-    },
-    inputIcon: {
-        justifyContent: "center",
-        // padding: 10,
-        marginRight: 10,
-        color: "blue"
-    },
-    buttonStyle: {
-        marginRight: 50,
-        marginBottom: 20,
-    },
-    titleStyle: {
-        color: "black"
-    }
-
-  });
-  
