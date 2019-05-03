@@ -28,7 +28,7 @@ class Login extends Component {
     }
 
     handleChangeEmail = (value) => {
-        this.setState({email: value});
+        this.setState({username: value});
     };
 
     handleChangePassword = (value) => {
@@ -56,7 +56,7 @@ class Login extends Component {
        
 
         // e.preventDef
-      return  fetch('http://localhost:6900/account/login',  {
+      return  fetch('http://192.168.1.107:6900/account/login',  {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
