@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Text  } from "native-base"
-import { TouchableOpacity, View, TextInput } from 'react-native';
+import { Text  } from "native-base"
+import { TouchableOpacity, View, TextInput, Button } from 'react-native';
 // import DateTimePicker from 'react-native-modal-datetime-picker';
-// import firebase from 'react-native-firebase';
+import firebase from 'react-native-firebase';
+import config from '../../../Constant'
 
 export default class DateTimePickerTester extends Component {
   constructor(props) {
@@ -10,7 +11,9 @@ export default class DateTimePickerTester extends Component {
     this.state = {
       time: ''
     }
+ 
   }
+  
    // state = {
   //   isDateTimePickerVisible: true,
   // };
@@ -29,15 +32,25 @@ export default class DateTimePickerTester extends Component {
   //   console.log('A date has been picked: ', date);
   //   this._hideDateTimePicker();
   //};
-  handleChangeText = (value) => {
-    console.log(value)
-    this.setState({
-      time: value
-    })
-  }
+  // handleChangeText = (value) => {
+  //   console.log('change the text: ', value)
+  //   this.setState({
+  //     time: value
+  //   })
+  // }
 
-  handleSubmit = e => {
-    alert('submit');
+  handleSubmit = () => {
+    let value = this.state.time;
+    // console.log('thiss iss value of interval!!!!!!!!!!!!!!  ',value)
+    
+    // const check = firebase.initializeApp(config.opt, 'test');
+    // check.onReady().then(app => {
+      const ref = firebase.app().database().ref('/Users/Devices/S1mdk2XxXg/Interval');
+      // app.messaging().subscribeToTopic('S1mdk2XxXg');
+      ref.set(+value);
+    // })
+    
+    
   }
 
   render () {
@@ -52,10 +65,9 @@ export default class DateTimePickerTester extends Component {
           onCancel={this._hideDateTimePicker}
           mode="time"
         /> */}
-        <TextInput style={{height: 50, width: 300, borderWidth: 2, color: "red"}} onChange={this.handleChangeText} value={this.state.time}></TextInput>
-        <Button style={{marginTop: 30, marginLeft: 140}} rounded success onPress={this.handleSubmit}>
-            <Text>Submit</Text>
-          </Button> 
+        <TextInput style={{height: 50, width: 300, borderWidth: 2, color: "red"}}  onChangeText={(value) => this.setState({time: value})}/>
+        <Button title="Submit" style={{marginTop: 30, marginLeft: 140}} rounded success onPress={this.handleSubmit}>
+        </Button> 
       </View>
     );
   }

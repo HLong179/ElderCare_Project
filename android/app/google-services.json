@@ -45,20 +45,12 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:49718683704:android:1fb0623114da33be",
+        "mobilesdk_app_id": "1:49718683704:android:25929f370dd722de",
         "android_client_info": {
-          "package_name": "com.mobile"
+          "package_name": "com.newtestreactapp"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "49718683704-k9apmbh8krqfq8o2ropdf9l607slv8vh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.mobile",
-            "certificate_hash": "0550d189eaeef8cfe565e597bab6ce26a8b05f00"
-          }
-        },
         {
           "client_id": "49718683704-ipl6t2j9c9rtub3hisae556k4l04fjji.apps.googleusercontent.com",
           "client_type": 3

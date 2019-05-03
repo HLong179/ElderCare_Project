@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import {TextInput, View, Button, StyleSheet, Text, TouchableHighlight, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import firebase from 'react-native-firebase';
+import config from '../../../Constant'
 class Login extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
+            username: '',
             password: ''
         }
+    }
+    componentDidMount() {
+        
     }
     
     handleChangeEmail = e => {
@@ -20,19 +24,54 @@ class Login extends Component {
 
     }
 
-    handleLogin = e => {
+    handleLogin = () => {
+        const {navigate} = this.props.navigation;
+        
+        // const hhh = {
+        //     databaseURL: "https://eldercare-5e4c8.firebaseio.com",
+        //     projectId: "eldercare-5e4c8",
+        //     apiKey: "AIzaSyBhgCvEUPBxv4JoqairKRVR8ijSnDKED-M",
+        //     appId: "1:49718683704:android:25929f370dd722de",
+        //     messagingSenderId: "49718683704",
+        //     storageBucket: "eldercare-5e4c8.appspot.com",
+        //     clientId: "49718683704-ipl6t2j9c9rtub3hisae556k4l04fjji.apps.googleusercontent.com",
+        //     // persistence: true,
+        // }
+       
+        // if (check) {
+           
+        // }
+       
+       
 
+        // e.preventDef
+      return  fetch('http://localhost:6900/account/login',  {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password
+            })
+        })
+        .then(
+            response => {
+                response.json();
+                console.log('the result after login : ', response);
+                const Side =  firebase.initializeApp(config.opt, 'test');
+                Side.onReady().then(app => {
+                    app.messaging().subscribeToTopic('S1mdk2XxXg');
+                    navigate('Home');
+                })
+                
+            }
+        )
+        .catch(e => console.log(e))
+        // navigate('Home')
     }
-    // static navigationOptions = {
-    //     title: 'Login',
-    //     // headerStyle: {
-    //     //     backgroundColor: "#c43c11"
-    //     // },
-    //     // headerTitleStyle: {
-    //     //     fontWeight: "bold"
-    //     // },
-    //     // headerTintColor: "#fff"
-    // }
+  
     render() {
         const { navigate } = this.props.navigation;
         return (
@@ -40,17 +79,17 @@ class Login extends Component {
                 <Text style={styles.textHeader}>Login</Text>
 
                 <View style={styles.inputContainer}>
-                    <TextInput placeholder="Email" style={styles.textInput} keyboardType="email-address" underlineColorAndroid="transparent" auto-capitalization={false}></TextInput>
+                    <TextInput placeholder="Email" style={styles.textInput} keyboardType="email-address" underlineColorAndroid="transparent" onChangeText={(text) => this.setState({'username': text})} auto-capitalization={false}></TextInput>
                     <Icon name={Platform.OS === "ios" ? "ios-mail" : "md-mail"} style={styles.inputIcon} size={25} ></Icon>
                 </View>
                 <View style={styles.inputContainer}>
-                    <TextInput placeholder="Password" style={styles.textInput}  secureTextEntry={true} ></TextInput>
+                    <TextInput placeholder="Password" onChangeText={(text) => this.setState({'password': text})} style={styles.textInput}  secureTextEntry={true} ></TextInput>
                     <Icon name={Platform.OS === "ios" ? "ios-lock" : "md-lock"} style={styles.inputIcon} size={27} ></Icon>
                 </View>
                
-                <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => navigate('Home')} >
-                    <Text style={styles.loginText}>Login</Text>
-                </TouchableHighlight>
+                <Button style={[styles.buttonContainer, styles.loginButton]} title="Login" onPress={() => this.handleLogin()} >
+                   
+                </Button>
 
                 <TouchableHighlight style={styles.buttonContainer} onPress={() => navigate('ResetPass')} >
                     <Text >Forgot password</Text>
