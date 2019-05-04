@@ -4,7 +4,6 @@ import {
   Typography,
   Input,
   Button,
-  Icon,
   List,
   Avatar,
   Modal,
@@ -17,26 +16,6 @@ import data from "../../data"
 
 const { Content } = Layout
 const { Title } = Typography
-
-// const listData = []
-// for (let i = 0; i < 10; i++) {
-//   listData.push({
-//     href: "http://ant.design",
-//     title: `ant design part ${i}`,
-//     avatar: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-//     description:
-//       "Ant Design, a design language for background applications, is refined by Ant UED Team.",
-//     content:
-//       "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently."
-//   })
-// }
-
-// const IconText = ({ type, text }) => (
-//   <span>
-//     <Icon type={type} style={{ marginRight: 8 }} />
-//     {text}
-//   </span>
-// )
 
 const findPatient = value => {
   const res = data.filter(patient => patient.key.toString() === value)[0]
@@ -66,14 +45,7 @@ const ListRelatives = ({ listData }) => {
       }}
       dataSource={listData}
       renderItem={item => (
-        <List.Item
-          key={item.title}
-          //   actions={[
-          //     <IconText type="star-o" text="156" />,
-          //     <IconText type="like-o" text="156" />,
-          //     <IconText type="message" text="2" />
-          //   ]}
-        >
+        <List.Item key={item.title}>
           <List.Item.Meta
             avatar={<Avatar src={userAvatar} />}
             title={item.name}
@@ -126,22 +98,22 @@ class RelativesWithForm extends Component {
           username: values.username,
           password: values.password
         }
-          try {
-            let options = {
-              method: 'post',
-              baseURL: 'http://localhost:3001',
-              url: '/account/addMainUser',
-              data: data
-            };
-            console.log('> call API options: ', options);
-            let res = await axios(options);
-            if (res.status === 200 && res.statusText === 'OK') {
-              return res.data;
-            }
-          } catch (e) {
-            console.log('Call API error: ', e.message);
-            return null;
+        try {
+          let options = {
+            method: "post",
+            baseURL: "http://localhost:3001",
+            url: "/account/addMainUser",
+            data: data
           }
+          console.log("> call API options: ", options)
+          let res = await axios(options)
+          if (res.status === 200 && res.statusText === "OK") {
+            return res.data
+          }
+        } catch (e) {
+          console.log("Call API error: ", e.message)
+          return null
+        }
       } else {
         console.log(err)
       }
@@ -152,29 +124,6 @@ class RelativesWithForm extends Component {
     this.setState({ confirmDirty: this.state.confirmDirty || !!value })
   }
 
-  compareToFirstPassword = (rule, value, callback) => {
-    const form = this.props.form
-    if (value && value !== form.getFieldValue("password")) {
-      callback("Two passwords that you enter is inconsistent!")
-    } else {
-      callback()
-    }
-  }
-
-  validateToNextPassword = (rule, value, callback) => {
-    const form = this.props.form
-    if (value && this.state.confirmDirty) {
-      form.validateFields(["confirm"], { force: true })
-    }
-    callback()
-  }
-  validatePatientID = (rule, value, callback) => {
-    const isMatch = data.filter(patient => patient.key.toString() === value)
-    if (value && !isMatch[0]) {
-      callback("PatientID is not exist!")
-    }
-    callback()
-  }
   displayModal() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -207,94 +156,36 @@ class RelativesWithForm extends Component {
             }}
           >
             <Form.Item label="Người nhà bệnh nhân">
-              {getFieldDecorator("patientID", {
-                rules: [
-                  {
-                    required: true,
-                    message: "Please input your field"
-                  },
-                  {
-                    validator: this.validatePatientID
-                  }
-                ]
-              })(<Input />)}
+              {getFieldDecorator("patientID", {})(<Input />)}
             </Form.Item>
             <Form.Item label="E-mail">
-              {getFieldDecorator("email", {
-                rules: [
-                  {
-                    type: "email",
-                    message: "The input is not valid E-mail!"
-                  },
-                  {
-                    required: true,
-                    message: "Please input your E-mail!"
-                  }
-                ]
-              })(<Input />)}
+              {getFieldDecorator("email", {})(<Input />)}
             </Form.Item>
             <Form.Item label="Tên đăng nhập">
-              {getFieldDecorator("username", {
-                rules: [
-                  {
-                    required: true,
-                    message: "Please input your Username!"
-                  }
-                ]
-              })(<Input />)}
+              {getFieldDecorator("username", {})(<Input />)}
             </Form.Item>
             <Form.Item label="Password">
-              {getFieldDecorator("password", {
-                rules: [
-                  {
-                    required: true,
-                    message: "Please input your password!"
-                  },
-                  {
-                    validator: this.validateToNextPassword
-                  }
-                ]
-              })(<Input type="password" />)}
+              {getFieldDecorator("password", {})(<Input type="password" />)}
             </Form.Item>
             <Form.Item label="Confirm Password">
-              {getFieldDecorator("confirm", {
-                rules: [
-                  {
-                    required: true,
-                    message: "Please confirm your password!"
-                  },
-                  {
-                    validator: this.compareToFirstPassword
-                  }
-                ]
-              })(<Input type="password" onBlur={this.handleConfirmBlur} />)}
+              {getFieldDecorator("confirm", {})(
+                <Input type="password" onBlur={this.handleConfirmBlur} />
+              )}
             </Form.Item>
             <Form.Item label="Họ và tên">
-              {getFieldDecorator("name", {
-                rules: [
-                  {
-                    required: true,
-                    message: "Please input your name!"
-                  }
-                ]
-              })(<Input type="text" onBlur={this.handleConfirmBlur} />)}
+              {getFieldDecorator("name", {})(
+                <Input type="text" onBlur={this.handleConfirmBlur} />
+              )}
             </Form.Item>
             <Form.Item label="Địa chỉ">
-              {getFieldDecorator("address", {
-                rules: [
-                  {
-                    required: true,
-                    message: "Please input your address!"
-                  }
-                ]
-              })(<Input type="text" onBlur={this.handleConfirmBlur} />)}
+              {getFieldDecorator("address", {})(
+                <Input type="text" onBlur={this.handleConfirmBlur} />
+              )}
             </Form.Item>
             <Form.Item label="Số điện thoại">
-              {getFieldDecorator("phone", {
-                rules: [
-                  { required: true, message: "Please input your phone number!" }
-                ]
-              })(<Input addonBefore={"+84"} style={{ width: "100%" }} />)}
+              {getFieldDecorator("phone", {})(
+                <Input addonBefore={"+84"} style={{ width: "100%" }} />
+              )}
             </Form.Item>
           </Form>
         </Modal>

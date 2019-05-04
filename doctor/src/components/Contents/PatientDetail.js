@@ -129,17 +129,12 @@ class PatientDetailWithForm extends Component {
             >
               <Form onSubmit={this.handleSubmit}>
                 <Form.Item label="Tên thuốc">
-                  {getFieldDecorator("drugName", {
-                    rules: [
-                      { required: true, message: "Please input drug name!" }
-                    ]
-                  })(<Input />)}
+                  {getFieldDecorator("drugName", {})(<Input />)}
                 </Form.Item>
                 <Form.Item label="Số lượng">
-                  {getFieldDecorator("drugNumber", {
-                    rules: [{ required: true }],
-                    initialValue: 1
-                  })(<InputNumber min={1} max={10} />)}
+                  {getFieldDecorator("drugNumber", {})(
+                    <InputNumber min={1} max={10} />
+                  )}
                 </Form.Item>
                 <Form.Item label="Ghi chú">
                   {getFieldDecorator("drugNote", {})(<TextArea />)}
@@ -255,12 +250,12 @@ class PatientDetailWithForm extends Component {
       <Content style={{ margin: "16px 16px" }}>
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
           <Row>
-            <Col span={20}>
+            <Col span={24}>
               <Title level={3} style={{ marginBottom: 20 }}>
                 Thông tin chi tiết của bệnh nhân
               </Title>
             </Col>
-            <Col span={4}>
+            {/* <Col span={4}>
               {this.state.subcribe ? (
                 <Button
                   icon="eye-invisible"
@@ -286,7 +281,7 @@ class PatientDetailWithForm extends Component {
                   Theo dõi
                 </Button>
               )}
-            </Col>
+            </Col> */}
           </Row>
 
           {this.displayPatientDetails()}

@@ -21,22 +21,6 @@ class RegistrationForm extends Component {
     this.setState({ confirmDirty: this.state.confirmDirty || !!value })
   }
 
-  compareToFirstPassword = (rule, value, callback) => {
-    const form = this.props.form
-    if (value && value !== form.getFieldValue("password")) {
-      callback("Two passwords that you enter is inconsistent!")
-    } else {
-      callback()
-    }
-  }
-
-  validateToNextPassword = (rule, value, callback) => {
-    const form = this.props.form
-    if (value && this.state.confirmDirty) {
-      form.validateFields(["confirm"], { force: true })
-    }
-    callback()
-  }
   render() {
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -77,51 +61,20 @@ class RegistrationForm extends Component {
           className="register-form"
         >
           <Form.Item label="E-mail">
-            {getFieldDecorator("email", {
-              rules: [
-                {
-                  type: "email",
-                  message: "The input is not valid E-mail!"
-                },
-                {
-                  required: true,
-                  message: "Please input your E-mail!"
-                }
-              ]
-            })(<Input />)}
+            {getFieldDecorator("email", {})(<Input />)}
           </Form.Item>
           <Form.Item label="Password">
-            {getFieldDecorator("password", {
-              rules: [
-                {
-                  required: true,
-                  message: "Please input your password!"
-                },
-                {
-                  validator: this.validateToNextPassword
-                }
-              ]
-            })(<Input type="password" />)}
+            {getFieldDecorator("password", {})(<Input type="password" />)}
           </Form.Item>
           <Form.Item label="Confirm Password">
-            {getFieldDecorator("confirm", {
-              rules: [
-                {
-                  required: true,
-                  message: "Please confirm your password!"
-                },
-                {
-                  validator: this.compareToFirstPassword
-                }
-              ]
-            })(<Input type="password" onBlur={this.handleConfirmBlur} />)}
+            {getFieldDecorator("confirm", {})(
+              <Input type="password" onBlur={this.handleConfirmBlur} />
+            )}
           </Form.Item>
           <Form.Item label="Phone Number">
-            {getFieldDecorator("phone", {
-              rules: [
-                { required: true, message: "Please input your phone number!" }
-              ]
-            })(<Input addonBefore={"+84"} style={{ width: "100%" }} />)}
+            {getFieldDecorator("phone", {})(
+              <Input addonBefore={"+84"} style={{ width: "100%" }} />
+            )}
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">

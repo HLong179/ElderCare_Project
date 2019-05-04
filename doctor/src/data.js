@@ -1,7 +1,7 @@
 const data = []
-for (let i = 0; i < 25; i++) {
+for (let i = 0; i < 4; i++) {
   data.push({
-    key: i,
+    key: "12345678" + i,
     name: i % 2 === 0 ? `Trần Văn A` : `Nguyễn Thị B`,
     age: 32,
     gender: i % 2 === 0 ? "Nam" : "Nữ",

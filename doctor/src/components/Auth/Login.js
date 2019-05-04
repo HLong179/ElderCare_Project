@@ -29,15 +29,7 @@ class NormalLoginForm extends Component {
         </Title>
         <Form onSubmit={this.handleSubmit} className="login-form">
           <Form.Item>
-            {getFieldDecorator("email", {
-              rules: [
-                {
-                  type: "email",
-                  message: "The input is not valid E-mail!"
-                },
-                { required: true, message: "Please input your email!" }
-              ]
-            })(
+            {getFieldDecorator("email", {})(
               <Input
                 prefix={
                   <Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />
@@ -47,11 +39,7 @@ class NormalLoginForm extends Component {
             )}
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator("password", {
-              rules: [
-                { required: true, message: "Please input your Password!" }
-              ]
-            })(
+            {getFieldDecorator("password", {})(
               <Input
                 prefix={
                   <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
@@ -62,10 +50,9 @@ class NormalLoginForm extends Component {
             )}
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator("remember", {
-              valuePropName: "checked",
-              initialValue: true
-            })(<Checkbox>Remember me</Checkbox>)}
+            {getFieldDecorator("remember", {})(
+              <Checkbox>Remember me</Checkbox>
+            )}
             <Link className="login-form-forgot" to="/">
               Forgot password
             </Link>
