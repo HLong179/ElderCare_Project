@@ -96,7 +96,16 @@ class ListPatientsWithForm extends Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log("Received values of form: ", values)
+        const newData = {
+          key: data.length + 1,
+          name: values.name,
+          age: values.age,
+          gender: values.gender,
+          cmnd: values.cmnd,
+          address: values.address,
+          patient_status: values.patient_status
+        }
+        data.push(newData)
       }
     })
     this.props.form.resetFields()
@@ -159,10 +168,10 @@ class ListPatientsWithForm extends Component {
               )}
             </Form.Item>
             <Form.Item label="Giới tính">
-              {getFieldDecorator("gender", { initialValue: "nam" })(
+              {getFieldDecorator("gender", { initialValue: "Nam" })(
                 <Select>
-                  <Option value="nam">Nam</Option>
-                  <Option value="nu">Nữ</Option>
+                  <Option value="Nam">Nam</Option>
+                  <Option value="Nữ">Nữ</Option>
                 </Select>
               )}
             </Form.Item>
@@ -209,11 +218,7 @@ class ListPatientsWithForm extends Component {
       },
       {
         title: "CMND",
-        dataIndex: "key"
-      },
-      {
-        title: "Số ĐT",
-        dataIndex: "phone_number"
+        dataIndex: "cmnd"
       },
       {
         title: "Địa chỉ",
