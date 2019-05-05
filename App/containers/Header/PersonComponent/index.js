@@ -27,6 +27,12 @@ class Bulb extends  Component {
 
     };
 
+    onSelectSetTime = e => {
+        const {navigate} = this.props.navigation;
+        this.hideMenu();
+        navigate('SetTime');
+    }
+
     render() {
         const {navigate} = this.props.navigation;
         console.log(navigate);
@@ -40,7 +46,9 @@ class Bulb extends  Component {
                     }
                 >
                     <MenuItem onPress={this.onSelectMenu}>Add relative</MenuItem>
+                    <MenuItem onPress={this.onSelectSetTime}>Set Time</MenuItem>
                     <MenuItem onPress={this.hideMenu}>Log out</MenuItem>
+
                 </Menu>
             </Button>
             </View>

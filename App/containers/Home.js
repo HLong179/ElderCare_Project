@@ -34,11 +34,7 @@ class Home extends Component {
                                 <HeartCard/>
                             </Col>
                         </Row>
-                        {/*<Row>*/}
-                        {/*    <Col>*/}
-                        {/*        <FoodCard/>*/}
-                        {/*    </Col>*/}
-                        {/*</Row>*/}
+
                         <Row>
                             <Col>
                                 <SleepCard />

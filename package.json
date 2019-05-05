@@ -7,15 +7,22 @@
     "test": "jest"
   },
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
+    "material-ui-time-picker": "^1.2.0",
+    "moment": "^2.24.0",
     "native-base": "^2.12.1",
-    "react": "16.8.3",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.6",
     "react-native": "0.59.4",
     "react-native-firebase": "^5.3.1",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-i18n": "^2.0.15",
     "react-native-material-menu": "^0.4.2",
+    "react-native-modal-datetime-picker": "^7.4.0",
     "react-native-popup-menu": "^0.15.5",
+    "react-native-splash-screen": "^3.2.0",
     "react-navigation": "^3.8.1",
+    "react-router": "^5.0.0",
     "styled-components": "^4.2.0"
   },
   "devDependencies": {

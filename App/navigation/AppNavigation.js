@@ -1,16 +1,17 @@
 import React from "react";
-import { StackNavigator, createStackNavigator, createAppContainer } from "react-navigation";
+import {StackNavigator, createStackNavigator, createAppContainer} from "react-navigation";
 import HeaderWithIcon from '../containers/Header';
 import CommonHeader from '../components/CommonHeader';
 import AddRelative from '../containers/AddRelative';
+import WelcomePage from '../containers/SplashScreen';
 
-// screens identified by the router
 
-// import NavigationDrawer from "./NavigationDrawer";
 import Home from "../containers/Home";
 import Login from "../containers/AuthPage/FormLogin";
 import ResetPassword from "../containers/AuthPage/FormResetPass"
 import FormHeartRate from "../containers/HeartCard/FormHeartRate";
+import SetTime from "../containers/SetTime";
+
 
 const PrimaryNav = createStackNavigator(
     {
@@ -23,31 +24,38 @@ const PrimaryNav = createStackNavigator(
         FormHeartRate: {
             screen: FormHeartRate,
             navigationOptions: () => ({
-                header: <CommonHeader title="Heart Rate" />
+                header: <CommonHeader title="Heart Rate"/>
             }),
         },
         Login: {
             screen: Login,
-            navigationOptions: () => ({header: null})
+            navigationOptions: {
+                header: null
+            }
 
         },
         ResetPass: {
             screen: ResetPassword,
-            header: <CommonHeader title="Reset Password" />
+            header: <CommonHeader title="Reset Password"/>
         },
         AddRelative: {
             screen: AddRelative,
+        },
+        SplashScreen: {
+            screen: WelcomePage
+        },
+        SetTime: {
+            screen: SetTime,
+            navigationOptions: () => {
+                return (<CommonHeader title='SetTime'/>)
+            }
         }
+
 
     },
     {
-        initialRouteName: "Login",
-        defaultNavigationOptions: {
-            headerStyle: {
-                backgroundColor: "#DCDCDC"
-            }
-        }
-        // headerMode: "none"
+        initialRouteName: "SplashScreen",
+
     }
 );
 

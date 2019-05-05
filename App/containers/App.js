@@ -19,10 +19,10 @@ export default class App extends Component {
 
         <View style={{flex: 1}}>
         <PrimaryNav>
-          <Container>
-            <HeaderWithIcon />
-            <FooterTabs></FooterTabs>
-          </Container>
+          {/*<Container>*/}
+          {/*  <HeaderWithIcon />*/}
+          {/*  <FooterTabs></FooterTabs>*/}
+          {/*</Container>*/}
         </PrimaryNav>
       </View>
 
