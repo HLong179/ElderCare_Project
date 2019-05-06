@@ -13,6 +13,18 @@ exports.getListDoctors = () => {
     var sql = `select * from doctor where permission = 'doctor'`;
     return db.load(sql);
 }
+exports.addElder = (elder) => {
+    var sql = `insert into elder(name, gender, age, ICID, doctorId, weight, height) values ('${elder.name}', '${elder.gender}', '${elder.age}', '${elder.icid}', ${elder.weight}, ${elder.height})`
+    return db.insert(sql);
+}
+exports.getListElders = () => {
+    var sql = `select * from elder`;
+    return db.load(sql);
+}
+exports.elderDetail = (elderId) => {
+    var sql = `select * from elder where ICID = ${elderId}`;
+    return db.load(sql);
+}
 
 exports.doctorLogin = (doctor) => {
     var sql = `select * from doctor where username = '${doctor.username}' and password = '${doctor.password}'`;

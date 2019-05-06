@@ -20,16 +20,13 @@ router.post('/addDoctor' , (req, res) => {
             res.json(doctor);
         },
         err => {
-            console.log(err)
+            res.json(err)
         }
     )
     } catch (error) {
         
     }
 })
-
-
-
 
 router.post('/login', (req, res) => {
     try {
@@ -52,7 +49,47 @@ router.get('/listDoctors', (req, res) => {
         doctors => {
             res.json(doctors)
         },
-        err => console.log(err)
+        err => res.json(err)
+    )
+})
+
+
+router.post('/addElder', (req, res) => {
+    let elder = {
+        name: req.body.name,
+        gender: req.body.gender,
+        age: req.body.age,
+        icid: req.body.icid,
+        weight: req.body.weight,
+        height: req.body.height
+    }
+    accountRepo.addElder(elder).then(
+        next => {
+            res.json({
+                status: 200,
+                message: 'Create Elder Success!'
+            })
+        },
+        err => res.json(err)
+    )
+})
+
+router.get('/listElders', (req, res) => {
+    accountRepo.getListElders().then(
+        elders => {
+            res.json(elders);
+        },
+        err => res.json(err)
+    )
+})
+
+router.post('/detailElder', (req, res) => {
+    let elderId = req.body.elderId;
+    accountRepo.elderDetail(elderId).then(
+        elders => {
+            res.json(elders[0]);
+        },
+        err => res.json(err)
     )
 })
 
