@@ -9,6 +9,11 @@ exports.logIn = (user) => {
     var sql = `select * from relative where rlUsername = '${user.username}' and rlPassword = '${user.password}'`;
     return db.load(sql);
 }
+
+exports.doctorLogin = (doctor) => {
+    var sql = `select * from doctor where drUsername = '${doctor.username}' and drPassword = '${doctor.password}'`;
+    return db.load(sql);
+}
 exports.getUserByUsername = username => {
     var sql = `select * from relative where rlUsername = '${username}'`;
     return db.load(sql);
