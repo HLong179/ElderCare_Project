@@ -40,7 +40,7 @@ router.post('/addDoctor' , (req, res) => {
         password: md5(req.body.password).toString()
      }
     accountRepo.addDoctor(doctor).then(
-        res => {
+        next => {
             res.json(doctor);
         },
         err => {
