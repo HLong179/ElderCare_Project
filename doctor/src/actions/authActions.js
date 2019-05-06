@@ -1,8 +1,11 @@
 import axios from "axios"
-import { GET_ERRORS, LOGIN_USER, SET_CURRENT_USER } from "../constants"
+import { GET_ERRORS, SET_CURRENT_USER } from "../constants"
 
 export const registerUser = (userData, history) => dispatch => {}
+
+
 export const loginUser = (userData, history) => dispatch => {
+  // axios.post('http://localhost:6900/account/addDoctor')
   if (userData.email === "admin") {
     history.push("/admin/register")
     let newData = {
