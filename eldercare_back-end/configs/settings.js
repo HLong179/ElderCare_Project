@@ -3,7 +3,7 @@ module.exports = Object({
         HOST: '127.0.0.1',
         PORT: '3306',
         USER: 'root',
-        PWD: '123456',
+        PWD: 'hl1681997',
         DB_NAME: 'elder_care'
     }
 })

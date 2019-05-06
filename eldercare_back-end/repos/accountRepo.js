@@ -13,3 +13,8 @@ exports.getUserByUsername = username => {
     var sql = `select * from relative where rlUsername = '${username}'`;
     return db.load(sql);
 }
+exports.addDoctor = (doctor) => {
+    var sql = `insert into doctor(name, email, phone, specializeIn, drUsername, drPassword) values 
+    ('${doctor.name}', '${doctor.email}', '${doctor.phone}', '${doctor.specializeIn}', '${doctor.username}', '${doctor.password}')`;
+    return db.insert(sql);
+}

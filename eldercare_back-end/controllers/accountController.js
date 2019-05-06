@@ -29,6 +29,29 @@ router.post('/addMainUser', (req, res) => {
     }
 })
 
+router.post('/addDoctor' , (req, res) => {
+    try {
+     let doctor = {
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone,
+        specializeIn: req.body.specializeIn,
+        username: req.body.username,
+        password: req.body.password
+     }
+    accountRepo.addDoctor(doctor).then(
+        res => {
+            res.json(doctor);
+        },
+        err => {
+            console.log(err)
+        }
+    )
+    } catch (error) {
+        
+    }
+})
+
 router.post('/addSubUser', (req, res) => {
     try {
         var user = {
@@ -63,7 +86,7 @@ router.post('/login', (req, res) => {
             if (err) {
                return res.status(500).send("[LOGIN] Something went wrong!");
             }
-            if (!user) {
+            if (!user || user.length === 0) {
                 return res.status(404).send("[LOGIN] No user found");
             }
             if (info.password === user[0].rlPassword) {

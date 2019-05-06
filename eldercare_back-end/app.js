@@ -18,7 +18,7 @@ app.use(cors());
  app.use('/account', accountController);
 //  app.use('/healthIndexes', healthIndexesController);
  // set port
- const port = process.env.PORT || 3001;
+ const port = process.env.PORT || 6900;
  app.listen(port, () => {
      console.log(`Server is running on port ${port}`);
  });
