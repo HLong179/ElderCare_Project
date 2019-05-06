@@ -90,8 +90,8 @@ class PatientDetailWithForm extends Component {
                 <span>{newData.address}</span>
               </p>
               <p>
-                <span className="patientDetails-title">Số điện thoại:</span>{" "}
-                <span>{newData.phone_number}</span>
+                <span className="patientDetails-title">Số CMND:</span>{" "}
+                <span>{newData.cmnd}</span>
               </p>
               <p>
                 <span className="patientDetails-title">Bệnh lý:</span>{" "}
@@ -99,7 +99,7 @@ class PatientDetailWithForm extends Component {
               </p>
             </Col>
             <Col span={8} style={{ display: "flex" }}>
-              <img
+              {/* <img
                 src={patientAvatar}
                 alt="patient_picture"
                 style={{
@@ -109,7 +109,7 @@ class PatientDetailWithForm extends Component {
                   border: "none",
                   borderRadius: 10
                 }}
-              />
+              /> */}
             </Col>
           </Row>
           <div className="list-drug">

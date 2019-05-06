@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from "react"
 import { Form, Icon, Input, Button, Checkbox, Typography } from "antd"
-import { Link } from "react-router-dom"
+import { Link, withRouter } from "react-router-dom"
+import { connect } from "react-redux"
+import { loginUser } from "../../actions/authActions"
+
 import "./login.css"
 
 const { Title } = Typography
@@ -10,9 +13,16 @@ class NormalLoginForm extends Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.history.push("/")
+        this.props.loginUser(values, this.props.history)
       }
     })
+  }
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated && this.props.auth.isAdmin) {
+      this.props.history.push("/admin/register")
+    } else if (this.props.auth.isAuthenticated && !this.props.auth.isAdmin) {
+      this.props.history.push("/")
+    }
   }
 
   render() {
@@ -72,4 +82,20 @@ class NormalLoginForm extends Component {
 }
 
 const Login = Form.create({ name: "normal_login" })(NormalLoginForm)
-export default Login
+
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loginUser: (userData, history) => dispatch(loginUser(userData, history))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Login))

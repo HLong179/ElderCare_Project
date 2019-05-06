@@ -11,12 +11,21 @@ import Schedules from "./Contents/Schedules"
 import PatientDetail from "./Contents/PatientDetail"
 import Relatives from "./Contents/Relatives"
 
+import { withRouter } from "react-router-dom"
+import { connect } from "react-redux"
+
 class Home extends Component {
   componentWillMount() {
     if (this.props.location.pathname === "/") {
       this.props.history.push("/dashboard")
     }
   }
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated && this.props.auth.isAdmin) {
+      this.props.history.push("/admin/register")
+    }
+  }
+
   render() {
     return (
       <Layout style={{ minHeight: "100vh" }}>
@@ -37,4 +46,17 @@ class Home extends Component {
   }
 }
 
-export default Home
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {}
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Home))
