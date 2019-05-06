@@ -1,15 +1,5 @@
 import React, { Component } from "react"
-import { Link } from "react-router-dom"
-import {
-  Layout,
-  Input,
-  Icon,
-  Menu,
-  Dropdown,
-  Avatar,
-  Badge,
-  Typography
-} from "antd"
+import { Layout, Icon, Menu, Dropdown, Avatar, Badge } from "antd"
 import doctorAvatar from "../../assets/avatar-doctor.png"
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
@@ -146,11 +136,14 @@ const notify = (
 )
 
 class AHeader extends Component {
+  logoutUser = () => {
+    this.props.logout(this.props.history)
+  }
   render() {
     const userMenu = (
       <Menu style={{ marginTop: "24px" }}>
         <Menu.Item key="0">
-          <div onClick={logout(this.props.history)}>
+          <div onClick={this.logoutUser}>
             <Icon type="logout" />
             <span style={{ marginLeft: "10px" }}>Đăng xuất</span>
           </div>
@@ -190,7 +183,7 @@ class AHeader extends Component {
             <span>
               <Avatar size="large" src={doctorAvatar} />
               <span style={{ fontWeight: "bold", marginLeft: "5px" }}>
-                {this.props.auth.user.name}
+                {this.props.auth.user ? this.props.auth.user.name : null}
               </span>
             </span>
           </Dropdown>

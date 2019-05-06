@@ -8,11 +8,14 @@ import { logout } from "../../actions/authActions"
 const { Header } = Layout
 
 class AdminHeader extends Component {
+  logoutUser = () => {
+    this.props.logout(this.props.history)
+  }
   render() {
     const userMenu = (
       <Menu style={{ marginTop: "24px" }}>
         <Menu.Item key="0">
-          <div onClick={logout(this.props.history)}>
+          <div onClick={this.logoutUser}>
             <Icon type="logout" />
             <span style={{ marginLeft: "10px" }}>Đăng xuất</span>
           </div>
@@ -39,7 +42,7 @@ class AdminHeader extends Component {
             <span>
               <Avatar size="large" src={doctorAvatar} />
               <span style={{ fontWeight: "bold", marginLeft: "5px" }}>
-                {this.props.auth.user.name}
+                {this.props.auth.user ? this.props.auth.user.name : null}
               </span>
             </span>
           </Dropdown>

@@ -30,26 +30,6 @@ export const loginUser = (userData, history) => dispatch => {
       })
       .catch()
   }
-
-  // if (userData.email === "admin") {
-  //   history.push("/admin/register")
-  //   let newData = {
-  //     email: userData.email,
-  //     password: userData.password,
-  //     isAdmin: true
-  //   }
-  //   localStorage.setItem("userData", JSON.stringify(newData))
-  //   dispatch(setCurrentUser(newData))
-  // } else {
-  //   history.push("/")
-  //   let newData = {
-  //     email: userData.email,
-  //     password: userData.password,
-  //     isAdmin: false
-  //   }
-  //   localStorage.setItem("userData", JSON.stringify(newData))
-  //   dispatch(setCurrentUser(newData))
-  // }
 }
 
 export const setCurrentUser = data => {
@@ -59,9 +39,11 @@ export const setCurrentUser = data => {
   }
 }
 
-export const logout = () => dispatch => {
+export const logout = history => {
   localStorage.removeItem("userData")
+  history.push("/login")
   return {
-    type: LOGOUT_USER
+    type: LOGOUT_USER,
+    payload: null
   }
 }
