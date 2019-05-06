@@ -11,7 +11,7 @@ exports.logIn = (user) => {
 }
 
 exports.doctorLogin = (doctor) => {
-    var sql = `select * from doctor where drUsername = '${doctor.username}' and drPassword = '${doctor.password}'`;
+    var sql = `select * from doctor where username = '${doctor.username}' and password = '${doctor.password}'`;
     return db.load(sql);
 }
 exports.getUserByUsername = username => {
@@ -19,7 +19,7 @@ exports.getUserByUsername = username => {
     return db.load(sql);
 }
 exports.addDoctor = (doctor) => {
-    var sql = `insert into doctor(name, email, phone, specializeIn, drUsername, drPassword) values 
-    ('${doctor.name}', '${doctor.email}', '${doctor.phone}', '${doctor.specializeIn}', '${doctor.username}', '${doctor.password}')`;
+    var sql = `insert into doctor(name, email, phone, specializeIn, username, password, permission) values 
+    ('${doctor.name}', '${doctor.email}', '${doctor.phone}', '${doctor.specializeIn}', '${doctor.username}', '${doctor.password}', 'doctor')`;
     return db.insert(sql);
 }
