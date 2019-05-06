@@ -24,6 +24,9 @@ class Home extends Component {
     if (this.props.auth.isAuthenticated && this.props.auth.isAdmin) {
       this.props.history.push("/admin/register")
     }
+    if (!this.props.auth.isAuthenticated) {
+      this.props.history.push("/login")
+    }
   }
 
   render() {

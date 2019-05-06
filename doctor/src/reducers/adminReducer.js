@@ -1,16 +1,22 @@
-import { REGISTER_DOCTOR } from "../constants"
+import { REGISTER_DOCTOR, FETCH_DOCTORS } from "../constants"
 
 const initialState = {
-  isRegisterSuccess: false
+  isRegisterSuccess: false,
+  listDoctors: []
 }
 
 const adminReducer = (state = initialState, action) => {
   switch (action.type) {
     case REGISTER_DOCTOR:
-      state.isRegisterSuccess = false
       return {
         ...state
       }
+    case FETCH_DOCTORS:
+      return {
+        ...state,
+        listDoctors: [...action.payload]
+      }
+
     default:
       return state
   }

@@ -1,7 +1,7 @@
 import axios from "axios"
-import { REGISTER_DOCTOR } from "../constants"
+import { REGISTER_DOCTOR, FETCH_DOCTORS } from "../constants"
 
-export const registerDoctor = (userData, history) => dispatch => {
+export const registerDoctor = userData => dispatch => {
   axios
     .post("http://localhost:6900/doctor/addDoctor", userData)
     .then(res =>
@@ -10,4 +10,20 @@ export const registerDoctor = (userData, history) => dispatch => {
       })
     )
     .catch()
+}
+export const fetchDoctors = () => dispatch => {
+  axios
+    .get("http://localhost:6900/doctor/listDoctors")
+    .then(res =>
+      dispatch({
+        type: FETCH_DOCTORS,
+        payload: res.data
+      })
+    )
+    .catch()
+}
+
+export const adminLogout = history => dispatch => {
+  localStorage.removeItem("userData")
+  history.push("/login")
 }

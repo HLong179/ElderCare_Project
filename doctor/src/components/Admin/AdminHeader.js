@@ -1,23 +1,24 @@
 import React, { Component } from "react"
-import { Link } from "react-router-dom"
+import { withRouter } from "react-router-dom"
 import { Layout, Icon, Menu, Dropdown, Avatar } from "antd"
 import doctorAvatar from "../../assets/avatar-doctor.png"
+import { connect } from "react-redux"
+import { adminLogout } from "../../actions/adminActions"
 
 const { Header } = Layout
 
-const userMenu = (
-  <Menu style={{ marginTop: "24px" }}>
-    <Menu.Item key="0">
-      <Link to="/login">
-        <Icon type="logout" />
-        <span style={{ marginLeft: "10px" }}>Đăng xuất</span>
-      </Link>
-    </Menu.Item>
-  </Menu>
-)
-
 class AdminHeader extends Component {
   render() {
+    const userMenu = (
+      <Menu style={{ marginTop: "24px" }}>
+        <Menu.Item key="0">
+          <div onClick={adminLogout(this.props.history)}>
+            <Icon type="logout" />
+            <span style={{ marginLeft: "10px" }}>Đăng xuất</span>
+          </div>
+        </Menu.Item>
+      </Menu>
+    )
     return (
       <Header style={{ background: "#fff", padding: 0, position: "relative" }}>
         <div
@@ -48,4 +49,17 @@ class AdminHeader extends Component {
   }
 }
 
-export default AdminHeader
+const mapStateToProps = state => {
+  return {}
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    adminLogout: history => dispatch(adminLogout(history))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(AdminHeader))

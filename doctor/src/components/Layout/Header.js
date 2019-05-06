@@ -11,10 +11,11 @@ import {
   Typography
 } from "antd"
 import doctorAvatar from "../../assets/avatar-doctor.png"
+import { withRouter } from "react-router-dom"
+import { connect } from "react-redux"
+import { logout } from "../../actions/authActions"
 
 const { Header } = Layout
-const { Title } = Typography
-const Search = Input.Search
 
 const notify = (
   <Menu style={{ marginTop: "24px" }}>
@@ -22,8 +23,7 @@ const notify = (
       key="0"
       style={{
         borderBottom: "1px solid #e8e8e8",
-        maxWidth: "400px",
-
+        maxWidth: "400px"
       }}
     >
       <div className="clearfix">
@@ -147,17 +147,10 @@ const notify = (
 const userMenu = (
   <Menu style={{ marginTop: "24px" }}>
     <Menu.Item key="0">
-      <Link to="/login">
-        <Icon type="user" />
-        <span style={{ marginLeft: "10px" }}>Thông tin cá nhân</span>
-      </Link>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="1">
-      <Link to="/login">
+      <div onClick={logout(this.props.history)}>
         <Icon type="logout" />
         <span style={{ marginLeft: "10px" }}>Đăng xuất</span>
-      </Link>
+      </div>
     </Menu.Item>
   </Menu>
 )
@@ -207,4 +200,17 @@ class AHeader extends Component {
   }
 }
 
-export default AHeader
+const mapStateToProps = state => {
+  return {}
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: history => dispatch(logout(history))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(AHeader))

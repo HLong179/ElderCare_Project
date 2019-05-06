@@ -5,15 +5,25 @@ import AFooter from "../Layout/AFooter"
 import RegisterDoctor from "./RegisterDoctor"
 import ListDoctor from "./ListDoctor"
 import AdminSider from "./AdminSider"
-import AdminHeader from "./AdminHeader";
+import AdminHeader from "./AdminHeader"
+import { withRouter } from "react-router-dom"
+import { connect } from "react-redux"
 
-export default class AdminPage extends Component {
+class AdminPage extends Component {
+  componentDidMount() {
+    if (!this.props.auth.isAuthenticated) {
+      this.props.history.push("/login")
+    }
+    if (this.props.auth.isAuthenticated && !this.props.auth.isAdmin) {
+      this.props.history.push("/")
+    }
+  }
   render() {
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <AdminSider />
         <Layout>
-        <AdminHeader />
+          <AdminHeader />
           <Switch>
             <Route path="/admin/register" component={RegisterDoctor} />
             <Route path="/admin/doctors" component={ListDoctor} />
@@ -24,3 +34,18 @@ export default class AdminPage extends Component {
     )
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {}
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(AdminPage))

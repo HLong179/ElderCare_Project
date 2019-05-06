@@ -3,7 +3,6 @@ import { GET_ERRORS, SET_CURRENT_USER } from "../constants"
 
 export const registerUser = (userData, history) => dispatch => {}
 
-
 export const loginUser = (userData, history) => dispatch => {
   // axios.post('http://localhost:6900/account/addDoctor')
   if (userData.email === "admin") {
@@ -32,4 +31,9 @@ export const setCurrentUser = data => {
     type: SET_CURRENT_USER,
     payload: data
   }
+}
+
+export const logout = history => dispatch => {
+  localStorage.removeItem("userData")
+  history.push("/login")
 }
