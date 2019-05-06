@@ -21,11 +21,14 @@ class Home extends Component {
     }
   }
   componentDidMount() {
-    if (this.props.auth.isAuthenticated && this.props.auth.isAdmin) {
-      this.props.history.push("/admin/register")
-    }
     if (!this.props.auth.isAuthenticated) {
       this.props.history.push("/login")
+    }
+    if (
+      this.props.auth.isAuthenticated &&
+      this.props.auth.user.permission === "admin"
+    ) {
+      this.props.history.push("/admin/register")
     }
   }
 

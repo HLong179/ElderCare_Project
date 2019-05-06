@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom"
 import { Layout, Icon, Menu, Dropdown, Avatar } from "antd"
 import doctorAvatar from "../../assets/avatar-doctor.png"
 import { connect } from "react-redux"
-import { adminLogout } from "../../actions/adminActions"
+import { logout } from "../../actions/authActions"
 
 const { Header } = Layout
 
@@ -12,7 +12,7 @@ class AdminHeader extends Component {
     const userMenu = (
       <Menu style={{ marginTop: "24px" }}>
         <Menu.Item key="0">
-          <div onClick={adminLogout(this.props.history)}>
+          <div onClick={logout(this.props.history)}>
             <Icon type="logout" />
             <span style={{ marginLeft: "10px" }}>Đăng xuất</span>
           </div>
@@ -39,7 +39,7 @@ class AdminHeader extends Component {
             <span>
               <Avatar size="large" src={doctorAvatar} />
               <span style={{ fontWeight: "bold", marginLeft: "5px" }}>
-                Admin
+                {this.props.auth.user.name}
               </span>
             </span>
           </Dropdown>
@@ -50,12 +50,14 @@ class AdminHeader extends Component {
 }
 
 const mapStateToProps = state => {
-  return {}
+  return {
+    auth: state.auth
+  }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    adminLogout: history => dispatch(adminLogout(history))
+    logout: history => dispatch(logout(history))
   }
 }
 

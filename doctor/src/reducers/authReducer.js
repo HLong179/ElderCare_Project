@@ -1,8 +1,7 @@
-import { LOGIN_USER, SET_CURRENT_USER } from "../constants"
+import { SET_CURRENT_USER } from "../constants"
 
 const initialState = {
   isAuthenticated: false,
-  isAdmin: false,
   user: null
 }
 
@@ -11,9 +10,8 @@ const authReducer = (state = initialState, action) => {
     case SET_CURRENT_USER:
       return {
         ...state,
-        isAuthenticated: true,
-        user: action.payload,
-        isAdmin: action.payload.isAdmin
+        isAuthenticated: Object.keys(action.payload).length !== 0,
+        user: action.payload
       }
     default:
       return state

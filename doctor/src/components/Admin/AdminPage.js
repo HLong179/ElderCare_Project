@@ -10,11 +10,19 @@ import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 
 class AdminPage extends Component {
+  componentWillMount() {
+    if (this.props.location.pathname === "/admin") {
+      this.props.history.push("/admin/register")
+    }
+  }
   componentDidMount() {
     if (!this.props.auth.isAuthenticated) {
       this.props.history.push("/login")
     }
-    if (this.props.auth.isAuthenticated && !this.props.auth.isAdmin) {
+    if (
+      this.props.auth.isAuthenticated &&
+      this.props.auth.user.permission === "doctor"
+    ) {
       this.props.history.push("/")
     }
   }

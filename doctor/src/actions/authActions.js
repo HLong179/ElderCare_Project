@@ -1,29 +1,55 @@
 import axios from "axios"
-import { GET_ERRORS, SET_CURRENT_USER } from "../constants"
+import { LOGOUT_USER, SET_CURRENT_USER } from "../constants"
 
 export const registerUser = (userData, history) => dispatch => {}
 
 export const loginUser = (userData, history) => dispatch => {
-  // axios.post('http://localhost:6900/account/addDoctor')
-  if (userData.email === "admin") {
-    history.push("/admin/register")
-    let newData = {
-      email: userData.email,
-      password: userData.password,
-      isAdmin: true
+  if (userData.username === "admin") {
+    const user = {
+      name: "Admin",
+      username: "admin",
+      permission: "admin"
     }
-    localStorage.setItem("userData", JSON.stringify(newData))
-    dispatch(setCurrentUser(newData))
+    localStorage.setItem("userData", JSON.stringify(user))
+    dispatch(setCurrentUser(user))
   } else {
-    history.push("/")
-    let newData = {
-      email: userData.email,
-      password: userData.password,
-      isAdmin: false
-    }
-    localStorage.setItem("userData", JSON.stringify(newData))
-    dispatch(setCurrentUser(newData))
+    axios
+      .post("http://localhost:6900/doctor/login", userData)
+      .then(res => {
+        const user = {
+          doctorId: res.data[0].doctorId,
+          name: res.data[0].name,
+          email: res.data[0].email,
+          phone: res.data[0].phone,
+          specializeIn: res.data[0].specializeIn,
+          username: res.data[0].username,
+          permission: res.data[0].permission
+        }
+        localStorage.setItem("userData", JSON.stringify(user))
+        dispatch(setCurrentUser(user))
+      })
+      .catch()
   }
+
+  // if (userData.email === "admin") {
+  //   history.push("/admin/register")
+  //   let newData = {
+  //     email: userData.email,
+  //     password: userData.password,
+  //     isAdmin: true
+  //   }
+  //   localStorage.setItem("userData", JSON.stringify(newData))
+  //   dispatch(setCurrentUser(newData))
+  // } else {
+  //   history.push("/")
+  //   let newData = {
+  //     email: userData.email,
+  //     password: userData.password,
+  //     isAdmin: false
+  //   }
+  //   localStorage.setItem("userData", JSON.stringify(newData))
+  //   dispatch(setCurrentUser(newData))
+  // }
 }
 
 export const setCurrentUser = data => {
@@ -33,7 +59,9 @@ export const setCurrentUser = data => {
   }
 }
 
-export const logout = history => dispatch => {
+export const logout = () => dispatch => {
   localStorage.removeItem("userData")
-  history.push("/login")
+  return {
+    type: LOGOUT_USER
+  }
 }

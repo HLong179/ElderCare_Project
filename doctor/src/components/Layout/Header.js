@@ -144,19 +144,19 @@ const notify = (
     </Menu.Item>
   </Menu>
 )
-const userMenu = (
-  <Menu style={{ marginTop: "24px" }}>
-    <Menu.Item key="0">
-      <div onClick={logout(this.props.history)}>
-        <Icon type="logout" />
-        <span style={{ marginLeft: "10px" }}>Đăng xuất</span>
-      </div>
-    </Menu.Item>
-  </Menu>
-)
 
 class AHeader extends Component {
   render() {
+    const userMenu = (
+      <Menu style={{ marginTop: "24px" }}>
+        <Menu.Item key="0">
+          <div onClick={logout(this.props.history)}>
+            <Icon type="logout" />
+            <span style={{ marginLeft: "10px" }}>Đăng xuất</span>
+          </div>
+        </Menu.Item>
+      </Menu>
+    )
     return (
       <Header style={{ background: "#fff", padding: 0, position: "relative" }}>
         <div
@@ -190,7 +190,7 @@ class AHeader extends Component {
             <span>
               <Avatar size="large" src={doctorAvatar} />
               <span style={{ fontWeight: "bold", marginLeft: "5px" }}>
-                N.V. Hùng
+                {this.props.auth.user.name}
               </span>
             </span>
           </Dropdown>
@@ -201,7 +201,9 @@ class AHeader extends Component {
 }
 
 const mapStateToProps = state => {
-  return {}
+  return {
+    auth: state.auth
+  }
 }
 
 const mapDispatchToProps = dispatch => {

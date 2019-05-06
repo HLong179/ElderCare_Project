@@ -18,10 +18,21 @@ class NormalLoginForm extends Component {
     })
   }
   componentDidMount() {
-    if (this.props.auth.isAuthenticated && this.props.auth.isAdmin) {
-      this.props.history.push("/admin/register")
-    } else if (this.props.auth.isAuthenticated && !this.props.auth.isAdmin) {
+    if (
+      this.props.auth.isAuthenticated &&
+      this.props.auth.user.permission === "doctor"
+    ) {
       this.props.history.push("/")
+    } else if (
+      this.props.auth.isAuthenticated &&
+      this.props.auth.user.permission === "admin"
+    ) {
+      this.props.history.push("/admin/register")
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard")
     }
   }
 
@@ -39,10 +50,10 @@ class NormalLoginForm extends Component {
         </Title>
         <Form onSubmit={this.handleSubmit} className="login-form">
           <Form.Item>
-            {getFieldDecorator("email", {})(
+            {getFieldDecorator("username", {})(
               <Input
                 prefix={
-                  <Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
                 }
                 placeholder="Email"
               />

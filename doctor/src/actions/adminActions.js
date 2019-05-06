@@ -22,8 +22,3 @@ export const fetchDoctors = () => dispatch => {
     )
     .catch()
 }
-
-export const adminLogout = history => dispatch => {
-  localStorage.removeItem("userData")
-  history.push("/login")
-}
