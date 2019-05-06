@@ -14,7 +14,7 @@ exports.getListDoctors = () => {
     return db.load(sql);
 }
 exports.addElder = (elder) => {
-    var sql = `insert into elder(name, gender, age, ICID, doctorId, weight, height) values ('${elder.name}', '${elder.gender}', ${elder.age}, '${elder.icid}', ${elder.weight}, ${elder.height})`
+    var sql = `insert into elder(name, gender, age, ICID, doctorId, weight, height) values ('${elder.name}', '${elder.gender}', ${elder.age}, '${elder.icid}', ${elder.doctorId}, ${elder.weight}, ${elder.height})`
     return db.insert(sql);
 }
 exports.getListElders = () => {

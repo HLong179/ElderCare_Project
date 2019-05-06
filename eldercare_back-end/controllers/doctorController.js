@@ -60,6 +60,7 @@ router.post('/addElder', (req, res) => {
         gender: req.body.gender,
         age: req.body.age,
         icid: req.body.icid,
+        doctorId: req.body.doctorId,
         weight: req.body.weight,
         height: req.body.height
     }
