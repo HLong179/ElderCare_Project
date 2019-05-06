@@ -10,12 +10,14 @@ app.use(cors());
  }));
 
  var accountController = require('./controllers/accountController');
+ var doctorController = require('./controllers/doctorController');
 //  var healthIndexesController = require('./controllers/healthIndexesController');
  // default route
  app.get('/', function (req, res) {
      return res.send({ error: true, message: 'hello' })
  });
  app.use('/account', accountController);
+ app.use('/doctor', doctorController);
 //  app.use('/healthIndexes', healthIndexesController);
  // set port
  const port = process.env.PORT || 6900;

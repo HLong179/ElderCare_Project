@@ -9,6 +9,10 @@ exports.logIn = (user) => {
     var sql = `select * from relative where rlUsername = '${user.username}' and rlPassword = '${user.password}'`;
     return db.load(sql);
 }
+exports.getListDoctors = () => {
+    var sql = `select * from doctor where permission = 'doctor'`;
+    return db.load(sql);
+}
 
 exports.doctorLogin = (doctor) => {
     var sql = `select * from doctor where username = '${doctor.username}' and password = '${doctor.password}'`;
