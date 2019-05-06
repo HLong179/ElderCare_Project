@@ -76,7 +76,8 @@ router.post('/addElder', (req, res) => {
 })
 
 router.get('/listElders', (req, res) => {
-    accountRepo.getListElders().then(
+    let doctorId = req.body.doctorId;
+    accountRepo.getListElders(doctorId).then(
         elders => {
             res.json(elders);
         },
