@@ -9,11 +9,7 @@ import {
 export const addPatient = userData => dispatch => {
   axios
     .post("http://localhost:6900/doctor/addElder", userData)
-    .then(res =>
-      dispatch({
-        type: ADD_PATIENT
-      })
-    )
+    .then(res => dispatch(fetchPatients({ doctorId: userData.doctorId })))
     .catch()
 }
 
