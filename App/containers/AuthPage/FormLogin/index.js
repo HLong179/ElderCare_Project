@@ -6,8 +6,11 @@ import {Content, Form, Label, Icon, Input} from "native-base";
 import Item from "../../../components/CommonItemInput";
 import Button from "../../../components/CommonButton";
 import Wrapper from "../../../components/CommonWrapper";
-import firebase from 'react-native-firebase';
-import config from '../../../Constant'
+
+import {submitLogin} from '../action';
+import {compose, bindActionCreators} from 'redux';
+import {connect} from 'react-redux'
+
 const StyleHeader = styled(Text)`
     font-size: 30;
     font-weight: bold;
@@ -18,6 +21,9 @@ const StyleHeader = styled(Text)`
 `;
 
 class Login extends Component {
+    static navigationOptions = ({navigation}) => ({
+        header: null
+    })
 
     constructor(props) {
         super(props);
@@ -36,8 +42,15 @@ class Login extends Component {
     };
 
     handleLogin = () => {
-        const {navigate} = this.props.navigation;
-        
+        console.log(this.props)
+        const { username, password } = this.state;
+
+        const data = {
+            username,
+            password
+        }
+        // const {navigate} = this.props.navigation;
+
         // const hhh = {
         //     databaseURL: "https://eldercare-5e4c8.firebaseio.com",
         //     projectId: "eldercare-5e4c8",
@@ -48,63 +61,69 @@ class Login extends Component {
         //     clientId: "49718683704-ipl6t2j9c9rtub3hisae556k4l04fjji.apps.googleusercontent.com",
         //     // persistence: true,
         // }
-       
-        // if (check) {
-           
-        // }
-       
-       
 
-        // e.preventDef
-      return  fetch('http://192.168.1.107:6900/account/login',  {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type' : 'application/json'
-            },
-            body: JSON.stringify({
-                username: this.state.username,
-                password: this.state.password
-            })
-        })
-        .then(
-            response => {
-                response.json();
-                console.log('the result after login : ', response);
-                const Side =  firebase.initializeApp(config.opt, 'test');
-                Side.onReady().then(app => {
-                    app.messaging().subscribeToTopic('S1mdk2XxXg');
-                    navigate('Home');
-                })
-                
-            }
-        )
-        .catch(e => console.log(e))
+        // if (check) {
+
+        // }
+
+
+        // // e.preventDef
+        // return fetch('http://192.168.1.107:6900/account/login', {
+        //     method: 'POST',
+        //     headers: {
+        //         Accept: 'application/json',
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         username: this.state.username,
+        //         password: this.state.password
+        //     })
+        // })
+        //     .then(
+        //         response => {
+        //             response.json();
+        //             console.log('the result after login : ', response);
+        //             const Side = firebase.initializeApp(config.opt, 'test');
+        //             Side.onReady().then(app => {
+        //                 app.messaging().subscribeToTopic('S1mdk2XxXg');
+        //                 navigate('Home');
+        //             })
+
+        //         }
+        //     )
+        //     .catch(e => console.log(e))
+
+
+        this.props.onLogin(data);
         // navigate('Home')
     }
-  
+
     render() {
         return (
             <Wrapper>
                 <Content>
                     <Form>
                         <StyleHeader>{translate('LOGIN_header')}</StyleHeader>
-                        <Item >
+                        <Item>
                             <Input placeholder={translate('LOGIN_email')}
                                    onChangeText={this.handleChangeEmail}
-                                   ref={(input) => this._email = input }
+                                   ref={(input) => this._email = input}
                                    returnKeyType={"next"}
-                                   onSubmitEditing={(event) => {this._password._root.focus()}}
+                                   onSubmitEditing={(event) => {
+                                       this._password._root.focus()
+                                   }}
                                    autoCapitalize={"none"}
                             />
                             <Icon active name="mail"/>
 
                         </Item>
-                        <Item >
+                        <Item>
                             <Input placeholder={translate('LOGIN_password')}
                                    onChangeText={this.handleChangePassword}
-                                   ref={(input) => this._password = input }
-                                   onSubmitEditing={(event) => {this._email._root.focus()}}
+                                   ref={(input) => this._password = input}
+                                   onSubmitEditing={(event) => {
+                                       this._email._root.focus()
+                                   }}
                                    autoCapitalize={"none"}
                             />
                             <Icon active name="key"/>
@@ -120,5 +139,27 @@ class Login extends Component {
     }
 }
 
-export default Login;
 
+const mapStateToProps = state => {
+    return {
+        init: state.init,
+}
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        onLogin: submitLogin,
+    }, dispatch);
+};
+
+// const withConnect = connect(
+//     null,
+//     ma
+// )
+
+
+// export default compose(
+//     withConnect,
+// )(Login);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

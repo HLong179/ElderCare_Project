@@ -7,7 +7,7 @@ class WelcomePage extends React.Component {
     componentDidMount = async () => {
         const result = await setTimeout(() => {
             SplashScreen.hide()
-            this.props.navigation.navigate('Home');
+            this.props.navigation.navigate('Login');
         }, 2000);
 
         console.log(result);

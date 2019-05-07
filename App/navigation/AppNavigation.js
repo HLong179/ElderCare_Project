@@ -1,5 +1,6 @@
 import React from "react";
-import {StackNavigator, createStackNavigator, createAppContainer} from "react-navigation";
+import {createStackNavigator} from "react-navigation";
+
 import HeaderWithIcon from '../containers/Header';
 import CommonHeader from '../components/CommonHeader';
 import AddRelative from '../containers/AddRelative';
@@ -13,37 +14,49 @@ import FormHeartRate from "../containers/HeartCard/FormHeartRate";
 import SetTime from "../containers/SetTime";
 
 
+
+
+
+
 const PrimaryNav = createStackNavigator(
     {
+
         Home: {
             screen: Home,
             navigationOptions: () => ({
                 header: <HeaderWithIcon/>
             })
         },
-        FormHeartRate: {
-            screen: FormHeartRate,
-            navigationOptions: () => ({
-                header: <CommonHeader title="Heart Rate"/>
-            }),
-        },
+
+        // FormHeartRate: {
+        //     screen: FormHeartRate,
+        //     navigationOptions: () => ({
+        //         header: <CommonHeader title="Heart Rate"/>
+        //     }),
+        // },
+
         Login: {
             screen: Login,
-            navigationOptions: {
-                header: null
-            }
+
+            // navigationOptions: {
+            //     header: null
+            // }
 
         },
-        ResetPass: {
-            screen: ResetPassword,
-            header: <CommonHeader title="Reset Password"/>
-        },
+
+        // ResetPass: {
+        //     screen: ResetPassword,
+        //     header: <CommonHeader title="Reset Password"/>
+        // },
+
         AddRelative: {
             screen: AddRelative,
         },
+
         SplashScreen: {
             screen: WelcomePage
         },
+
         SetTime: {
             screen: SetTime,
             navigationOptions: () => {
@@ -59,6 +72,7 @@ const PrimaryNav = createStackNavigator(
     }
 );
 
-const App = createAppContainer(PrimaryNav)
+// export default PrimaryNav;
 
-export default App;
+
+  export default PrimaryNav;
