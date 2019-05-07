@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react"
-import { Input, Button, Modal, Form, Select } from "antd"
+import { Input, Button, Modal, Form, Select, message } from "antd"
 import { connect } from "react-redux"
 import { addPatient } from "../../../actions/patientActions"
 
@@ -35,6 +35,7 @@ class AddPatientWithForm extends Component {
     this.setState({
       visible: false
     })
+    message.success("Thêm bệnh nhân thành công")
   }
 
   handleCancel = e => {

@@ -1,11 +1,12 @@
 import React, { Component } from "react"
 import { Line } from "react-chartjs-2"
-import { Layout, Typography, Row, Col, Form } from "antd"
+import { Layout } from "antd"
 import { connect } from "react-redux"
 
 import "../../Home.css"
 import PatientInfo from "./PatientInfo"
 import Relatives from "./Relatives"
+import ListDrugs from "./ListDrugs"
 
 const { Content } = Layout
 
@@ -109,12 +110,12 @@ class PatientDetail extends Component {
         ]
       }
     }
-    console.log(this.state.patient.ICID)
     return (
       <Content style={{ margin: "16px 16px" }}>
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
           <PatientInfo patient={this.state.patient} />
           <Relatives elderId={this.state.patient.ICID} />
+          <ListDrugs />
           {/* {this.displayPatientDetails()} */}
           <Line data={chartData} options={chartOption} />
         </div>

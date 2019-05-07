@@ -1,10 +1,5 @@
 import axios from "axios"
-import {
-  ADD_PATIENT,
-  FETCH_PATIENTS,
-  ADD_RELATIVE,
-  FETCH_RELATIVES
-} from "../constants"
+import { FETCH_PATIENTS, FETCH_RELATIVES } from "../constants"
 
 export const addPatient = userData => dispatch => {
   axios
@@ -42,7 +37,6 @@ export const fetchRelatives = elderId => async dispatch => {
   await axios
     .post("http://localhost:6900/doctor/listRelatives", elderId)
     .then(res => {
-      console.log(res)
       dispatch({
         type: FETCH_RELATIVES,
         payload: res.data

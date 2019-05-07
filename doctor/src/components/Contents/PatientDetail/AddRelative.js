@@ -1,9 +1,7 @@
 import React, { Component } from "react"
-import { Typography, Input, Button, List, Modal, Form } from "antd"
+import { Input, Button, Modal, Form, message } from "antd"
 import { addRelative } from "../../../actions/patientActions"
 import { connect } from "react-redux"
-
-const { Title } = Typography
 
 class RelativesWithForm extends Component {
   constructor(props) {
@@ -45,6 +43,7 @@ class RelativesWithForm extends Component {
         this.setState({
           visible: false
         })
+        message.success("Thêm người thân thành công")
       } else {
         console.log(err)
       }
@@ -69,7 +68,12 @@ class RelativesWithForm extends Component {
     }
     return (
       <div>
-        <Button type="primary" icon="user-add" onClick={this.showModal}>
+        <Button
+          type="primary"
+          icon="user-add"
+          onClick={this.showModal}
+          style={{ marginBottom: 20 }}
+        >
           Tạo tài khoản
         </Button>
         <Modal

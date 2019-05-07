@@ -9,7 +9,6 @@ import DashboardContent from "./Contents/DashboardContent"
 import ListPatients from "./Contents/ListPatients/ListPatients"
 import Schedules from "./Contents/Schedules"
 import PatientDetail from "./Contents/PatientDetail/PatientDetail"
-import Relatives from "./Contents/PatientDetail/Relatives"
 
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"

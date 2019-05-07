@@ -1,4 +1,4 @@
-import { ADD_PATIENT, FETCH_PATIENTS, FETCH_RELATIVES } from "../constants"
+import { FETCH_PATIENTS, FETCH_RELATIVES } from "../constants"
 
 const initialState = {
   listPatients: [],
