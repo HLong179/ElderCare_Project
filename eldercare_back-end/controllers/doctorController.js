@@ -94,5 +94,16 @@ router.post('/detailElder', (req, res) => {
         err => res.json(err)
     )
 })
+router.post('/listRelatives', (req,res) => {
+    let elderId = req.body.elderId;
+
+    accountRepo.getListRelatives(elderId).then(
+        relatives => {
+            res.json(relatives);
+        },
+        err => res.json(err)
+    )
+
+})
 
 module.exports = router;

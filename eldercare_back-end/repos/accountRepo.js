@@ -39,3 +39,8 @@ exports.addDoctor = (doctor) => {
     ('${doctor.name}', '${doctor.email}', '${doctor.phone}', '${doctor.specializeIn}', '${doctor.username}', '${doctor.password}', 'doctor')`;
     return db.insert(sql);
 }
+
+exports.getListRelatives = (elderId) => {
+    let sql = `select * from relative where elderId = '${elderId}'`;
+    return db.load(sql);
+}
