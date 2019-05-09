@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { BackHandler, View } from 'react-native'
+import { BackHandler, View} from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 import { Col, Row, Grid } from 'react-native-easy-grid';
 
 // import HeaderWithIcon from "./Header";
@@ -16,12 +17,25 @@ import HeartCard from './HeartCard'
 
 
 class Home extends Component {
-    componentDidMount () {
+    constructor(props) {
+        super(props);
+    }
+    async componentDidMount () {
         BackHandler.addEventListener('hardwareBackPress', () => {
             this.props.navigation.goBack();
-            return true
+            return true;
         })
+        try {
+            const data = await AsyncStorage.getItem('curUser');
+            if (data!= null) {
+                alert(data);
+            }
+        }
+        catch(err){
+            console.log(err);
+        }
     }
+    
 
     render () {
         return (

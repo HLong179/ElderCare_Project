@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Text} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import translate from '../../../utils/language.utils';
 import styled from "styled-components";
 import {Content, Form, Label, Icon, Input} from "native-base";
 import Item from "../../../components/CommonItemInput";
 import Button from "../../../components/CommonButton";
 import Wrapper from "../../../components/CommonWrapper";
+import SETTINGS from "../../../settings"
 
 import {submitLogin} from '../action';
 import {compose, bindActionCreators} from 'redux';
@@ -29,7 +31,8 @@ class Login extends Component {
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            isLogged: '',
         }
     }
 
@@ -49,6 +52,28 @@ class Login extends Component {
             username,
             password
         }
+        fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/login`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "username": data.username,
+                "password": data.password
+            }),
+        }).then((response) => response.json())
+            .then(async(response) => {
+                if (response.auth) {
+                    await AsyncStorage.setItem('curUser', JSON.stringify(response.curUser[0]));
+                    this.props.navigation.navigate('Home');
+                } else {
+                    alert(JSON.stringify(response))
+                }
+            })
+            .catch((error) => {
+                alert(error)
+            })
         // const {navigate} = this.props.navigation;
 
         // const hhh = {
@@ -94,7 +119,7 @@ class Login extends Component {
         //     .catch(e => console.log(e))
 
 
-        this.props.onLogin(data);
+        //this.props.onLogin(data);
         // navigate('Home')
     }
 
