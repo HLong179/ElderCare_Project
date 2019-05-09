@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import { Button, Icon, Modal, Form, Input, Upload, message } from "antd"
-
-import "./style.css"
+import * as firebase from "firebase/app";
+import 'firebase/storage';
+import "./style.css";
+import {connect} from 'react-redux'
 
 const { TextArea } = Input
 
@@ -30,11 +32,40 @@ class AddDrugsWithForm extends Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // let result = {
-        //   imageUrl: this.state.imageUrl,
-        //   drugNote: values.drugNote
-        // }
-        message.success("Thêm đơn thuốc thành công")
+        let result = {
+          imageUrl: this.state.imageUrl,
+          drugNote: values.drugNote
+        }
+        // console.log('the result after we pick image: ', result)
+        if (firebase) {
+          let icid = this.props.elderId + 'Prescription.png';
+          console.log(icid)
+          var link = 'doctor' + this.props.auth.user.name + this.props.auth.user.doctorId ;
+          
+          console.log(link)
+          var storageRef = firebase.storage().ref().child(`${link}/${icid}`);
+          
+          // var message = result.imageUrl.split(',')[1];
+          storageRef.putString(result.imageUrl, 'data_url', {contentType:'image/jpg'}).then(function(snapshot) {
+            // console.log('Uploaded a base64url string!', snapshot);
+            //we get url of this image after upload this to firebase storage
+            storageRef.getDownloadURL().then(url => {
+              console.log('url of this picture after upload to firebase: ', url);
+            })
+
+
+
+
+
+            message.success("Thêm đơn thuốc thành công")
+
+          });
+        }
+       
+
+
+
+
         this.props.form.resetFields()
         this.setState({
           visible: false
@@ -146,4 +177,18 @@ class AddDrugsWithForm extends Component {
 
 const AddDrugs = Form.create({ name: "add_drugs" })(AddDrugsWithForm)
 
-export default AddDrugs
+// export default AddDrugs
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {}
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddDrugs)

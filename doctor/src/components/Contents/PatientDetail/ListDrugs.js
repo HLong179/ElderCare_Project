@@ -11,7 +11,7 @@ class ListDrugs extends Component {
         <Title level={3} style={{ marginBottom: 20, marginTop: 30 }}>
           Đơn thuốc
         </Title>
-        <AddDrugs />
+        <AddDrugs elderId={this.props.elderId}/>
       </div>
     )
   }
