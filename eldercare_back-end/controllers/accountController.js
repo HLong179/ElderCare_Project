@@ -15,7 +15,7 @@ router.post('/addMainUser', (req, res) => {
             phone: req.body.phone,
             address: req.body.address,
             username: req.body.username,
-            password: md5(req.body.password).toString(),
+            password: (req.body.password).toString(),
             permission: "Main"
         };
         accountRepo.addUser(user)
@@ -40,7 +40,7 @@ router.post('/addSubUser', (req, res) => {
             phone: req.body.phone,
             address: req.body.address,
             username: req.body.username,
-            password: md5(req.body.password).toString(),
+            password: (req.body.password).toString(),
             permission: "Sub"
         };
         accountRepo.addUser(user)
@@ -58,7 +58,7 @@ router.post('/login', (req, res) => {
     try {
         var info = {
             username: req.body.username,
-            password: md5(req.body.password).toString()
+            password: (req.body.password).toString()
         };
         accountRepo.getUserByUsername(info.username)
         .then((user, err) => {
@@ -69,12 +69,14 @@ router.post('/login', (req, res) => {
                 return res.status(404).send("[LOGIN] No user found");
             }
             if (info.password === user[0].rlPassword) {
+               
                 res.status(200).send({
                     auth: true,
                     curUser: user
                 })
             }
             else {
+                console.log(info)
                 res.status(401).send({
                     auth: false,
                     message: "Wrong password"

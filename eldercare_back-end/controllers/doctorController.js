@@ -13,7 +13,7 @@ router.post('/addDoctor' , (req, res) => {
         phone: req.body.phone,
         specializeIn: req.body.specializeIn,
         username: req.body.username,
-        password: md5(req.body.password).toString()
+        password: (req.body.password).toString()
      }
     accountRepo.addDoctor(doctor).then(
         next => {
@@ -32,15 +32,16 @@ router.post('/login', (req, res) => {
     try {
         var info = {
             username: req.body.username,
-            password: md5(req.body.password).toString()
+            password: (req.body.password).toString()
         };
+        console.log(info)
         accountRepo.doctorLogin(info).then(
             doctor => {
                 res.json(doctor);
             }
         )
     } catch (error) {
-        console.log(error)
+       res.json(error)
     }
 })
 
