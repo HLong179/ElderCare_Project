@@ -61,7 +61,6 @@ class ListDoctor extends Component {
         key: index
       }
     })
-    console.log(listDoctors)
     return (
       <Content style={{ margin: "16px 16px" }}>
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>

@@ -1,9 +1,11 @@
 import React, { Component } from "react"
 import { Button, Icon, Modal, Form, Input, Upload, message } from "antd"
-import * as firebase from "firebase/app";
-import 'firebase/storage';
-import "./style.css";
-import {connect} from 'react-redux'
+import * as firebase from "firebase/app"
+import "firebase/storage"
+import "./style.css"
+import { connect } from "react-redux"
+import { addPrescription } from "../../../actions/patientActions"
+import store from "../../../store"
 
 const { TextArea } = Input
 
@@ -27,49 +29,52 @@ class AddDrugsWithForm extends Component {
     this.setState({
       visible: false
     })
+    this.props.form.resetFields()
   }
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        let result = {
+        let icid = this.props.elderId
+        let doctorId = this.props.auth.user.doctorId
+        let body = {
+          elderId: icid,
+          doctorId: doctorId,
           imageUrl: this.state.imageUrl,
-          drugNote: values.drugNote
+          script: values.drugNote
         }
+
         // console.log('the result after we pick image: ', result)
         if (firebase) {
-          let icid = this.props.elderId + 'Prescription.png';
-          console.log(icid)
-          var link = 'doctor' + this.props.auth.user.name + this.props.auth.user.doctorId ;
-          
-          console.log(link)
-          var storageRef = firebase.storage().ref().child(`${link}/${icid}`);
-          
+          let imageFileName = icid + +"Prescription.png"
+          let link = "doctor" + this.props.auth.user.name + doctorId
+
+          let storageRef = firebase
+            .storage()
+            .ref()
+            .child(`${link}/${imageFileName}`)
+
           // var message = result.imageUrl.split(',')[1];
-          storageRef.putString(result.imageUrl, 'data_url', {contentType:'image/jpg'}).then(function(snapshot) {
-            // console.log('Uploaded a base64url string!', snapshot);
-            //we get url of this image after upload this to firebase storage
-            storageRef.getDownloadURL().then(url => {
-              console.log('url of this picture after upload to firebase: ', url);
+
+          storageRef
+            .putString(body.imageUrl, "data_url", {
+              contentType: "image/.jpg"
             })
+            .then(function(snapshot) {
+              // console.log('Uploaded a base64url string!', snapshot);
+              //we get url of this image after upload this to firebase storage
 
-
-
-
-
-            message.success("Thêm đơn thuốc thành công")
-
-          });
+              storageRef.getDownloadURL().then(url => {
+                body.imageUrl = url
+                store.dispatch(addPrescription(body))
+              })
+            })
         }
-       
-
-
-
-
-        this.props.form.resetFields()
         this.setState({
           visible: false
         })
+        message.success("Thêm đơn thuốc thành công")
+        this.props.form.resetFields()
       } else {
         console.log(err)
       }
@@ -99,9 +104,9 @@ class AddDrugsWithForm extends Component {
   }
 
   beforeUpload = file => {
-    const isJPG = file.type === "image/jpeg"
+    const isJPG = file.type === "image/jpeg" || file.type === "image/png"
     if (!isJPG) {
-      message.error("You can only upload JPG file!")
+      message.error("You can only upload JPG or PNG file!")
     }
     const isLt2M = file.size / 1024 / 1024 < 2
     if (!isLt2M) {
@@ -185,7 +190,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    addPrescription: data => dispatch(addPrescription(data))
+  }
 }
 
 export default connect(

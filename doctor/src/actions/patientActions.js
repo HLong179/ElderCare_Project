@@ -44,3 +44,12 @@ export const fetchRelatives = elderId => async dispatch => {
     })
     .catch()
 }
+
+export const addPrescription = data => dispatch => {
+  axios
+    .post("http://localhost:6900/medicine/addPrescription", data)
+    .then(res => {
+      // dispatch(fetchRelatives({ elderId: userData.elder_id }))
+    })
+    .catch()
+}

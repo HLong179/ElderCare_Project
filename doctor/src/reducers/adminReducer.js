@@ -12,6 +12,7 @@ const adminReducer = (state = initialState, action) => {
         ...state
       }
     case FETCH_DOCTORS:
+    debugger
       return {
         ...state,
         listDoctors: [...action.payload]

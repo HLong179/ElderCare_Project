@@ -43,12 +43,6 @@ class ASider extends Component {
               <span>Lịch khám bệnh</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="relatives">
-            <NavLink to={"/relatives"}>
-              <Icon type="team" />
-              <span>Quản lý người thân</span>
-            </NavLink>
-          </Menu.Item>
         </Menu>
       </Sider>
     )

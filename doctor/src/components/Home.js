@@ -63,7 +63,6 @@ class Home extends Component {
             <Route path="/list-patients" component={ListPatients} />
             <Route path="/schedules" component={Schedules} />
             <Route path="/patient/:icid" component={PatientDetail} />
-            {/* <Route path="/relatives" component={Relatives} /> */}
           </Switch>
           <AFooter />
         </Layout>

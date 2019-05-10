@@ -31,11 +31,11 @@ const PatientInfo = patient => {
         </p>
         <p>
           <span className="patientDetails-title">Cân nặng:</span>{" "}
-          <span>{patient.patient.weight}</span>
+          <span>{patient.patient.weight} kg</span>
         </p>
         <p>
           <span className="patientDetails-title">Chiều cao:</span>{" "}
-          <span>{patient.patient.height}</span>
+          <span>{patient.patient.height} cm</span>
         </p>
       </Col>
       <Col span={8} style={{ display: "flex" }}>
