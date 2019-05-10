@@ -8,7 +8,7 @@ class ListDrugs extends Component {
   render() {
     return (
       <div>
-        <Title level={3} style={{ marginBottom: 20, marginTop: 30 }}>
+        <Title level={3} style={{ marginBottom: 20, marginTop: 50 }}>
           Đơn thuốc
         </Title>
         <AddDrugs elderId={this.props.elderId}/>

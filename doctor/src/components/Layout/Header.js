@@ -1,139 +1,11 @@
 import React, { Component } from "react"
-import { Layout, Icon, Menu, Dropdown, Avatar, Badge } from "antd"
+import { Layout, Icon, Menu, Dropdown, Avatar } from "antd"
 import doctorAvatar from "../../assets/avatar-doctor.png"
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 import { logout } from "../../actions/authActions"
 
 const { Header } = Layout
-
-const notify = (
-  <Menu style={{ marginTop: "24px" }}>
-    <Menu.Item
-      key="0"
-      style={{
-        borderBottom: "1px solid #e8e8e8",
-        maxWidth: "400px"
-      }}
-    >
-      <div className="clearfix">
-        <Avatar
-          size={40}
-          icon="heart"
-          style={{
-            color: "#fff",
-            backgroundColor: "tomato",
-            float: "left",
-            marginRight: "10px",
-            clear: "left"
-          }}
-        />
-        <p style={{ whiteSpace: "pre-wrap", marginBottom: 0 }}>
-          Nhịp tim của bệnh nhân
-          <span style={{ color: "#1890ff", fontWeight: 500 }}>
-            {" "}
-            Trần Văn A
-          </span>{" "}
-          đang tăng cao <span style={{ color: "tomato" }}>122 bpm</span>
-        </p>
-        <p
-          style={{
-            color: "#bfbfbf",
-            fontStyle: "italic",
-            fontSize: "12px",
-            marginLeft: "50px",
-            marginTop: "5px",
-            marginBottom: 0
-          }}
-        >
-          15 phút trước
-        </p>
-      </div>
-    </Menu.Item>
-    <Menu.Item
-      key="1"
-      style={{
-        borderBottom: "1px solid #e8e8e8",
-        maxWidth: "400px"
-      }}
-    >
-      <div className="clearfix">
-        <Avatar
-          size={40}
-          icon="heart"
-          style={{
-            color: "#fff",
-            backgroundColor: "tomato",
-            float: "left",
-            marginRight: "10px",
-            clear: "left"
-          }}
-        />
-        <p style={{ whiteSpace: "pre-wrap", marginBottom: 0 }}>
-          Nhịp tim của bệnh nhân
-          <span style={{ color: "#1890ff", fontWeight: 500 }}>
-            {" "}
-            Trần Văn A
-          </span>{" "}
-          đang tăng cao <span style={{ color: "tomato" }}>122 bpm</span>
-        </p>
-        <p
-          style={{
-            color: "#bfbfbf",
-            fontStyle: "italic",
-            fontSize: "12px",
-            marginLeft: "50px",
-            marginTop: "5px",
-            marginBottom: 0
-          }}
-        >
-          15 phút trước
-        </p>
-      </div>
-    </Menu.Item>
-    <Menu.Item
-      key="2"
-      style={{
-        borderBottom: "1px solid #e8e8e8",
-        maxWidth: "400px"
-      }}
-    >
-      <div className="clearfix">
-        <Avatar
-          size={40}
-          icon="heart"
-          style={{
-            color: "#fff",
-            backgroundColor: "tomato",
-            float: "left",
-            marginRight: "10px",
-            clear: "left"
-          }}
-        />
-        <p style={{ whiteSpace: "pre-wrap", marginBottom: 0 }}>
-          Nhịp tim của bệnh nhân
-          <span style={{ color: "#1890ff", fontWeight: 500 }}>
-            {" "}
-            Trần Văn A
-          </span>{" "}
-          đang tăng cao <span style={{ color: "tomato" }}>122 bpm</span>
-        </p>
-        <p
-          style={{
-            color: "#bfbfbf",
-            fontStyle: "italic",
-            fontSize: "12px",
-            marginLeft: "50px",
-            marginTop: "5px",
-            marginBottom: 0
-          }}
-        >
-          15 phút trước
-        </p>
-      </div>
-    </Menu.Item>
-  </Menu>
-)
 
 class AHeader extends Component {
   logoutUser = () => {
@@ -171,14 +43,6 @@ class AHeader extends Component {
             onSearch={value => console.log(value)}
             style={{ width: 200 }}
           /> */}
-          <Dropdown overlay={notify}>
-            <Badge dot>
-              <Icon
-                type="notification"
-                style={{ marginLeft: "50px", cursor: "pointer" }}
-              />
-            </Badge>
-          </Dropdown>
           <Dropdown overlay={userMenu} className="user-avatar">
             <span>
               <Avatar size="large" src={doctorAvatar} />

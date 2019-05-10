@@ -40,11 +40,16 @@ class Relatives extends Component {
   render() {
     return (
       <div>
-        <Title level={3} style={{ marginBottom: 20 }}>
+        <Title level={3} style={{ marginBottom: 20, marginTop: 50 }}>
           Danh sách người thân
         </Title>
         <AddRelative ICID={this.props.elderId} />
-        <Table columns={columns} dataSource={this.props.listRelatives} />
+        <Table
+          columns={columns}
+          dataSource={this.props.listRelatives}
+          pagination={false}
+          style={{ marginTop: 20 }}
+        />
       </div>
     )
   }

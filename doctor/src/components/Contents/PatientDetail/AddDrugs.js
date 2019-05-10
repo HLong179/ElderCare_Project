@@ -8,7 +8,7 @@ import { addPrescription } from "../../../actions/patientActions"
 import store from "../../../store"
 
 const { TextArea } = Input
-
+  
 class AddDrugsWithForm extends Component {
   constructor(props) {
     super(props)
