@@ -21,6 +21,31 @@ router.post('/addPrescription', (req, res) => {
         err => res.json(err)
     )
 })
+router.post('/getPescription', (req, res) => {
+    let elderId = req.body.elderId;
+    medicineRepo.getPrescription(elderId).then(
+        pres => {
+            res.json(pres[0]);
+        },
+        err => res.json(err)
+    )
+})
 
+router.post('/updatePrescription', (req, res) => {
+    let elderId = req.body.elderId;
+    let dataChanged = {
+        imageUrl: req.body.imageUrl,
+        script: req.body.script
+    }
+    medicineRepo.updatePrescription(elderId, dataChanged).then(
+        next => {
+            res.json({
+                ...dataChanged,
+                msg: 'update prescription success!'
+            })
+        },
+        err => res.json(err)
+    )
+})
 
 module.exports = router;
