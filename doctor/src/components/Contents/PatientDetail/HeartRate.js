@@ -18,20 +18,18 @@ export default class HeartRate extends Component {
 
   componentWillMount = async () => {
     const patientsRef = firebase.database().ref("Patients")
-    await patientsRef.on("value",async (snapshot) => {
+    await patientsRef.on("value", async snapshot => {
       let patients = snapshot.val()["184305179"]
-      console.log(patients)
       for (let patient in patients) {
-        let timeLabel = moment(patients[patient]["time"]).format("DD/MM/YYYY HH:mm:ss")
+        let timeLabel = moment(patients[patient]["time"]).format(
+          "DD/MM/YYYY HH:mm:ss"
+        )
         await this.setState({
-          ...this.state,
-          labels: [timeLabel, ...this.state.labels],
-          heartRates: [patients[patient]["value"], ...this.state.heartRates]
+          labels: [...this.state.labels, timeLabel],
+          heartRates: [...this.state.heartRates, patients[patient]["value"]]
         })
-     
       }
     })
-    console.log(this.state)
   }
 
   render() {
