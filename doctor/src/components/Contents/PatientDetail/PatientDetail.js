@@ -28,7 +28,7 @@ class PatientDetail extends Component {
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
           <PatientInfo patient={this.state.patient} />
           <Relatives elderId={this.state.patient.ICID} />
-          <ListDrugs />
+          <ListDrugs elderId={this.state.patient.ICID} />
           <HeartRate />
         </div>
       </Content>

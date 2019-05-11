@@ -5,6 +5,7 @@ import { Layout, Table, Typography, Input, Button, Icon } from "antd"
 import AddPatient from "./AddPatient"
 import { connect } from "react-redux"
 import { fetchPatients } from "../../../actions/patientActions"
+import "./style.css"
 
 const { Content } = Layout
 const { Title } = Typography
@@ -115,10 +116,11 @@ class ListPatients extends Component {
     return (
       <Content style={{ margin: "16px 16px" }}>
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
-          <Title level={3} style={{ marginBottom: 20 }}>
-            Danh sách bệnh nhân
-          </Title>
-          <AddPatient />
+          <div className="top-content">
+            <Title level={3}>Danh sách bệnh nhân</Title>
+            <AddPatient />
+          </div>
+
           <Table columns={columns} dataSource={listPatients} bordered />
         </div>
       </Content>

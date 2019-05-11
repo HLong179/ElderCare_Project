@@ -4,17 +4,18 @@ import * as firebase from "firebase/app"
 import "firebase/storage"
 import "./style.css"
 import { connect } from "react-redux"
-import { addPrescription } from "../../../actions/patientActions"
+import { updatePrescription } from "../../../actions/patientActions"
 import store from "../../../store"
 
 const { TextArea } = Input
 
-class AddDrugsWithForm extends Component {
+class UpdateDrugsWithForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
       visible: false,
       loading: false,
+      imageUrlP: this.props.presciption.imageUrl,
       imageUrl: null,
       done: false
     }
@@ -38,43 +39,53 @@ class AddDrugsWithForm extends Component {
       if (!err) {
         let icid = this.props.elderId
         let doctorId = this.props.auth.user.doctorId
-        let body = {
-          elderId: icid,
-          doctorId: doctorId,
-          imageUrl: this.state.imageUrl,
-          script: values.drugNote
-        }
 
         // console.log('the result after we pick image: ', result)
-        if (firebase) {
-          let imageFileName = icid +"Prescription.png"
-          let link = "doctor" + this.props.auth.user.name + doctorId
-          console.log(imageFileName)
-          let storageRef = firebase
-            .storage()
-            .ref()
-            .child(`${link}/${imageFileName}`)
+        if (this.state.imageUrl) {
+          let body = {
+            elderId: icid,
+            imageUrl: this.state.imageUrl,
+            script: values.drugNote
+          }
+          if (firebase) {
+            let imageFileName = icid + "Prescription.png"
+            console.log(imageFileName)
+            let link = "doctor" + this.props.auth.user.name + doctorId
 
-          // var message = result.imageUrl.split(',')[1];
+            let storageRef = firebase
+              .storage()
+              .ref()
+              .child(`${link}/${imageFileName}`)
 
-          storageRef
-            .putString(body.imageUrl, "data_url", {
-              contentType: "image/.jpg"
-            })
-            .then(function(snapshot) {
-              // console.log('Uploaded a base64url string!', snapshot);
-              //we get url of this image after upload this to firebase storage
+            // var message = result.imageUrl.split(',')[1];
 
-              storageRef.getDownloadURL().then(url => {
-                body.imageUrl = url
-                store.dispatch(addPrescription(body))
+            storageRef
+              .putString(body.imageUrl, "data_url", {
+                contentType: "image/.jpg"
               })
-            })
+              .then(function(snapshot) {
+                // console.log('Uploaded a base64url string!', snapshot);
+                //we get url of this image after upload this to firebase storage
+
+                storageRef.getDownloadURL().then(url => {
+                  body.imageUrl = url
+                  store.dispatch(updatePrescription(body))
+                })
+              })
+          }
+        } else {
+          let body = {
+            elderId: icid,
+            imageUrl: this.state.imageUrlP,
+            script: values.drugNote
+          }
+          store.dispatch(updatePrescription(body))
         }
+
         this.setState({
           visible: false
         })
-        message.success("Thêm đơn thuốc thành công")
+        message.success("Cập nhật đơn thuốc thành công")
         this.props.form.resetFields()
       } else {
         console.log(err)
@@ -119,25 +130,19 @@ class AddDrugsWithForm extends Component {
 
   displayDrugs() {
     const { getFieldDecorator } = this.props.form
-    const uploadButton = (
-      <div>
-        <Icon type={this.state.loading ? "loading" : "plus"} />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    )
+    const scriptProps = this.props.presciption.script
     const imageUrl = this.state.imageUrl
     return (
       <React.Fragment>
         <div className="list-drug">
           <Button type="primary" onClick={this.showModal}>
-            <Icon type="plus" /> Thêm đơn thuốc
+            <Icon type="sync" /> Cập nhật đơn thuốc
           </Button>
           <Modal
             title="Thêm thuốc"
             visible={this.state.visible}
             onOk={this.handleSubmit}
             onCancel={this.handleCancel}
-            okButtonProps={{ disabled: !this.state.done }}
           >
             <Form onSubmit={this.handleSubmit}>
               <Form.Item label="Hình ảnh thuốc">
@@ -159,7 +164,11 @@ class AddDrugsWithForm extends Component {
                           className="upload-preview"
                         />
                       ) : (
-                        uploadButton
+                        <img
+                          src={this.state.imageUrlP}
+                          alt="avatar"
+                          className="upload-preview"
+                        />
                       )}
                     </Upload>
                   </div>
@@ -169,7 +178,7 @@ class AddDrugsWithForm extends Component {
             <Form onSubmit={this.handleSubmit}>
               <Form.Item label="Ghi chú">
                 {getFieldDecorator("drugNote", {
-                  initialValue: ""
+                  initialValue: scriptProps
                 })(<TextArea />)}
               </Form.Item>
             </Form>
@@ -178,12 +187,15 @@ class AddDrugsWithForm extends Component {
       </React.Fragment>
     )
   }
+
   render() {
     return <div>{this.displayDrugs()}</div>
   }
 }
 
-const AddDrugs = Form.create({ name: "add_drugs" })(AddDrugsWithForm)
+const UpdatePresciption = Form.create({ name: "update_drugs" })(
+  UpdateDrugsWithForm
+)
 
 const mapStateToProps = state => {
   return {
@@ -193,11 +205,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addPrescription: data => dispatch(addPrescription(data))
+    updatePrescription: data => dispatch(updatePrescription(data))
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddDrugs)
+)(UpdatePresciption)

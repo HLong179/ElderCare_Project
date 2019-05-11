@@ -3,6 +3,7 @@ import { Typography, Table } from "antd"
 import { connect } from "react-redux"
 import { fetchRelatives } from "../../../actions/patientActions"
 import AddRelative from "./AddRelative"
+import "./style.css"
 
 const { Title } = Typography
 const columns = [
@@ -40,10 +41,13 @@ class Relatives extends Component {
   render() {
     return (
       <div>
-        <Title level={3} style={{ marginBottom: 20, marginTop: 50 }}>
-          Danh sách người thân
-        </Title>
-        <AddRelative ICID={this.props.elderId} />
+        <div className="top-content">
+          <Title level={3}>Danh sách người thân</Title>
+          {!this.props.listRelatives[0] ? (
+            <AddRelative ICID={this.props.elderId} />
+          ) : null}
+        </div>
+
         <Table
           columns={columns}
           dataSource={this.props.listRelatives}

@@ -1,5 +1,9 @@
 import axios from "axios"
-import { FETCH_PATIENTS, FETCH_RELATIVES } from "../constants"
+import {
+  FETCH_PATIENTS,
+  FETCH_RELATIVES,
+  FETCH_PRESCIPTION
+} from "../constants"
 
 export const addPatient = userData => dispatch => {
   axios
@@ -49,7 +53,28 @@ export const addPrescription = data => dispatch => {
   axios
     .post("http://localhost:6900/medicine/addPrescription", data)
     .then(res => {
-      // dispatch(fetchRelatives({ elderId: userData.elder_id }))
+      dispatch(fetchPrescription({ elderId: data.elderId }))
+    })
+    .catch()
+}
+
+export const fetchPrescription = elderId => async dispatch => {
+  await axios
+    .post("http://localhost:6900/medicine/getPescription", elderId)
+    .then(res => {
+      dispatch({
+        type: FETCH_PRESCIPTION,
+        payload: res.data
+      })
+    })
+    .catch()
+}
+
+export const updatePrescription = data => dispatch => {
+  axios
+    .post("http://localhost:6900/medicine/updatePrescription", data)
+    .then(res => {
+      dispatch(fetchPrescription({ elderId: data.elderId }))
     })
     .catch()
 }
