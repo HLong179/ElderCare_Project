@@ -40,14 +40,14 @@ export default class DateTimePickerTester extends Component {
   // }
 
   handleSubmit = () => {
-    let value = this.state.time;
-    // console.log('thiss iss value of interval!!!!!!!!!!!!!!  ',value)
+    // let value = this.state.time;
+    // // console.log('thiss iss value of interval!!!!!!!!!!!!!!  ',value)
     
-    // const check = firebase.initializeApp(config.opt, 'test');
-    // check.onReady().then(app => {
-      const ref = firebase.app().database().ref('/Users/Devices/S1mdk2XxXg/Interval');
-      // app.messaging().subscribeToTopic('S1mdk2XxXg');
-      ref.set(+value);
+    // // const check = firebase.initializeApp(config.opt, 'test');
+    // // check.onReady().then(app => {
+    //   const ref = firebase.app().database().ref('/Users/Devices/S1mdk2XxXg/Interval');
+    //   // app.messaging().subscribeToTopic('S1mdk2XxXg');
+    //   ref.set(+value);
     // })
     
     

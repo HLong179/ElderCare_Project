@@ -4,6 +4,8 @@ import { Container, Content, ListItem, CheckBox, Body, Text, Item } from 'native
 import DateTimePicker from "react-native-modal-datetime-picker";
 import Dialog from "react-native-dialog"
 import moment from 'moment'
+import firebase from 'react-native-firebase';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 class SetTime extends React.Component {
@@ -81,8 +83,19 @@ class SetTime extends React.Component {
     };
 
     handleOK = () => {
-        let newItv = (this.state.hour)*60*60 + (this.state.minute)*60 + (this.state.second);
+        let newItv = (this.state.hour)*60 + (this.state.minute);
         console.log("New interval (seconds):", newItv);
+        let elderId;
+        AsyncStorage.getItem('curUser').then(
+            (user) => {
+                
+                elderId = JSON.parse(user).elderId;
+                console.log(elderId)
+                firebase.database().ref(`Patients/${elderId}/Interval`).set(+newItv);
+                console.log('we set interval value success')
+            },
+            err => console.log(err)
+        )
         //update khoang thoi gian moi nhap vao db
         
         this.setState({ dialogVisible: false });

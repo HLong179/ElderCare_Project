@@ -8,7 +8,8 @@ import Item from "../../../components/CommonItemInput";
 import Button from "../../../components/CommonButton";
 import Wrapper from "../../../components/CommonWrapper";
 import SETTINGS from "../../../settings"
-
+import firebase from "react-native-firebase";
+import config from "../../../Constant";
 import {submitLogin} from '../action';
 import {compose, bindActionCreators} from 'redux';
 import {connect} from 'react-redux'
@@ -65,14 +66,31 @@ class Login extends Component {
         }).then((response) => response.json())
             .then(async(response) => {
                 if (response.auth) {
+                    // console.log('connect to firebase', response.curUser[0].elderId)
+
                     await AsyncStorage.setItem('curUser', JSON.stringify(response.curUser[0]));
-                    this.props.navigation.navigate('Home');
-                } else {
-                    alert(JSON.stringify(response))
-                }
+
+                    // if (!firebase.apps.length) {
+                        const Side = firebase.initializeApp(config.opt, 'test');
+                        Side.onReady().then(app => {
+                            // alert('we connect to firebase now');
+                         console.log('connect to firebase', response.curUser[0].elderId)
+
+                            app.messaging().subscribeToTopic(response.curUser[0].elderId);
+                            this.props.navigation.navigate('Home');
+
+                            // navigate('Home');
+                        })
+                    // }
+                  
+                } 
+                // else {
+                //     alert(JSON.stringify(response))
+                // }
+                
             })
             .catch((error) => {
-                alert(error)
+                // alert(error)
             })
         // const {navigate} = this.props.navigation;
 
@@ -108,11 +126,7 @@ class Login extends Component {
         //         response => {
         //             response.json();
         //             console.log('the result after login : ', response);
-        //             const Side = firebase.initializeApp(config.opt, 'test');
-        //             Side.onReady().then(app => {
-        //                 app.messaging().subscribeToTopic('S1mdk2XxXg');
-        //                 navigate('Home');
-        //             })
+        //             
 
         //         }
         //     )
