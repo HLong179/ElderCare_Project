@@ -28,7 +28,7 @@ class ListDrugs extends Component {
                 elderId={this.props.elderId}
               />
             )}
-            <Notify/>
+            <Notify elderId={this.props.elderId} />
           </div>
         </div>
 

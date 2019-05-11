@@ -39,9 +39,11 @@ class NotifyWithForm extends Component {
       night: false
     }
     this.state.checked.map(check => {
-      return body[check] = true
+      return (body[check] = true)
     })
-    console.log(body) // result
+
+    console.log(this.props.elderId)
+    console.log(body)
     message.success("Hẹn giờ uống thuốc thành công")
   }
   handleConfirmBlur = e => {
