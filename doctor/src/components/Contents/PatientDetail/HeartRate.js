@@ -34,11 +34,23 @@ export default class HeartRate extends Component {
 
   render() {
     const chartData = {
-      labels: this.state.labels,
+      labels:
+        this.state.labels.length >=15
+          ? this.state.labels.slice(
+              this.state.labels.length - 15,
+              this.state.labels.length
+            )
+          : this.state.labels,
       datasets: [
         {
           label: "Nhịp tim",
-          data: this.state.heartRates,
+          data:
+            this.state.heartRates.length > 15
+              ? this.state.heartRates.slice(
+                  this.state.heartRates.length - 15,
+                  this.state.heartRates.length
+                )
+              : this.state.heartRates,
           backgroundColor: "rgba(54, 162, 235, 0.6)",
           borderColor: "rgba(0,0,255, 0.6)"
         }
@@ -73,7 +85,7 @@ export default class HeartRate extends Component {
     return (
       <div>
         <Title level={3} style={{ marginTop: 50 }}>
-          Nhịp tim của bệnh nhân trong ngày {moment().format("DD/MM/YYYY")}
+          Nhịp tim của bệnh nhân
         </Title>
         <Line data={chartData} options={chartOption} />
       </div>

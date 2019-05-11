@@ -5,6 +5,7 @@ import { Typography } from "antd"
 import { fetchPrescription } from "../../../actions/patientActions"
 import "./style.css"
 import UpdatePresciption from "./UpdatePresciption"
+import Notify from "./Notify"
 
 const { Title } = Typography
 
@@ -16,16 +17,19 @@ class ListDrugs extends Component {
   render() {
     return (
       <div>
-        <div className="top-content" style={{marginTop: 50}}>
+        <div className="top-content" style={{ marginTop: 50 }}>
           <Title level={3}>Đơn thuốc</Title>
-          {Object.keys(this.props.prescription).length === 0 ? (
-            <AddDrugs elderId={this.props.elderId} />
-          ) : (
-            <UpdatePresciption
-              presciption={this.props.prescription}
-              elderId={this.props.elderId}
-            />
-          )}
+          <div className="prescription-button">
+            {Object.keys(this.props.prescription).length === 0 ? (
+              <AddDrugs elderId={this.props.elderId} />
+            ) : (
+              <UpdatePresciption
+                presciption={this.props.prescription}
+                elderId={this.props.elderId}
+              />
+            )}
+            <Notify/>
+          </div>
         </div>
 
         {Object.keys(this.props.prescription).length !== 0 ? (

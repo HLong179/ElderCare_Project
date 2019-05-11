@@ -28,3 +28,8 @@ img.upload-preview {
 .prescription > div.drugNote {
   margin-left: 50px;
 }
+.prescription-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
