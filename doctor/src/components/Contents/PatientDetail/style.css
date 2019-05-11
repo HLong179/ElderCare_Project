@@ -18,7 +18,7 @@ img.upload-preview {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .prescription img {

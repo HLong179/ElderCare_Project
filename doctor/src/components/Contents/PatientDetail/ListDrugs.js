@@ -16,7 +16,7 @@ class ListDrugs extends Component {
   render() {
     return (
       <div>
-        <div className="top-content">
+        <div className="top-content" style={{marginTop: 50}}>
           <Title level={3}>Đơn thuốc</Title>
           {Object.keys(this.props.prescription).length === 0 ? (
             <AddDrugs elderId={this.props.elderId} />

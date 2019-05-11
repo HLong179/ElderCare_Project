@@ -41,7 +41,7 @@ class Relatives extends Component {
   render() {
     return (
       <div>
-        <div className="top-content">
+        <div className="top-content" style={{marginTop: 50}}>
           <Title level={3}>Danh sách người thân</Title>
           {!this.props.listRelatives[0] ? (
             <AddRelative ICID={this.props.elderId} />
