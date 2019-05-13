@@ -1,11 +1,12 @@
 import axios from 'axios';
-const requestURL = 'http://192.168.1.9:6900'
+// const requestURL = 'http://192.168.1.9:6900'
+import SETTINGS from "../settings"
 import firebase from 'react-native-firebase';
 import config from '../Constant';
 
 export async function Login(data) {
     console.log(data);
-    const response = await  fetch(`${requestURL}/account/login`, {
+    const response = await  fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/login`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -35,7 +36,7 @@ export async function Login(data) {
 
 export async function AddRelative(data) {
     console.log(data);
-    const response = await  fetch(`${requestURL}/account/addSubUser`, {
+    const response = await  fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addSubUser`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',

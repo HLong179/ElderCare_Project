@@ -52,6 +52,8 @@ class Login extends Component {
             username,
             password
         }
+        console.log('data login: ',data)
+
         fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/login`, {
             method: 'POST',
             headers: {
@@ -64,25 +66,29 @@ class Login extends Component {
             }),
         }).then(async (response) => { 
             response = await response.json();
-            console.log(response);
+            // console.log(response);
             // if()
             if (response.auth) {
-                console.log('connect to firebase', response.curUser.elderId)
+                // console.log('connect to firebase', response.curUser.elderId)
 
-                const result = await AsyncStorage.setItem('curUser', JSON.stringify(response.curUser));
-                console.log(result);
-                console.log(JSON.stringify(response.curUser))
-                // if (!firebase.apps.length) {
+                const result = await AsyncStorage.setItem('curUser', JSON.stringify(response.curUser[0]));
+                // console.log(result);
+                // console.log(JSON.stringify(response.curUser))
+                if (!firebase.apps.length) {
                     const Side = firebase.initializeApp(config.opt, 'test');
                     Side.onReady().then(app => {
                         // alert('we connect to firebase now');
-                     console.log('connect to firebase', response.curUser.elderId)
-                        app.messaging().subscribeToTopic(response.curUser.elderId);
+                     console.log('connect to firebase', response.curUser[0].elderId)
+                        app.messaging().subscribeToTopic(response.curUser[0].elderId);
+                        
                         this.props.navigation.navigate('Home');
-
                         // navigate('Home');
                     })
-                // }
+                    
+                } else {
+                    this.props.navigation.navigate('Home');
+                }
+                
               
             } 
 
