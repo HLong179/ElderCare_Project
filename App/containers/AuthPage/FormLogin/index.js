@@ -46,7 +46,6 @@ class Login extends Component {
     };
 
     handleLogin = () => {
-        console.log(this.props)
         const { username, password } = this.state;
 
         const data = {
@@ -63,35 +62,61 @@ class Login extends Component {
                 "username": data.username,
                 "password": data.password
             }),
-        }).then((response) => response.json())
-            .then(async(response) => {
-                if (response.auth) {
-                    // console.log('connect to firebase', response.curUser[0].elderId)
+        }).then(async (response) => { 
+            response = await response.json();
+            console.log(response);
+            // if()
+            if (response.auth) {
+                console.log('connect to firebase', response.curUser.elderId)
 
-                    await AsyncStorage.setItem('curUser', JSON.stringify(response.curUser[0]));
+                const result = await AsyncStorage.setItem('curUser', JSON.stringify(response.curUser));
+                console.log(result);
+                console.log(JSON.stringify(response.curUser))
+                // if (!firebase.apps.length) {
+                    const Side = firebase.initializeApp(config.opt, 'test');
+                    Side.onReady().then(app => {
+                        // alert('we connect to firebase now');
+                     console.log('connect to firebase', response.curUser.elderId)
+                        app.messaging().subscribeToTopic(response.curUser.elderId);
+                        this.props.navigation.navigate('Home');
 
-                    // if (!firebase.apps.length) {
-                        const Side = firebase.initializeApp(config.opt, 'test');
-                        Side.onReady().then(app => {
-                            // alert('we connect to firebase now');
-                         console.log('connect to firebase', response.curUser[0].elderId)
-
-                            app.messaging().subscribeToTopic(response.curUser[0].elderId);
-                            this.props.navigation.navigate('Home');
-
-                            // navigate('Home');
-                        })
-                    // }
-                  
-                } 
-                // else {
-                //     alert(JSON.stringify(response))
+                        // navigate('Home');
+                    })
                 // }
+              
+            } 
+
+        })
+            // .then(async (response) => {
+            //     console.log(response.auth);
+            //     if (response.auth) {
+            //         console.log('connect to firebase', response.curUser[0].elderId)
+
+            //         await AsyncStorage.setItem('curUser', JSON.stringify(response.curUser[0]));
+
+            //         console.log(JSON.stringify(response.curUser[0]))
+            //         // if (!firebase.apps.length) {
+            //             const Side = firebase.initializeApp(config.opt, 'test');
+            //             Side.onReady().then(app => {
+            //                 // alert('we connect to firebase now');
+            //              console.log('connect to firebase', response.curUser[0].elderId)
+
+            //                 app.messaging().subscribeToTopic(response.curUser[0].elderId);
+            //                 this.props.navigation.navigate('AddRelative');
+
+            //                 // navigate('Home');
+            //             })
+            //         // }
+                  
+            //     } 
+            //     // else {
+            //     //     alert(JSON.stringify(response))
+            //     // }
                 
-            })
-            .catch((error) => {
-                // alert(error)
-            })
+            // })
+            // .catch((error) => {
+            //     // alert(error)
+            // })
         // const {navigate} = this.props.navigation;
 
         // const hhh = {
