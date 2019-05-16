@@ -63,13 +63,15 @@ router.post('/login', (req, res) => {
         accountRepo.getUserByUsername(info.username)
         .then((user, err) => {
             if (err) {
+                console.log(err)
                return res.status(500).send("[LOGIN] Something went wrong!");
             }
             if (!user || user.length === 0) {
+                console.log('No user found')
                 return res.status(404).send("[LOGIN] No user found");
             }
             if (info.password === user[0].rlPassword) {
-               
+               console.log('data login: ', user)
                 res.status(200).send({
                     auth: true,
                     curUser: user
