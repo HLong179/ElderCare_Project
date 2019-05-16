@@ -2,7 +2,8 @@ var express = require('express');
 
 var accountRepo = require('../repos/accountRepo');
 
-var md5 = require('crypto-js/md5')
+var md5 = require('crypto-js/md5');
+var firebase = require('firebase');
 
 var router = express.Router();
 
@@ -90,4 +91,16 @@ router.post('/login', (req, res) => {
         console.log(">>>>> Error:", err);
     }
 })
+
+
+router.post('/getData', async (req, res) => {
+    const { elder_id } = req.body;
+    let result; 
+    let patientRef = await firebase.database().ref("Patients/" + elder_id).once('value');
+    console.log(patientRef.val());
+    res.status(200).send({patientRef});
+    
+});
+
+
 module.exports = router;
