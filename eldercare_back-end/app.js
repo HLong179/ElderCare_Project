@@ -25,9 +25,6 @@ app.use(cors());
 //  app.use('/healthIndexes', healthIndexesController);
  // set port
  const port = process.env.PORT || 6900;
- app.listen(port, () => {
-     console.log(`Server is running on port ${port}`);
- });
 
  var config = {
     apiKey: "AIzaSyBhkXtTybamYMmxnZU2aYdoHf2Hy2uH1DQ",
@@ -40,21 +37,70 @@ app.use(cors());
   };
 firebase.initializeApp(config);
 
-var j = schedule.scheduleJob('6 * * * * *', function(){
-        var ref = firebase.database().ref('/Patients');
-        ref.once("value", (snapshot) => {
-            // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
-            Object.keys(snapshot.val()).forEach(elderId => {
-                var detailRef = firebase.database().ref(`Patients/${elderId}/Config/DataSleepToday`);
-                detailRef.set(false, (e) => {
-                    if (e) {
-                        console.log("we get some error here: ", e);
-                    } else {
-                        console.log("we set value to firebase success!");
-                    }
-                })
-            });
-        })
-    // console.log('The answer to life, the universe, and everything!');
+// var morning = schedule.scheduleJob('7 * * *', () => {
+//         var ref = firebase.database().ref('/Patients');
+//         ref.once("value", (snapshot) => {
+//             // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
+//             Object.keys(snapshot.val()).forEach(elderId => {
+//                 var detailRef = firebase.database().ref(`Patients/${elderId}/Config/DataSleepToday`);
+//                 var medicinePath = firebase.database().ref(`Patients/${elderId}/Config/MedicineTime`);
+//                 detailRef.set(false, (e) => {
+//                     if (e) {
+//                         console.log("we get some error here: ", e);
+//                     } else {
+//                         console.log("we set value to firebase success!");
+//                     }
+//                 })
+//                 medicinePath.set(true, (e) => {
+//                     if (e) {
+//                         console.log('we get some error here: ', e);
+//                     } else {
+//                         console.log('set time medicine success')
+//                     }
+//                 })
+//             });
+//         })
+//     // console.log('The answer to life, the universe, and everything!');
 
-  });
+//   });
+  
+//   var afternoon = schedule.scheduleJob('30 10 * * *', () => {
+//     var ref = firebase.database().ref('/Patients');
+//     ref.once("value", (snapshot) => {
+//         // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
+//         Object.keys(snapshot.val()).forEach(elderId => {
+//             var medicinePath = firebase.database().ref(`Patients/${elderId}/Config/MedicineTime`);
+//             medicinePath.set(true, (e) => {
+//                 if (e) {
+//                     console.log('we get some error here: ', e);
+//                 } else {
+//                     console.log('set time medicine success')
+//                 }
+//             })
+//         });
+//     })
+//   })
+
+//   var eve = schedule.scheduleJob('18 * * *', () => {
+//     var ref = firebase.database().ref('/Patients');
+//     ref.once("value", (snapshot) => {
+//         // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
+//         Object.keys(snapshot.val()).forEach(elderId => {
+//             var medicinePath = firebase.database().ref(`Patients/${elderId}/Config/MedicineTime`);
+//             medicinePath.set(true, (e) => {
+//                 if (e) {
+//                     console.log('we get some error here: ', e);
+//                 } else {
+//                     console.log('set time medicine success')
+//                 }
+//             })
+//         });
+//     })
+//   })
+
+
+ app.listen(port, () => {
+     console.log(`Server is running on port ${port}`);
+ });
+
+ 
