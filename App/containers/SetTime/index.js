@@ -18,7 +18,7 @@ class SetTime extends React.Component {
             isEmergencyChecked: false,
             hasHeartRate: false,
             options: [{ id: 1, key: 'Khẩn cấp' }, { id: 2, key: 'Nhịp tim đạt ngưỡng' }],
-            selectedOption: [1],
+            selectedOption: [],
             dialogVisible: false,
             hour: 0,
             minute: 0,
@@ -33,9 +33,13 @@ class SetTime extends React.Component {
         data.id = user.elderId;
 
         let response = await getUserData(data);
+        const { emergency } = response.patientRef.Config;
 
-        console.log('response', response.json());
-        
+        if(emergency === true) {
+            this.setState({
+                selectedOption: [1]
+            })
+        } 
 
     }
 
