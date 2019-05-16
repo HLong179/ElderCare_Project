@@ -6,6 +6,7 @@ import Dialog from "react-native-dialog"
 import moment from 'moment'
 import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
+import { getUserData } from '../../services/authServices';
 
 
 class SetTime extends React.Component {
@@ -23,6 +24,19 @@ class SetTime extends React.Component {
             minute: 0,
             second: 0
         };
+    }
+
+    componentDidMount = async() => {
+        let user = await AsyncStorage.getItem('curUser');
+        user = JSON.parse(user);
+        let data = {};
+        data.id = user.elderId;
+
+        let response = await getUserData(data);
+
+        console.log('response', response.json());
+        
+
     }
 
     showDateTimePicker = () => {
