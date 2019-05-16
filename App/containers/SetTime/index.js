@@ -16,7 +16,7 @@ class SetTime extends React.Component {
             time: '',
             isEmergencyChecked: false,
             hasHeartRate: false,
-            options: [{ id: 1, key: 'Emergency' }, { id: 2, key: 'Has Heart Rate' }],
+            options: [{ id: 1, key: 'Khẩn cấp' }, { id: 2, key: 'Nhịp tim đạt ngưỡng' }],
             selectedOption: [1],
             dialogVisible: false,
             hour: 0,
@@ -115,14 +115,14 @@ class SetTime extends React.Component {
                         is24Hour={false}
                     /> */}
                     <Dialog.Container visible={this.state.dialogVisible}>
-                        <Dialog.Title>Input Getting Data Period</Dialog.Title>
-                        <Dialog.Description>
+                        <Dialog.Title>Hẹn giờ thông báo</Dialog.Title>
+                        {/* <Dialog.Description>
                             Set an interval time for getting data.
-                        </Dialog.Description>
-                        <Dialog.Input label="Hour(s)" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeHour.bind(this)}></Dialog.Input>
-                        <Dialog.Input label="Minute(s)" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeMinute.bind(this)}></Dialog.Input>
-                        <Dialog.Input label="Second(s)" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeSecond.bind(this)}></Dialog.Input>
-                        <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                        </Dialog.Description> */}
+                        <Dialog.Input label="Giờ" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeHour.bind(this)}></Dialog.Input>
+                        <Dialog.Input label="Phút" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeMinute.bind(this)}></Dialog.Input>
+                        <Dialog.Input label="Giây" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeSecond.bind(this)}></Dialog.Input>
+                        <Dialog.Button label="Hủy" onPress={this.handleCancel} />
                         <Dialog.Button label="OK" onPress={this.handleOK} />
                     </Dialog.Container>
                     <Item>

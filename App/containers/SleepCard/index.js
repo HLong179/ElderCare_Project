@@ -27,14 +27,14 @@ class SleepCard extends Component {
         <CommonCard >
           <CardItem cardBody>
             <Left>
-              <IconWithText icon="moon" text="Sleep" color="blue"></IconWithText>
+              <IconWithText icon="moon" text="Giấc ngủ" color="blue"></IconWithText>
             </Left>
             <Right>
-              <CommonButton title="ADD"></CommonButton>
+              <CommonButton title="Thêm"></CommonButton>
             </Right>
           </CardItem>
           <TextWrapper>
-          <CommonText text="How do you sleep?"></CommonText>
+          <CommonText text="Theo dõi giấc ngủ"></CommonText>
           </TextWrapper>
         </CommonCard>
       </TouchableOpacity>

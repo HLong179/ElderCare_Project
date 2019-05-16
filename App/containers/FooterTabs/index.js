@@ -9,16 +9,16 @@ export default class FooterTabs extends Component {
             <Footer>
                 <FooterTab>
                     <Button vertical active>
-                        <Icon android="md-menu" ios="ios-menu"/>
-                        <Text>Home</Text>
+                        <Icon android="md-home" ios="ios-home"/>
+                        {/* <Text>Home</Text> */}
                     </Button>
                     <Button vertical>
                         <Icon android="md-people" ios="ios-people"/>
-                        <Text>Together</Text>
+                        {/* <Text>Together</Text> */}
                     </Button>
                     <Button vertical>
                         <Icon name="person" android="md-compass" ios="ios-compass"/>
-                        <Text>Contact</Text>
+                        {/* <Text>Contact</Text> */}
                     </Button>
                 </FooterTab>
             </Footer>

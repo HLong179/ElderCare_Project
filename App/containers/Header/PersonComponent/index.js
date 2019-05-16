@@ -49,9 +49,9 @@ class Bulb extends  Component {
                     button={<Text onPress={this.showMenu}><CommonIcon name="person"/></Text>
                     }
                 >
-                    <MenuItem onPress={this.onSelectMenu}>Add relative</MenuItem>
-                    <MenuItem onPress={this.onSelectSetTime}>Set Time</MenuItem>
-                    <MenuItem onPress={this.onSelectLogout}>Log out</MenuItem>
+                    <MenuItem onPress={this.onSelectMenu}>Thêm người thân phụ</MenuItem>
+                    <MenuItem onPress={this.onSelectSetTime}>Hẹn giờ</MenuItem>
+                    <MenuItem onPress={this.onSelectLogout}>Đăng xuất</MenuItem>
 
                 </Menu>
             </Button>

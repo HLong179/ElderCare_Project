@@ -68,7 +68,7 @@ class AddRelative extends Component {
               />
             </CommonItem>
             <CommonItem stackedLabel>
-              <Label>Name</Label>
+              <Label>Họ và tên</Label>
               <Input
                 onChangeText={name => this.setState({ name: name })}
                 autoCapitalize={"none"}
@@ -84,7 +84,7 @@ class AddRelative extends Component {
               />
             </CommonItem>
             <CommonItem stackedLabel>
-              <Label>Phone</Label>
+              <Label>Số điện thoại</Label>
               <Input
                 onChangeText={phone => this.setState({ phone })}
                 autoCapitalize={"none"}
@@ -105,13 +105,13 @@ class AddRelative extends Component {
               />
             </CommonItem>
             <CommonItem stackedLabel>
-              <Label>Address</Label>
+              <Label>Địa chỉ</Label>
               <Input
                 onChangeText={address => this.setState({ address })}
                 autoCapitalize={"none"}
               />
             </CommonItem>
-            <CommonButton onPress={this.handleSubmit} title="Add Relative" />
+            <CommonButton onPress={this.handleSubmit} title="Thêm người thân" />
           </Form>
         </Content>
       </Wrapper>

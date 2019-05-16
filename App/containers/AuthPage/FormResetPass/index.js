@@ -17,10 +17,10 @@ class resetPass extends Component {
         return (
             <Wrapper>
                 <Content>
-                    <Text style={{alignSelf: "center"}}>Please enter your information below</Text>
+                    <Text style={{alignSelf: "center"}}>Nhập thông tin vào ô bên dưới để lấy lại mật khẩu</Text>
                     <Form>
                         <Item >
-                            <Input placeholder="ID (Email or phone number)" onChangeText={this.handleChangeEmail}/>
+                            <Input placeholder="ID (Email hoặc số điện thoại)" onChangeText={this.handleChangeEmail}/>
                             <Icon active name="mail"/>
                         </Item>
                     </Form>
