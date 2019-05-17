@@ -25,19 +25,19 @@ router.post('/getPescription', (req, res) => {
     let elderId = req.body.elderId;
     medicineRepo.getPrescription(elderId).then(
         pres => {
-            res.json(pres);
+            res.json(pres[0]);
         },
         err => res.json(err)
     )
 })
- 
+
 router.post('/updatePrescription', (req, res) => {
-    let id = req.body.id;
+    let elderId = req.body.elderId;
     let dataChanged = {
         imageUrl: req.body.imageUrl,
         script: req.body.script
     }
-    medicineRepo.updatePrescription(id, dataChanged).then(
+    medicineRepo.updatePrescription(elderId, dataChanged).then(
         next => {
             res.json({
                 ...dataChanged,

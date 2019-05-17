@@ -2,8 +2,7 @@ var express = require('express');
 
 var accountRepo = require('../repos/accountRepo');
 
-var md5 = require('crypto-js/md5');
-var firebase = require('firebase');
+var md5 = require('crypto-js/md5')
 
 var router = express.Router();
 
@@ -93,14 +92,25 @@ router.post('/login', (req, res) => {
 })
 
 
-router.post('/getData', async (req, res) => {
-    const { elder_id } = req.body;
-    let result; 
-    let patientRef = await firebase.database().ref("Patients/" + elder_id).once('value');
-    console.log(patientRef.val());
-    res.status(200).send({patientRef});
-    
-});
-
-
+router.post('/getDoctorPhoneNum', (req, res) => {
+    let elderId = req.body.elderId;
+    accountRepo.getElderInformation(elderId).then(
+        elder => {
+            if (elder.doctorId) {
+                accountRepo.getDoctorPhoneNum(elder.doctorId).then(
+                    numPhone => {
+                        res.json({
+                            doctorPhoneNum: numPhone
+                        });
+                    },
+                    except => res.json(except)
+                )
+            } else {
+                res.json({msg: 'no doctor found with this patient!'})
+            }
+            
+        },
+        err => res.json(err)
+    )
+})
 module.exports = router;

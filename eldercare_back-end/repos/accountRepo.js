@@ -26,6 +26,16 @@ exports.elderDetail = (elderId) => {
     return db.load(sql);
 }
 
+exports.getElderInformation = (elderId) => {
+    var sql = `select * from elder where ICID = '${elderId}'`;
+    return db.load(sql);
+}
+
+exports.getDoctorPhoneNum = (doctorId) => {
+    var sql = `select phone from doctor where doctorId = ${doctorId} `;
+    return db.load(sql);
+}
+
 exports.doctorLogin = (doctor) => {
     var sql = `select * from doctor where username = '${doctor.username}' and password = '${doctor.password}'`;
     return db.load(sql);

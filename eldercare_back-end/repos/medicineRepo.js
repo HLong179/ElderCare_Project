@@ -8,8 +8,8 @@ exports.getPrescription = (elderId) => {
     var sql = `select * from prescription where elderId = '${elderId}'`;
     return db.load(sql);
 }
-exports.updatePrescription = (id, prescription) => {
-    var sql = `update prescription set imageUrl = '${prescription.imageUrl}', script = '${prescription.script}' where id = '${id}'`;
+exports.updatePrescription = (elderId, prescription) => {
+    var sql = `update prescription set imageUrl = '${prescription.imageUrl}', script = '${prescription.script}' where elderId = '${elderId}'`;
     return db.insert(sql);
 }
 // exports.addPrescription = (prescription) => {
