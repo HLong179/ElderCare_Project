@@ -25,7 +25,7 @@ router.post('/getPescription', (req, res) => {
     let elderId = req.body.elderId;
     medicineRepo.getPrescription(elderId).then(
         pres => {
-            res.json(pres[0]);
+            res.json(pres);
         },
         err => res.json(err)
     )
