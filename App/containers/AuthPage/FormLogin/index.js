@@ -52,8 +52,6 @@ class Login extends Component {
             username,
             password
         }
-        console.log('data login: ',data)
-
         fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/login`, {
             method: 'POST',
             headers: {
@@ -72,6 +70,7 @@ class Login extends Component {
                 // console.log('connect to firebase', response.curUser.elderId)
 
                 const result = await AsyncStorage.setItem('curUser', JSON.stringify(response.curUser[0]));
+                
                 // console.log(result);
                 // console.log(JSON.stringify(response.curUser))
                 if (!firebase.apps.length) {

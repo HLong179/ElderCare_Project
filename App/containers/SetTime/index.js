@@ -91,7 +91,7 @@ class SetTime extends React.Component {
                 
                 elderId = JSON.parse(user).elderId;
                 console.log(elderId)
-                firebase.database().ref(`Patients/${elderId}/Interval`).set(+newItv);
+                firebase.database().ref(`Patients/${elderId}/Config/Interval`).set(+newItv);
                 console.log('we set interval value success')
             },
             err => console.log(err)
