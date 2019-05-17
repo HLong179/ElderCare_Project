@@ -17,30 +17,31 @@ class SetTime extends React.Component {
             time: '',
             isEmergencyChecked: false,
             hasHeartRate: false,
-            options: [{ id: 1, key: 'Khẩn cấp' }, { id: 2, key: 'Nhịp tim đạt ngưỡng' }],
+            options: [{ id: 1, key: 'Khẩn cấp' }],
             selectedOption: [],
             dialogVisible: false,
             hour: 0,
             minute: 0,
-            second: 0
+            second: 0, 
+            elderId: ''
         };
     }
 
-    componentDidMount = async() => {
-        let user = await AsyncStorage.getItem('curUser');
-        user = JSON.parse(user);
-        let data = {};
-        data.id = user.elderId;
-
-        let response = await getUserData(data);
-        const { emergency } = response.patientRef.Config;
-
+    componentDidMount = async () => {
+        let idElder;
+        let emergency;
+        let tempValue = await AsyncStorage.getItem('curUser');
+        idElder = JSON.parse(tempValue).elderId;
+        this.setState({elderId: idElder});
+        let snapshot = await firebase.database().ref(`Patients/${idElder}/Config/Emergency`).once("value");
+        if (snapshot.val()) {
+            emergency = snapshot.val();
+        } else emergency = false;
         if(emergency === true) {
             this.setState({
                 selectedOption: [1]
             })
-        } 
-
+        }  
     }
 
     showDateTimePicker = () => {
@@ -59,6 +60,7 @@ class SetTime extends React.Component {
 
     onSelectCheckbox = (id) => {
         let temp = this.state.selectedOption;
+        let isEmergency;
         if (temp.includes(id)) {
             temp.splice(temp.indexOf(id), 1);
         }
@@ -66,8 +68,12 @@ class SetTime extends React.Component {
             temp.push(id);
         }
         this.setState({ selected: temp }, () => {
-            console.log(temp);
-            console.log(this.state.selected);
+            console.log("we selected this options: ", temp);
+            if (temp[0] === 1) {
+               isEmergency = true;
+            } else isEmergency = false;
+            firebase.database().ref(`Patients/${this.state.elderId}/Config/Emergency`).set(isEmergency)
+            console.log("detail value selected: ", this.state.selected);
         });
 
     }
@@ -103,17 +109,13 @@ class SetTime extends React.Component {
     handleOK = () => {
         let newItv = (this.state.hour)*60 + (this.state.minute);
         console.log("New interval (seconds):", newItv);
-        let elderId;
-        AsyncStorage.getItem('curUser').then(
-            (user) => {
-                
-                elderId = JSON.parse(user).elderId;
-                console.log(elderId)
-                firebase.database().ref(`Patients/${elderId}/Config/Interval`).set(+newItv);
-                console.log('we set interval value success')
-            },
-            err => console.log(err)
-        )
+       
+        
+        // elderId = JSON.parse(user).elderId;
+        // console.log(elderId)
+        firebase.database().ref(`Patients/${this.state.elderId}/Config/Interval`).set(+newItv);
+        console.log('we set interval value success')
+
         //update khoang thoi gian moi nhap vao db
         
         this.setState({ dialogVisible: false });
