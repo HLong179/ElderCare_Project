@@ -2,7 +2,8 @@ import axios from "axios"
 import {
   FETCH_PATIENTS,
   FETCH_RELATIVES,
-  FETCH_PRESCIPTION
+  FETCH_PRESCIPTION,
+  CLEAR_PRESCIPTION
 } from "../constants"
 
 export const addPatient = userData => dispatch => {
@@ -70,11 +71,17 @@ export const fetchPrescription = elderId => async dispatch => {
     .catch()
 }
 
-export const updatePrescription = data => dispatch => {
+export const updatePrescription = (data, elderId) => dispatch => {
   axios
     .post("http://localhost:6900/medicine/updatePrescription", data)
     .then(res => {
-      dispatch(fetchPrescription({ elderId: data.elderId }))
+      dispatch(fetchPrescription({ elderId: elderId }))
     })
     .catch()
+}
+
+export const clearPresciption = () => dispatch => {
+  dispatch({
+    type: CLEAR_PRESCIPTION
+  })
 }

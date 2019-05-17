@@ -20,6 +20,7 @@ class UpdateDrugsWithForm extends Component {
       done: false
     }
   }
+
   showModal = () => {
     this.props.form.resetFields()
     this.setState({
@@ -37,19 +38,19 @@ class UpdateDrugsWithForm extends Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        let id = this.props.presciption.id
         let icid = this.props.elderId
         let doctorId = this.props.auth.user.doctorId
 
         // console.log('the result after we pick image: ', result)
         if (this.state.imageUrl) {
           let body = {
-            elderId: icid,
+            id: id,
             imageUrl: this.state.imageUrl,
             script: values.drugNote
           }
           if (firebase) {
             let imageFileName = icid + "Prescription.png"
-            console.log(imageFileName)
             let link = "doctor" + this.props.auth.user.name + doctorId
 
             let storageRef = firebase
@@ -69,21 +70,23 @@ class UpdateDrugsWithForm extends Component {
 
                 storageRef.getDownloadURL().then(url => {
                   body.imageUrl = url
-                  store.dispatch(updatePrescription(body))
+                  store.dispatch(updatePrescription(body, icid))
                 })
               })
           }
         } else {
           let body = {
-            elderId: icid,
+            id: id,
             imageUrl: this.state.imageUrlP,
             script: values.drugNote
           }
-          store.dispatch(updatePrescription(body))
+          store.dispatch(updatePrescription(body, icid))
         }
 
         this.setState({
-          visible: false
+          visible: false,
+          imageUrl: null,
+          imageUrlP: null
         })
         message.success("Cập nhật đơn thuốc thành công")
         this.props.form.resetFields()
@@ -104,7 +107,8 @@ class UpdateDrugsWithForm extends Component {
         this.setState({
           imageUrl,
           loading: false,
-          done: true
+          done: true,
+          imageUrlP: imageUrl
         })
       })
     }
@@ -131,7 +135,7 @@ class UpdateDrugsWithForm extends Component {
   displayDrugs() {
     const { getFieldDecorator } = this.props.form
     const scriptProps = this.props.presciption.script
-    const imageUrl = this.state.imageUrl
+    const { imageUrl, imageUrlP } = this.state
     return (
       <React.Fragment>
         <div className="list-drug">
@@ -159,13 +163,13 @@ class UpdateDrugsWithForm extends Component {
                     >
                       {imageUrl ? (
                         <img
-                          src={imageUrl}
+                          src={imageUrlP}
                           alt="avatar"
                           className="upload-preview"
                         />
                       ) : (
                         <img
-                          src={this.state.imageUrlP}
+                          src={imageUrlP}
                           alt="avatar"
                           className="upload-preview"
                         />
@@ -205,7 +209,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    updatePrescription: data => dispatch(updatePrescription(data))
+    updatePrescription: (data,elderId) => dispatch(updatePrescription(data, elderId))
   }
 }
 

@@ -4,7 +4,7 @@ import { Layout, Table, Typography, Input, Button, Icon } from "antd"
 
 import AddPatient from "./AddPatient"
 import { connect } from "react-redux"
-import { fetchPatients } from "../../../actions/patientActions"
+import { fetchPatients, clearPresciption } from "../../../actions/patientActions"
 import "./style.css"
 
 const { Content } = Layout
@@ -14,6 +14,11 @@ class ListPatients extends Component {
   state = {
     searchText: ""
   }
+  componentWillMount() {
+    console.log("clear");
+    this.props.clearPresciption()
+  }
+  
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -137,7 +142,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchPatients: doctorId => dispatch(fetchPatients(doctorId))
+    fetchPatients: doctorId => dispatch(fetchPatients(doctorId)),
+    clearPresciption: () => dispatch(clearPresciption())
   }
 }
 

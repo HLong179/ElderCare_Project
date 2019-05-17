@@ -45,11 +45,9 @@ class AddDrugsWithForm extends Component {
           script: values.drugNote
         }
 
-        // console.log('the result after we pick image: ', result)
         if (firebase) {
-          let imageFileName = icid +"Prescription.png"
+          let imageFileName = `${icid}Prescription${this.props.listPrescription.length + 1}.png`
           let link = "doctor" + this.props.auth.user.name + doctorId
-          console.log(imageFileName)
           let storageRef = firebase
             .storage()
             .ref()
@@ -71,8 +69,10 @@ class AddDrugsWithForm extends Component {
               })
             })
         }
+
         this.setState({
-          visible: false
+          visible: false,
+          imageUrl: null
         })
         message.success("Thêm đơn thuốc thành công")
         this.props.form.resetFields()
@@ -187,7 +187,8 @@ const AddDrugs = Form.create({ name: "add_drugs" })(AddDrugsWithForm)
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    listPrescription: state.patient.listPrescription
   }
 }
 

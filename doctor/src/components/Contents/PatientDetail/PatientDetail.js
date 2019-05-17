@@ -6,7 +6,8 @@ import "../../Home.css"
 import PatientInfo from "./PatientInfo"
 import Relatives from "./Relatives"
 import ListDrugs from "./ListDrugs"
-import HeartRate from "./HeartRate";
+import HeartRate from "./HeartRate"
+
 
 const { Content } = Layout
 
@@ -43,7 +44,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+  
+  }
 }
 
 export default connect(
