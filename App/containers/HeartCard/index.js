@@ -33,14 +33,14 @@ class HeartCard extends Component {
         <CommonCard >
           <CardItem cardBody>
             <Left>
-              <IconWithText icon="heart" text="Heart" color="tomato"></IconWithText>
+              <IconWithText icon="heart" text="Nhịp tim" color="tomato"></IconWithText>
             </Left>
             <Right>
-              <CommonButton title="ADD"></CommonButton>
+              <CommonButton title="Thêm"></CommonButton>
             </Right>
           </CardItem>
           <TextWrapper>
-          <CommonText text="How is your heart rate?"></CommonText>
+          <CommonText text="BPM"></CommonText>
           </TextWrapper>
         </CommonCard>
       </TouchableOpacity>

@@ -6,6 +6,7 @@ import Dialog from "react-native-dialog"
 import moment from 'moment'
 import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
+import { getUserData } from '../../services/authServices';
 
 
 class SetTime extends React.Component {
@@ -16,13 +17,30 @@ class SetTime extends React.Component {
             time: '',
             isEmergencyChecked: false,
             hasHeartRate: false,
-            options: [{ id: 1, key: 'Emergency' }, { id: 2, key: 'Has Heart Rate' }],
-            selectedOption: [1],
+            options: [{ id: 1, key: 'Khẩn cấp' }, { id: 2, key: 'Nhịp tim đạt ngưỡng' }],
+            selectedOption: [],
             dialogVisible: false,
             hour: 0,
             minute: 0,
             second: 0
         };
+    }
+
+    componentDidMount = async() => {
+        let user = await AsyncStorage.getItem('curUser');
+        user = JSON.parse(user);
+        let data = {};
+        data.id = user.elderId;
+
+        let response = await getUserData(data);
+        const { emergency } = response.patientRef.Config;
+
+        if(emergency === true) {
+            this.setState({
+                selectedOption: [1]
+            })
+        } 
+
     }
 
     showDateTimePicker = () => {
@@ -115,14 +133,14 @@ class SetTime extends React.Component {
                         is24Hour={false}
                     /> */}
                     <Dialog.Container visible={this.state.dialogVisible}>
-                        <Dialog.Title>Input Getting Data Period</Dialog.Title>
-                        <Dialog.Description>
+                        <Dialog.Title>Hẹn giờ thông báo</Dialog.Title>
+                        {/* <Dialog.Description>
                             Set an interval time for getting data.
-                        </Dialog.Description>
-                        <Dialog.Input label="Hour(s)" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeHour.bind(this)}></Dialog.Input>
-                        <Dialog.Input label="Minute(s)" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeMinute.bind(this)}></Dialog.Input>
-                        <Dialog.Input label="Second(s)" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeSecond.bind(this)}></Dialog.Input>
-                        <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                        </Dialog.Description> */}
+                        <Dialog.Input label="Giờ" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeHour.bind(this)}></Dialog.Input>
+                        <Dialog.Input label="Phút" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeMinute.bind(this)}></Dialog.Input>
+                        <Dialog.Input label="Giây" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeSecond.bind(this)}></Dialog.Input>
+                        <Dialog.Button label="Hủy" onPress={this.handleCancel} />
                         <Dialog.Button label="OK" onPress={this.handleOK} />
                     </Dialog.Container>
                     <Item>

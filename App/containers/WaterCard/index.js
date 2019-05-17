@@ -48,12 +48,12 @@ class WaterCard extends Component {
         <CommonCard>
           <CardItem cardBody>
             <Left>
-              <IconWithText icon="water" text="water" color="blue" />
+              <IconWithText icon="water" text="Nước" color="blue" />
             </Left>
           </CardItem>
 
           <TextWrapper text={numOfGlass}>
-            <CommonText text="/Glass" />
+            <CommonText text="/Ly" />
 
             <Right>
               <View style={{ flexDirection: "row" }}>

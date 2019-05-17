@@ -5,7 +5,6 @@ import firebase from 'react-native-firebase';
 import config from '../Constant';
 
 export async function Login(data) {
-    console.log(data);
     const response = await  fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/login`, {
         method: 'POST',
         headers: {
@@ -20,23 +19,10 @@ export async function Login(data) {
 
     const result = await response.json();
     return result;
-        // .then(( response) => {
-        //         // console.log('the result after login : ', response);
-        //         // const Side = firebase.initializeApp(config.opt, 'test');
-        //         // Side.onReady().then(app => {
-        //         //     app.messaging().subscribeToTopic('S1mdk2XxXg');
-        //         // })
-        //       return response;
-        //     }
-        // )
-        // .catch(e => console.log(e))
-
-
 }
 
 export async function AddRelative(data) {
-    console.log(data);
-    const response = await  fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addSubUser`, {
+    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addSubUser`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -56,5 +42,22 @@ export async function AddRelative(data) {
 
     const result = await response.json();
     return result;
+}
+
+export async function getUserData(data) {
+    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/getData`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            elder_id: data.id,
+        })
+    }) 
+
+    const result = await response.json();
+    return result;
+
 }
 
