@@ -30,14 +30,14 @@ router.post('/getPescription', (req, res) => {
         err => res.json(err)
     )
 })
-
+ 
 router.post('/updatePrescription', (req, res) => {
-    let elderId = req.body.elderId;
+    let id = req.body.id;
     let dataChanged = {
         imageUrl: req.body.imageUrl,
         script: req.body.script
     }
-    medicineRepo.updatePrescription(elderId, dataChanged).then(
+    medicineRepo.updatePrescription(id, dataChanged).then(
         next => {
             res.json({
                 ...dataChanged,
