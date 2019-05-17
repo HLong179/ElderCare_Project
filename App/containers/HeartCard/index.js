@@ -15,6 +15,7 @@ class HeartCard extends Component {
   //   super(props)
   //   this.state = {}
   // }
+
   componentDidMount () {
     BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack();
@@ -24,6 +25,10 @@ class HeartCard extends Component {
 
   handleAddHeartData = () => {
       this.props.navigation.navigate("FormHeartRate");
+  }
+
+  toHeartRate = () => {
+    this.props.navigation.navigate("HeartRate");
   }
 
   render () {
@@ -36,7 +41,7 @@ class HeartCard extends Component {
               <IconWithText icon="heart" text="Nhịp tim" color="tomato"></IconWithText>
             </Left>
             <Right>
-              <CommonButton title="Thêm"></CommonButton>
+              <CommonButton onPress={this.toHeartRate} title="Biểu đồ"></CommonButton>
             </Right>
           </CardItem>
           <TextWrapper>

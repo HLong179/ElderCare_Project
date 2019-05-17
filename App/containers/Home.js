@@ -27,9 +27,9 @@ class Home extends Component {
         })
         try {
             const data = await AsyncStorage.getItem('curUser');
-            if (data!= null) {
-                alert(data);
-            }
+            // if (data!= null) {
+            //     alert(data);
+            // }
         }
         catch(err){
             console.log(err);

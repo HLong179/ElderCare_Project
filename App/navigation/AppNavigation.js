@@ -12,6 +12,7 @@ import Login from "../containers/AuthPage/FormLogin";
 import ResetPassword from "../containers/AuthPage/FormResetPass"
 import FormHeartRate from "../containers/HeartCard/FormHeartRate";
 import SetTime from "../containers/SetTime";
+import HeartRate from "../containers/HeartRate";
 
 
 
@@ -62,6 +63,9 @@ const PrimaryNav = createStackNavigator(
             navigationOptions: () => {
                 return (<CommonHeader title='SetTime'/>)
             }
+        },
+        HeartRate: {
+            screen: HeartRate
         }
 
 
