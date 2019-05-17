@@ -69,7 +69,7 @@ class Login extends Component {
             if (response.auth) {
                 // console.log('connect to firebase', response.curUser.elderId)
 
-                const result = await AsyncStorage.setItem('curUser', JSON.stringify(response.curUser[0]));
+                const result = await AsyncStorage.multiSet([['curUser', JSON.stringify(response.curUser[0])],['isLogin', 'true']]);
                 
                 // console.log(result);
                 // console.log(JSON.stringify(response.curUser))
