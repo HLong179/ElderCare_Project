@@ -68,11 +68,11 @@ router.post('/login', (req, res) => {
             }
             if (!user || user.length === 0) {
                 console.log('No user found')
-                return res.status(404).send("[LOGIN] No user found");
+                return res.status(404).send({message: "[LOGIN] No user found"});
             }
             if (info.password === user[0].rlPassword) {
                console.log('data login: ', user)
-                res.status(200).send({
+                return res.status(200).send({
                     auth: true,
                     curUser: user
                 })
