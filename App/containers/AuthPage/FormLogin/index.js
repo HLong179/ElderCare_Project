@@ -3,7 +3,7 @@ import {Text} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import translate from '../../../utils/language.utils';
 import styled from "styled-components";
-import {Content, Form, Label, Icon, Input} from "native-base";
+import {Content, Form, Label, Icon, Input, Toast} from "native-base";
 import Item from "../../../components/CommonItemInput";
 import Button from "../../../components/CommonButton";
 import Wrapper from "../../../components/CommonWrapper";
@@ -13,6 +13,9 @@ import config from "../../../Constant";
 import {submitLogin} from '../action';
 import {compose, bindActionCreators} from 'redux';
 import {connect} from 'react-redux'
+import { Formik } from 'formik';
+import getSchema from './validateSchema';
+import TextError from '../../../components/CommonFormError';
 
 const StyleHeader = styled(Text)`
     font-size: 30;
@@ -45,13 +48,13 @@ class Login extends Component {
         this.setState({password: value});
     };
 
-    handleLogin = () => {
-        const { username, password } = this.state;
-
+    handleLogin = (values) => {
+        const { username, password } = values;
         const data = {
             username,
             password
         }
+
         fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/login`, {
             method: 'POST',
             headers: {
@@ -64,146 +67,109 @@ class Login extends Component {
             }),
         }).then(async (response) => { 
             response = await response.json();
-            // console.log(response);
-            // if()
+            console.log(response);
             if (response.auth) {
-                // console.log('connect to firebase', response.curUser.elderId)
-
                 const result = await AsyncStorage.multiSet([['curUser', JSON.stringify(response.curUser[0])],['isLogin', 'true']]);
                 
-                // console.log(result);
-                // console.log(JSON.stringify(response.curUser))
                 if (!firebase.apps.length) {
                     const Side = firebase.initializeApp(config.opt, 'test');
+
                     Side.onReady().then(app => {
-                        // alert('we connect to firebase now');
                      console.log('connect to firebase', response.curUser[0].elderId)
                         app.messaging().subscribeToTopic(response.curUser[0].elderId);
-                        
+
                         this.props.navigation.navigate('Home');
-                        // navigate('Home');
                     })
                     
                 } else {
                     this.props.navigation.navigate('Home');
                 }
-                
-              
-            } 
-
+            } else {
+              Toast.show({
+                text: `${response.message}`,
+                buttonText: "OK",
+                type: "danger"
+              })
+            }
         })
-            // .then(async (response) => {
-            //     console.log(response.auth);
-            //     if (response.auth) {
-            //         console.log('connect to firebase', response.curUser[0].elderId)
-
-            //         await AsyncStorage.setItem('curUser', JSON.stringify(response.curUser[0]));
-
-            //         console.log(JSON.stringify(response.curUser[0]))
-            //         // if (!firebase.apps.length) {
-            //             const Side = firebase.initializeApp(config.opt, 'test');
-            //             Side.onReady().then(app => {
-            //                 // alert('we connect to firebase now');
-            //              console.log('connect to firebase', response.curUser[0].elderId)
-
-            //                 app.messaging().subscribeToTopic(response.curUser[0].elderId);
-            //                 this.props.navigation.navigate('AddRelative');
-
-            //                 // navigate('Home');
-            //             })
-            //         // }
-                  
-            //     } 
-            //     // else {
-            //     //     alert(JSON.stringify(response))
-            //     // }
-                
-            // })
-            // .catch((error) => {
-            //     // alert(error)
-            // })
-        // const {navigate} = this.props.navigation;
-
-        // const hhh = {
-        //     databaseURL: "https://eldercare-5e4c8.firebaseio.com",
-        //     projectId: "eldercare-5e4c8",
-        //     apiKey: "AIzaSyBhgCvEUPBxv4JoqairKRVR8ijSnDKED-M",
-        //     appId: "1:49718683704:android:25929f370dd722de",
-        //     messagingSenderId: "49718683704",
-        //     storageBucket: "eldercare-5e4c8.appspot.com",
-        //     clientId: "49718683704-ipl6t2j9c9rtub3hisae556k4l04fjji.apps.googleusercontent.com",
-        //     // persistence: true,
-        // }
-
-        // if (check) {
-
-        // }
-
-
-        // // e.preventDef
-        // return fetch('http://192.168.1.107:6900/account/login', {
-        //     method: 'POST',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         username: this.state.username,
-        //         password: this.state.password
-        //     })
-        // })
-        //     .then(
-        //         response => {
-        //             response.json();
-        //             console.log('the result after login : ', response);
-        //             
-
-        //         }
-        //     )
-        //     .catch(e => console.log(e))
-
-
-        //this.props.onLogin(data);
-        // navigate('Home')
+        .catch((error) => {
+          console.log(error);
+        })
+       
     }
 
     render() {
+        const  initialValues  = this.state;
         return (
-            <Wrapper>
-                <Content>
-                    <Form>
-                        <StyleHeader>{translate('LOGIN_header')}</StyleHeader>
-                        <Item>
-                            <Input placeholder={translate('LOGIN_email')}
-                                   onChangeText={this.handleChangeEmail}
-                                   ref={(input) => this._email = input}
-                                   returnKeyType={"next"}
-                                   onSubmitEditing={(event) => {
-                                       this._password._root.focus()
-                                   }}
-                                   autoCapitalize={"none"}
-                            />
-                            <Icon active name="mail"/>
+          <Wrapper>
+            <Content>
+              <Formik
+                initialValues={initialValues}
+                onSubmit={this.handleLogin}
+                validationSchema={getSchema()}
+                enableReinitialize
+              >
+                {props => (
+                  <Form>
+                    <StyleHeader>
+                      {translate("LOGIN_header")}
+                    </StyleHeader>
+                    <Item>
+                      <Input
+                        placeholder={translate("LOGIN_email")}
+                        name={"username"}
+                        onChangeText={props.handleChange("username")}
+                        ref={input => (this._email = input)}
+                        returnKeyType={"next"}
+                        onSubmitEditing={event => {
+                          this._password._root.focus();
+                        }}
+                        value={props.values.username}
+                        autoCapitalize={"none"}
+                      />
+                      <Icon active name="mail" />
+                    </Item>
+                    <TextError>
+                      {props.touched.username && props.errors.username}
+                    </TextError>
 
-                        </Item>
-                        <Item>
-                            <Input placeholder={translate('LOGIN_password')}
-                                   onChangeText={this.handleChangePassword}
-                                   ref={(input) => this._password = input}
-                                   onSubmitEditing={(event) => {
-                                       this._email._root.focus()
-                                   }}
-                                   autoCapitalize={"none"}
-                            />
-                            <Icon active name="key"/>
-                        </Item>
-                        <Button onPress={this.handleLogin} title={translate('LOGIN_loginButton')}/>
-                        <Button transparent color="gray" title={translate('LOGIN_forgotPassword')}
-                                onPress={this.handleForgotPassword}/>
-                    </Form>
-                </Content>
-            </Wrapper>
+                    {/* <Text style={{ color: "red" }}>
+                      {props.touched.username && props.errors.username}
+                    </Text> */}
 
+                    <Item>
+                      <Input
+                        placeholder={translate("LOGIN_password")}
+                        name={"password"}
+                        onChangeText={props.handleChange("password")}
+                        ref={input => (this._password = input)}
+                        onSubmitEditing={event => {
+                          this._email._root.focus();
+                        }}
+                        value={props.values.password}
+                        autoCapitalize={"none"}
+                      />
+                      <Icon active name="key" />
+                    </Item>
+                    <TextError>
+                      {props.touched.password && props.errors.password}
+                    </TextError>
+
+                    <Button style={{marginTop: 10}}
+                      onPress={props.handleSubmit}
+                      title={translate("LOGIN_loginButton")}
+                    />
+                    <Button
+                      transparent
+                      color="gray"
+                      title={translate("LOGIN_forgotPassword")}
+                      onPress={this.handleForgotPassword}
+                    />
+                  </Form>
+                )}
+              </Formik>
+            </Content>
+          </Wrapper>
         );
     }
 }
