@@ -126,7 +126,8 @@ class SetTime extends React.Component {
 
             <Container>
                 <Content>
-                    <Button title="Time Picker Demo" onPress={this.showDialog} />
+                    <Button  
+                     title="Chọn mức thời gian theo dõi nhịp tim" onPress={this.showDialog} />
                     {/* <DateTimePicker
                         isVisible={this.state.isDateTimePickerVisible}
                         onConfirm={this.handleTimePicked}
@@ -135,7 +136,7 @@ class SetTime extends React.Component {
                         is24Hour={false}
                     /> */}
                     <Dialog.Container visible={this.state.dialogVisible}>
-                        <Dialog.Title>Hẹn giờ thông báo</Dialog.Title>
+                        <Dialog.Title>Nhập khoảng thời gian bạn muốn</Dialog.Title>
                         {/* <Dialog.Description>
                             Set an interval time for getting data.
                         </Dialog.Description> */}
@@ -145,7 +146,7 @@ class SetTime extends React.Component {
                         <Dialog.Button label="Hủy" onPress={this.handleCancel} />
                         <Dialog.Button label="OK" onPress={this.handleOK} />
                     </Dialog.Container>
-                    <Item>
+                    <Item  style={{marginTop:'7%'}}>
                         <FlatList
                             extraData={this.state}
                             keyExtractor={(item, index) => `list-item-${index}`}
@@ -165,6 +166,11 @@ class SetTime extends React.Component {
                             }}
 
                         />
+                    </Item>
+                    <Item>
+                        <Text style={{fontWeight: 'bold', fontStyle: 'italic', color: 'red', marginLeft:'4%'}}>
+                            *Tích chọn khẩn cấp, bạn sẽ nhận thông báo nhịp tim bất cứ khi nào có dữ liệu đo được. Ngược lại, thông báo chỉ xuất hiện khi nhịp tim của bệnh nhân có dấu hiệu nguy hiểm!*
+                        </Text>
                     </Item>
 
                 </Content>
