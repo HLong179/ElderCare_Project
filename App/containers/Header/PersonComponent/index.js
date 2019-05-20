@@ -33,6 +33,12 @@ class Bulb extends Component {
         this.hideMenu();
         navigate('SetTime');
     }
+    
+    onSelectDrugDetail = () => {
+        const { navigate } = this.props.navigation;
+        this.hideMenu();
+        navigate('DrugDetail');
+    }
 
     onSelectLogout = async () => {
         try {
@@ -60,6 +66,8 @@ class Bulb extends Component {
                     >
                         <MenuItem onPress={this.onSelectMenu}>Thêm người thân phụ</MenuItem>
                         <MenuItem onPress={this.onSelectSetTime}>Hẹn giờ</MenuItem>
+                        <MenuItem onPress={this.onSelectDrugDetail}>Chi tiết đơn thuốc</MenuItem>
+
                         <MenuItem onPress={this.onSelectLogout}>Đăng xuất</MenuItem>
 
                     </Menu>
