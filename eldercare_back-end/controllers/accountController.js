@@ -96,8 +96,8 @@ router.post('/getDoctorPhoneNum', (req, res) => {
     let elderId = req.body.elderId;
     accountRepo.getElderInformation(elderId).then(
         elder => {
-            if (elder.doctorId) {
-                accountRepo.getDoctorPhoneNum(elder.doctorId).then(
+            if (elder[0].doctorId) {
+                accountRepo.getDoctorPhoneNumber(elder[0].doctorId).then(
                     numPhone => {
                         res.json({
                             doctorPhoneNum: numPhone

@@ -31,7 +31,7 @@ exports.getElderInformation = (elderId) => {
     return db.load(sql);
 }
 
-exports.getDoctorPhoneNum = (doctorId) => {
+exports.getDoctorPhoneNumber = (doctorId) => {
     var sql = `select phone from doctor where doctorId = ${doctorId} `;
     return db.load(sql);
 }
