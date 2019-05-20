@@ -16,6 +16,8 @@ import createSagaMiddleware from 'redux-saga';
 
 import App from './App/navigation/AppNavigation';
 import { createAppContainer } from 'react-navigation';
+import { Root } from "native-base";
+
 
 const Navigation  = createAppContainer(App);
 
@@ -31,13 +33,17 @@ const store = createStore(
 sagaMiddleware.run(rootSaga);
 
 const RNRedux = () => (
+  <Root>
     <Provider store={store}>
-        <View style={{ flex: 1 }}>
-            <Navigation ref={navigatorRef => {
-          NavigationService.setTopLevelNavigator(navigatorRef);
-        }} />
-        </View>
+      <View style={{ flex: 1 }}>
+        <Navigation
+          ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
+      </View>
     </Provider>
+  </Root>
 );
 
 AppRegistry.registerComponent(appName, () => RNRedux);
