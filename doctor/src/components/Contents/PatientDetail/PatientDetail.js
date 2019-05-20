@@ -7,6 +7,7 @@ import PatientInfo from "./PatientInfo"
 import Relatives from "./Relatives"
 import ListDrugs from "./ListDrugs"
 import HeartRate from "./HeartRate"
+import SleepChart from "./SleepChart";
 
 
 const { Content } = Layout
@@ -31,6 +32,7 @@ class PatientDetail extends Component {
           <Relatives elderId={this.state.patient.ICID} />
           <ListDrugs elderId={this.state.patient.ICID} />
           <HeartRate />
+          <SleepChart />
         </div>
       </Content>
     )

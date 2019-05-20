@@ -15,7 +15,6 @@ class ListPatients extends Component {
     searchText: ""
   }
   componentWillMount() {
-    console.log("clear");
     this.props.clearPresciption()
   }
   
