@@ -40,19 +40,11 @@ class Login extends Component {
         }
     }
 
-    handleChangeEmail = (value) => {
-        this.setState({username: value});
-    };
-
-    handleChangePassword = (value) => {
-        this.setState({password: value});
-    };
-
     handleLogin = (values) => {
         const { username, password } = values;
         const data = {
-            username,
-            password
+            username: username.trim(),
+            password: password.trim(),
         }
 
         fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/login`, {
@@ -124,6 +116,7 @@ class Login extends Component {
                         onSubmitEditing={event => {
                           this._password._root.focus();
                         }}
+                        autoFocus={true}
                         value={props.values.username}
                         autoCapitalize={"none"}
                       />
@@ -148,6 +141,7 @@ class Login extends Component {
                         }}
                         value={props.values.password}
                         autoCapitalize={"none"}
+                        secureTextEntry={true}
                       />
                       <Icon active name="key" />
                     </Item>
