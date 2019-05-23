@@ -11,7 +11,6 @@ app.use(cors());
  }));
 
  var accountController = require('./controllers/accountController');
- var doctorController = require('./controllers/doctorController');
  var medicineController = require('./controllers/medicineController');
 //  var healthIndexesController = require('./controllers/healthIndexesController');
  // default route
@@ -20,7 +19,6 @@ app.use(cors());
  });
  console.log('hello')
  app.use('/account', accountController);
- app.use('/doctor', doctorController);
  app.use('/medicine', medicineController);
 
 //  app.use('/healthIndexes', healthIndexesController);
@@ -38,7 +36,7 @@ app.use(cors());
   };
 firebase.initializeApp(config);
 
-var morning = schedule.scheduleJob('5 10 * * *', () => {
+var sleeper = schedule.scheduleJob('5 10 * * *', () => {
         var ref = firebase.database().ref('/Patients');
         ref.once("value", (snapshot) => {
             // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
@@ -64,6 +62,24 @@ var morning = schedule.scheduleJob('5 10 * * *', () => {
     // console.log('The answer to life, the universe, and everything!');
 
   });
+
+
+  var morning = schedule.scheduleJob('7 * * * *', () => {
+    var ref = firebase.database().ref('/Patients');
+    ref.once("value", (snapshot) => {
+        // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
+        Object.keys(snapshot.val()).forEach(elderId => {
+            var medicinePath = firebase.database().ref(`Patients/${elderId}/Config/MedicineTime`);
+            medicinePath.set(true, (e) => {
+                if (e) {
+                    console.log('we get some error here: ', e);
+                } else {
+                    console.log('set time medicine success')
+                }
+            })
+        });
+    })
+  })
   
   var afternoon = schedule.scheduleJob('30 10 * * *', () => {
     var ref = firebase.database().ref('/Patients');
@@ -82,13 +98,13 @@ var morning = schedule.scheduleJob('5 10 * * *', () => {
     })
   })
 
-  var eve = schedule.scheduleJob('18 * * *', () => {
+  var eve = schedule.scheduleJob('50 16 * * *', () => {
     var ref = firebase.database().ref('/Patients');
     ref.once("value", (snapshot) => {
         // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
         Object.keys(snapshot.val()).forEach(elderId => {
             var medicinePath = firebase.database().ref(`Patients/${elderId}/Config/MedicineTime`);
-            medicinePath.set(true, (e) => {
+            medicinePath.set(new Date().getMilliseconds(), (e) => {
                 if (e) {
                     console.log('we get some error here: ', e);
                 } else {
