@@ -42,7 +42,7 @@ var sleeper = schedule.scheduleJob('5 10 * * *', () => {
             // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
             Object.keys(snapshot.val()).forEach(elderId => {
                 var detailRef = firebase.database().ref(`Patients/${elderId}/Config/DataSleepToday`);
-                var medicinePath = firebase.database().ref(`Patients/${elderId}/Config/MedicineTime`);
+                // var medicinePath = firebase.database().ref(`Patients/${elderId}/Config/MedicineTime`);
                 detailRef.set(false, (e) => {
                     if (e) {
                         console.log("we get some error here: ", e);
@@ -50,13 +50,13 @@ var sleeper = schedule.scheduleJob('5 10 * * *', () => {
                         console.log("we set value sleep request to firebase success!");
                     }
                 })
-                medicinePath.set(true, (e) => {
-                    if (e) {
-                        console.log('we get some error here: ', e);
-                    } else {
-                        console.log('set time medicine success')
-                    }
-                })
+                // medicinePath.set(true, (e) => {
+                //     if (e) {
+                //         console.log('we get some error here: ', e);
+                //     } else {
+                //         console.log('set time medicine success')
+                //     }
+                // })
             });
         })
     // console.log('The answer to life, the universe, and everything!');
@@ -64,7 +64,7 @@ var sleeper = schedule.scheduleJob('5 10 * * *', () => {
   });
 
 
-  var morning = schedule.scheduleJob('7 * * * *', () => {
+  var morning = schedule.scheduleJob('5 7 * * * ', () => {
     var ref = firebase.database().ref('/Patients');
     ref.once("value", (snapshot) => {
         // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
