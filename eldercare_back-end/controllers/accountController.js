@@ -6,6 +6,47 @@ var md5 = require('crypto-js/md5')
 
 var router = express.Router();
 
+router.post('/addElder', (req, res) => {
+    let elder = {
+        name: req.body.name,
+        gender: req.body.gender,
+        age: req.body.age,
+        icid: req.body.icid,
+        doctorPhoneNum: req.body.doctorPhoneNum
+    }
+    accountRepo.addElder(elder).then(
+        next => {
+            res.json({
+                status: 200,
+                message: 'Create Elder Success!'
+            })
+        },
+        err => res.json(err)
+    )
+})
+
+router.post('/elderDetail', (req, res) => {
+    let elderId = req.body.elderId;
+    accountRepo.elderDetail(elderId).then(
+        elders => {
+            res.json(elders[0]);
+        },
+        err => res.json(err)
+    )
+})
+
+router.post('/listRelatives', (req,res) => {
+    let elderId = req.body.elderId;
+
+    accountRepo.getListRelatives(elderId).then(
+        relatives => {
+            res.json(relatives);
+        },
+        err => res.json(err)
+    )
+
+})
+
 router.post('/addMainUser', (req, res) => {
     try {
         var user = {
@@ -18,11 +59,23 @@ router.post('/addMainUser', (req, res) => {
             password: (req.body.password).toString(),
             permission: "Main"
         };
-        accountRepo.addUser(user)
-        .then(result => {
-            console.log("User number", result ,"was added");
-            res.json(user);
-        })
+        accountRepo.getAllPateintsId().then(
+            listId => {
+                if (listId && listId.includes(req.body.elder_id)) {
+                   return res.json({
+                        msg: "This Patient already have a main relative"
+                    })
+                }
+                else {
+                    accountRepo.addUser(user)
+                    .then(result => {
+                        console.log("User number", result ,"was added");
+                        res.json(user);
+                    })
+                }
+            }
+        )
+        
     }
     catch (err) {
         console.log(">>>>> Error:", err);
@@ -94,19 +147,14 @@ router.post('/login', (req, res) => {
 
 router.post('/getDoctorPhoneNum', (req, res) => {
     let elderId = req.body.elderId;
-    accountRepo.getElderInformation(elderId).then(
+    accountRepo.elderDetail(elderId).then(
         elder => {
-            if (elder[0].doctorId) {
-                accountRepo.getDoctorPhoneNumber(elder[0].doctorId).then(
-                    numPhone => {
-                        res.json({
-                            doctorPhoneNum: numPhone
-                        });
-                    },
-                    except => res.json(except)
-                )
+            if (elder[0].doctorNumPhone) {
+               res.json({
+                   doctorPhoneNum: elder[0].doctorNumPhone
+               });
             } else {
-                res.json({msg: 'no doctor found with this patient!'})
+                res.json({msg: 'no doctor phone number found with this patient!'})
             }
             
         },

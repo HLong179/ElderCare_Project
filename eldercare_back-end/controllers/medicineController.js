@@ -4,44 +4,52 @@ var express = require('express');
 var medicineRepo = require('../repos/medicineRepo');
 var router = express.Router();
 
-router.post('/addPrescription', (req, res) => {
-    let prescription = {
+router.post('/addMedicine', (req, res) => {
+    let medicine = {
         elderId: req.body.elderId,
-        doctorId: req.body.doctorId,
         imageUrl: req.body.imageUrl,
-        script: req.body.script
+        name: req.body.name,
+        script: req.body.script,
+        morning: req.body.morning,
+        afternoon: req.body.afternoon,
+        evening: req.body.evening
     }
-    medicineRepo.addPrescription(prescription).then(
+    medicineRepo.addMedicine(medicine).then(
         pres => {
             res.json({
-                ...prescription,
+                ...medicine,
                 msg: 'create prescription success!'
             })
         },
         err => res.json(err)
     )
 })
-router.post('/getPescription', (req, res) => {
+router.post('/getMedicinesByTime', (req, res) => {
     let elderId = req.body.elderId;
-    medicineRepo.getPrescription(elderId).then(
-        pres => {
-            res.json(pres[0]);
+    let time = req.body.time;
+    medicineRepo.getMedicineOfPatientByTime(elderId, time).then(
+        listMedicines => {
+            res.json(listMedicines);
         },
         err => res.json(err)
     )
 })
 
-router.post('/updatePrescription', (req, res) => {
+router.post('/updateMedicine', (req, res) => {
     let elderId = req.body.elderId;
     let dataChanged = {
         imageUrl: req.body.imageUrl,
-        script: req.body.script
+        script: req.body.script,
+        name: req.body.name,
+        morning: req.body.morning,
+        afternoon: req.body.afternoon,
+        evening: req.body.evening
     }
-    medicineRepo.updatePrescription(elderId, dataChanged).then(
+    medicineRepo.updateMedicine(elderId, dataChanged).then(
         next => {
             res.json({
                 ...dataChanged,
-                msg: 'update prescription success!'
+                msg: 'update medicine success!'
             })
         },
         err => res.json(err)

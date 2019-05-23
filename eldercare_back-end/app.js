@@ -38,7 +38,7 @@ app.use(cors());
   };
 firebase.initializeApp(config);
 
-var morning = schedule.scheduleJob('7 * * *', () => {
+var morning = schedule.scheduleJob('5 10 * * *', () => {
         var ref = firebase.database().ref('/Patients');
         ref.once("value", (snapshot) => {
             // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
