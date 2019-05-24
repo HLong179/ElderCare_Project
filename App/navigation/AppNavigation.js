@@ -13,7 +13,7 @@ import ResetPassword from "../containers/AuthPage/FormResetPass"
 import FormHeartRate from "../containers/HeartCard/FormHeartRate";
 import SetTime from "../containers/SetTime";
 import HeartRate from "../containers/HeartRate";
-import DrugDetails from '../containers/MedicineDetail';
+import MedicinePage from '../containers/MedicinePage';
 
 
 
@@ -68,10 +68,10 @@ const PrimaryNav = createStackNavigator(
         HeartRate: {
             screen: HeartRate
         },
-        DrugDetail: {
-            screen: DrugDetails,
+        MedicinePage: {
+            screen: MedicinePage,
             navigationOptions: () => {
-                return (<CommonHeader title='Drug Detail'/>)
+                return (<CommonHeader title='Medicine Page'/>)
             }
         }
 

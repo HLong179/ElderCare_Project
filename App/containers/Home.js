@@ -12,7 +12,7 @@ import { Container, Header, Content } from 'native-base';
 // import FoodCard from "./FoodCard";
 import SleepCard from "./SleepCard"
 import WeightCard from './WeightCard'
-import WaterCard from './WaterCard'
+import MedicineCard from './MedicineCard'
 import HeartCard from './HeartCard'
 
 
@@ -61,7 +61,7 @@ class Home extends Component {
                         </Row>
                         <Row>
                             <Col>
-                                <WaterCard />
+                                <MedicineCard />
                             </Col>
                         </Row>
                     </Grid>

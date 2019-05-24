@@ -23,6 +23,7 @@
     "react-native-firebase": "^5.3.1",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-i18n": "^2.0.15",
+    "react-native-image-picker": "^0.28.1",
     "react-native-material-menu": "^0.4.2",
     "react-native-modal-datetime-picker": "^7.4.0",
     "react-native-phone-call": "^1.0.9",
