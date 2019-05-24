@@ -1,5 +1,6 @@
 import React from "react"
-import firebase from "react-native-firebase"
+// import firebase from "react-native-firebase"
+import firebase from "firebase"
 import {
   Image,
   ScrollView,
@@ -77,17 +78,17 @@ class AddMedicine extends React.Component {
     console.log(source)
 
     if(firebase) {
-      let name = "test"; // nhap ten cho hinh 
+      let name = "test"; // name of image
       let storageRef  = firebase.storage().ref().child(`${this.state.elderId}/${name}`)
-      storageRef.putFile(source, "data_url")
+      storageRef.putString(source, "data_url", {
+        contentType: "image/.jpg"
+      })
       .then(
-        (snapShot) => {
-          storageRef.getDownloadURL().then(
-            url =>{
-              this.setState({imgUrl : url}); // url cua hinh lay dc
-            },
-            err => console.log(err)
-          )
+        snapshot => {
+          storageRef.getDownloadURL().then(url => {
+            console.log("we got image url: ", url);
+            this.setState({imgUrl: url}); // image url we got
+          })
         }
       )
     }
