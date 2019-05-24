@@ -21,11 +21,10 @@ import {
 import Dialog from "react-native-dialog"
 import moment from "moment"
 import firebase from "react-native-firebase"
-import AsyncStorage from "@react-native-community/async-storage"
 import ImagePicker from "react-native-image-picker"
-import CommonButton from "../../../components/CommonButton"
-import CommonItem from "../../../components/CommonItemInput"
 import styled from "styled-components"
+import AsyncStorage from "@react-native-community/async-storage"
+import SETTINGS from "../../../settings"
 
 const Wrapper = styled(Container)`
   flex-direction: row;
@@ -48,6 +47,15 @@ class AddMedicine extends React.Component {
       text: ""
     }
   }
+  componentDidMount = async () => {
+    const storage = await AsyncStorage.getItem("curUser")
+    const objStorage = JSON.parse(storage)
+
+    this.setState({
+      elderId: objStorage.elderId,
+      permission: objStorage.permission
+    })
+  }
 
   setModalVisible(visible) {
     this.setState({ modalVisible: visible })
@@ -64,46 +72,32 @@ class AddMedicine extends React.Component {
     })
   }
   handleOK = () => {
-    console.log("OK")
+    let source = "data:image/jpeg;base64," + this.state.photo.data
+    console.log(source)
+    fetch(`http://${SETTINGS.LOCAL_IP}:6900/medicine/getImageUrl`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        elderId: this.state.elderId,
+        imageName: this.state.photo.fileName,
+        base64Url: source
+      })
+    })
+      .then(async response => {
+        response = await response.json()
+        console.log(response)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
+
   render() {
     const { photo } = this.state
-    console.log(this.state)
     return (
-      // <Container>
-      //   <Content>
-      //     <Button title="Nhập đơn thuốc" onPress={this.showDialog} />
-      //     <Dialog.Container visible={this.state.dialogVisible}>
-      //       <Dialog.Title>Nhập đơn thuốc</Dialog.Title>
-      //       <ScrollView>
-      //         <Form>
-      //           {photo && (
-      //             <Image
-      //               source={{ uri: photo.uri }}
-      //               style={{
-      //                 width: 200,
-      //                 height: 200,
-      //                 marginBottom: 20,
-      //                 flex: 1,
-      //                 justifyContent: "center"
-      //               }}
-      //             />
-      //           )}
-      //           <Button title="Choose photo" onPress={this.handleChoosePhoto} />
-      //           <Label style={{ marginTop: 20 }}>Ghi chú</Label>
-      //           <Textarea
-      //             rowSpan={2}
-      //             bordered
-      //             onChangeText={text => this.setState({ text })}
-      //           />
-      //         </Form>
-      //       </ScrollView>
-
-      //       <Dialog.Button label="Hủy" onPress={this.handleCancel} />
-      //       <Dialog.Button label="OK" onPress={this.handleOK} />
-      //     </Dialog.Container>
-      //   </Content>
-      // </Container>
       <View style={{ marginTop: 22 }}>
         <Modal
           animationType="slide"
