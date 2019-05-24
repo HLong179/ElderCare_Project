@@ -1,4 +1,5 @@
 import React from "react"
+import firebase from "react-native-firebase"
 import {
   Image,
   ScrollView,
@@ -74,25 +75,41 @@ class AddMedicine extends React.Component {
   handleOK = () => {
     let source = "data:image/jpeg;base64," + this.state.photo.data
     console.log(source)
-    fetch(`http://${SETTINGS.LOCAL_IP}:6900/medicine/getImageUrl`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        elderId: this.state.elderId,
-        imageName: this.state.photo.fileName,
-        base64Url: source
-      })
-    })
-      .then(async response => {
-        response = await response.json()
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+
+    if(firebase) {
+      let name = "test"; // nhap ten cho hinh 
+      let storageRef  = firebase.storage().ref().child(`${this.state.elderId}/${name}`)
+      storageRef.putFile(source, "data_url")
+      .then(
+        (snapShot) => {
+          storageRef.getDownloadURL().then(
+            url =>{
+              this.setState({imgUrl : url}); // url cua hinh lay dc
+            },
+            err => console.log(err)
+          )
+        }
+      )
+    }
+    // fetch(`http://${SETTINGS.LOCAL_IP}:6900/medicine/getImageUrl`, {
+    //   method: "POST",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({
+    //     elderId: this.state.elderId,
+    //     imageName: this.state.photo.fileName,
+    //     base64Url: source
+    //   })
+    // })
+    //   .then(async response => {
+    //     response = await response.json()
+    //     console.log(response)
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //   })
   }
 
   render() {
