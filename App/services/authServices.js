@@ -61,3 +61,24 @@ export async function getUserData(data) {
 
 }
 
+export async function addElder(data) {
+
+    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addElder`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: data.name,
+            gender: data.gender,
+            age: Number(data.age),
+            icid: data.icid,
+            docterPhoneNum: Number(data.docterPhoneNum),
+
+        })
+    }) 
+
+    const result = await response.json();
+    return result;
+}

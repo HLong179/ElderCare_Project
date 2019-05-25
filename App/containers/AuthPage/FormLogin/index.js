@@ -92,6 +92,12 @@ class Login extends Component {
        
     }
 
+    onClickSignUp = () => {
+      const { navigate } = this.props.navigation;
+      console.log('sign up click');
+      navigate('SignUp');
+    }
+ 
     render() {
         const  initialValues  = this.state;
         return (
@@ -161,6 +167,8 @@ class Login extends Component {
                       title={translate("LOGIN_forgotPassword")}
                       onPress={this.handleForgotPassword}
                     />
+
+                    <Button transparent color={'blue'} primary title={"Đăng kí tài khoản mới"} onPress={this.onClickSignUp} />
                   </Form>
                 )}
               </Formik>

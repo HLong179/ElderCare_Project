@@ -14,6 +14,7 @@ import FormHeartRate from "../containers/HeartCard/FormHeartRate";
 import SetTime from "../containers/SetTime";
 import HeartRate from "../containers/HeartRate";
 import MedicinePage from '../containers/MedicinePage';
+import SignUp from '../containers/AuthPage/FormSignUp';
 
 
 
@@ -28,6 +29,10 @@ const PrimaryNav = createStackNavigator(
             navigationOptions: () => ({
                 header: <HeaderWithIcon/>
             })
+        },
+
+        SignUp: {
+            screen: SignUp,
         },
 
         // FormHeartRate: {
@@ -74,7 +79,6 @@ const PrimaryNav = createStackNavigator(
                 return (<CommonHeader title='Medicine Page'/>)
             }
         }
-
 
     },
     {
