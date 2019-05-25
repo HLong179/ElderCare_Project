@@ -8,10 +8,10 @@ import AddMedicine from "./AddMedicine"
 class MedicinePage extends React.Component {
   render() {
     return (
-      <Container>
+      <Container style={{padding: 10}}>
         <Content>
           <AddMedicine />
-          <MedicineDetails />
+          {/* <MedicineDetails /> */}
         </Content>
       </Container>
     )
