@@ -127,12 +127,16 @@ class AddMedicine extends React.Component {
 
   handleOK = () => {
     let source = this.state.blobFile
-    firebase.initializeApp(config.opt)
-    if (firebase) {
+   console.log("data firebase we have: ", firebase.apps);
+    if (!firebase.apps.length) {
+       firebase.initializeApp(config.opt);
+    } 
+      console.log("run this fucking functions");
       let storageRef = firebase
         .storage()
         .ref()
         .child(`${this.state.elderId}/${this.state.imgName}.jpg`)
+        
       storageRef
         .put(source, {
           contentType: "image/jpeg"
@@ -158,7 +162,7 @@ class AddMedicine extends React.Component {
               .then(async response => {
                 response = await response.json()
                 this.setModalVisible(false)
-                console.log(response)
+                console.log("result we have after run this fucntion add medicine: ", response)
                 this.setState({
                   modalVisible: false,
                   loading: false,
@@ -177,7 +181,7 @@ class AddMedicine extends React.Component {
               })
           })
         })
-    }
+    
   }
 
   render() {

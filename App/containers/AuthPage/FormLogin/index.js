@@ -61,13 +61,15 @@ class Login extends Component {
             response = await response.json();
             console.log(response);
             if (response.auth) {
+              console.log("clgt what the fuck is happend?????")
                 const result = await AsyncStorage.multiSet([['curUser', JSON.stringify(response.curUser[0])],['isLogin', 'true']]);
-                
+                console.log("our firebae application already have? : " , firebase.apps)
                 if (!firebase.apps.length) {
+                  console.log('connect to firebase', response.curUser[0].elderId)
                     const Side = firebase.initializeApp(config.opt, 'test');
-
+                    
                     Side.onReady().then(app => {
-                     console.log('connect to firebase', response.curUser[0].elderId)
+                   
                         app.messaging().subscribeToTopic(response.curUser[0].elderId);
 
                         this.props.navigation.navigate('Home');
