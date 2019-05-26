@@ -13,6 +13,7 @@ import ResetPassword from "../containers/AuthPage/FormResetPass"
 import FormHeartRate from "../containers/HeartCard/FormHeartRate";
 import SetTime from "../containers/SetTime";
 import HeartRate from "../containers/HeartRate";
+import SleepScreen from "../containers/SleepScreen";
 import MedicinePage from '../containers/MedicinePage';
 import SignUp from '../containers/AuthPage/FormSignUp';
 
@@ -33,6 +34,9 @@ const PrimaryNav = createStackNavigator(
 
         SignUp: {
             screen: SignUp,
+            navigationOptions: () => ({
+                title: `Đăng ký`,
+              }),
         },
 
         // FormHeartRate: {
@@ -58,6 +62,9 @@ const PrimaryNav = createStackNavigator(
 
         AddRelative: {
             screen: AddRelative,
+            navigationOptions: () => ({
+                title: `Thêm người thân phụ`,
+              }),
         },
 
         SplashScreen: {
@@ -66,18 +73,27 @@ const PrimaryNav = createStackNavigator(
 
         SetTime: {
             screen: SetTime,
-            navigationOptions: () => {
-                return (<CommonHeader title='SetTime'/>)
-            }
+            navigationOptions: () => ({
+                title: `Hẹn giờ`,
+              }),
         },
         HeartRate: {
-            screen: HeartRate
+            screen: HeartRate,
+            navigationOptions: () => ({
+                title: `Nhịp tim`,
+              }),
+        },
+        SleepScreen: {
+            screen: SleepScreen,
+            navigationOptions: () => ({
+                title: `Giấc ngủ`,
+              }),
         },
         MedicinePage: {
             screen: MedicinePage,
-            navigationOptions: () => {
-                return (<CommonHeader title='Medicine Page'/>)
-            }
+            navigationOptions: () => ({
+                title: `Quản lý thuốc`,
+              }),
         }
 
     },

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { BackHandler, TouchableOpacity, View } from 'react-native'
 import { Header, Content, Card, CardItem, Text, Body, Left, Icon, Right } from "native-base"
-
+import { withNavigation } from 'react-navigation';
 import CommonButton from '../../components/CommonButton'
 import IconWithText from '../../components/IconWithText'
 import CommonCard from '../../components/CommonCard'
@@ -20,17 +20,20 @@ class SleepCard extends Component {
       return true
     })
   }
+  toSleep = () => {
+    this.props.navigation.navigate("SleepScreen")
+  }
 
   render () {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={this.toSleep}>
         <CommonCard >
           <CardItem cardBody>
             <Left>
               <IconWithText icon="moon" text="Giấc ngủ" color="blue"></IconWithText>
             </Left>
             <Right>
-              <CommonButton title="Thêm"></CommonButton>
+              <CommonButton title="Theo dõi" onPress={this.toSleep}></CommonButton>
             </Right>
           </CardItem>
           <TextWrapper>
@@ -44,4 +47,4 @@ class SleepCard extends Component {
 
 
 
-export default SleepCard
+export default withNavigation(SleepCard)
