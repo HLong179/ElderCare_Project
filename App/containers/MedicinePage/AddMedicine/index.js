@@ -1,6 +1,6 @@
 import React from "react"
 import firebase from "firebase"
-import { Image, Modal, View, CheckBox, Alert } from "react-native"
+import { Image, Modal, View, CheckBox, Alert, StyleSheet } from "react-native"
 import {
   Button,
   Container,
@@ -15,6 +15,7 @@ import {
 import ImagePicker from "react-native-image-picker"
 import AsyncStorage from "@react-native-community/async-storage"
 import config from "../../../Constant"
+import Spinner from "react-native-loading-spinner-overlay"
 
 class AddMedicine extends React.Component {
   constructor(props) {
@@ -27,7 +28,8 @@ class AddMedicine extends React.Component {
       morning: false,
       afternoon: false,
       evening: false,
-      blobFile: null
+      blobFile: null,
+      spinner: false
     }
   }
 
@@ -41,7 +43,8 @@ class AddMedicine extends React.Component {
       morning: false,
       afternoon: false,
       evening: false,
-      blobFile: null
+      blobFile: null,
+      spinner: false
     })
   }
 
@@ -86,6 +89,9 @@ class AddMedicine extends React.Component {
   }
 
   handleOK = async () => {
+    await this.setState({
+      spinner: true
+    })
     const { photo, imgName, morning, afternoon, evening } = this.state
     if (!photo) {
       Alert.alert("Lỗi", "Chưa chọn hình ảnh thuốc")
@@ -128,8 +134,6 @@ class AddMedicine extends React.Component {
               .then(async data => {
                 //success callback
                 await console.log("data ", data)
-                
-                this.setModalVisible(false)
                 this.setState({
                   modalVisible: false,
                   loading: false,
@@ -140,8 +144,10 @@ class AddMedicine extends React.Component {
                   morning: false,
                   afternoon: false,
                   evening: false,
-                  blobFile: null
+                  blobFile: null,
+                  spinner: false
                 })
+                this.setModalVisible(false)
               })
               .catch(error => {
                 //error callback
@@ -155,132 +161,159 @@ class AddMedicine extends React.Component {
   render() {
     const { photo } = this.state
     return (
-      <View style={{ marginTop: 22 }}>
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-        >
-          <Container>
-            <Content style={{ padding: 10 }}>
-              <Form>
-                <View style={{ marginTop: 20 }}>
-                  {photo && (
-                    <View
-                      style={{ justifyContent: "center", alignItems: "center" }}
-                    >
-                      <Image
-                        source={{ uri: photo.uri }}
+      <View>
+        <Spinner
+          visible={this.state.spinner}
+          textStyle={styles.spinnerTextStyle}
+        />
+
+        <View style={{ marginTop: 22 }}>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
+          >
+            <Container>
+              <Content style={{ padding: 10 }}>
+                <Form>
+                  <View style={{ marginTop: 20 }}>
+                    {photo && (
+                      <View
                         style={{
-                          width: 300,
-                          height: 300,
-                          marginBottom: 20
+                          justifyContent: "center",
+                          alignItems: "center"
                         }}
+                      >
+                        <Image
+                          source={{ uri: photo.uri }}
+                          style={{
+                            width: 300,
+                            height: 300,
+                            marginBottom: 20
+                          }}
+                        />
+                      </View>
+                    )}
+                    <Button block info onPress={this.handleChoosePhoto}>
+                      <Text>Chọn ảnh</Text>
+                    </Button>
+                  </View>
+                  <View>
+                    <Label style={{ marginTop: 30, marginBottom: 5 }}>
+                      Tên thuốc
+                    </Label>
+                    <Item regular>
+                      <Input
+                        onChangeText={imgName => this.setState({ imgName })}
                       />
+                    </Item>
+                  </View>
+                  <View>
+                    <Label style={{ marginTop: 30 }}>Ghi chú</Label>
+                    <Textarea
+                      rowSpan={3}
+                      bordered
+                      onChangeText={text => this.setState({ text })}
+                    />
+                  </View>
+                  <View style={{ flexDirection: "column" }}>
+                    <Label style={{ marginTop: 30, marginBottom: 10 }}>
+                      Hẹn giờ uống thuốc
+                    </Label>
+                    <View style={{ flexDirection: "row" }}>
+                      <CheckBox
+                        value={this.state.morning}
+                        onValueChange={() =>
+                          this.setState({ morning: !this.state.morning })
+                        }
+                      />
+                      <Text style={{ marginTop: 5 }}> Buổi sáng</Text>
                     </View>
-                  )}
-                  <Button block info onPress={this.handleChoosePhoto}>
-                    <Text>Chọn ảnh</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <CheckBox
+                        value={this.state.afternoon}
+                        onValueChange={() =>
+                          this.setState({ afternoon: !this.state.afternoon })
+                        }
+                      />
+                      <Text style={{ marginTop: 5 }}> Buổi trưa</Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                      <CheckBox
+                        value={this.state.evening}
+                        onValueChange={() =>
+                          this.setState({ evening: !this.state.evening })
+                        }
+                      />
+                      <Text style={{ marginTop: 5 }}> Buổi tối</Text>
+                    </View>
+                  </View>
+                </Form>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 40,
+                    marginBottom: 50
+                  }}
+                >
+                  <Button
+                    light
+                    onPress={this.handleCancel}
+                    style={{
+                      width: 100,
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                  >
+                    <Text>HỦY</Text>
+                  </Button>
+                  <Button
+                    info
+                    onPress={this.handleOK}
+                    style={{
+                      width: 100,
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                  >
+                    <Text>OK</Text>
                   </Button>
                 </View>
-                <View>
-                  <Label style={{ marginTop: 30, marginBottom: 5 }}>
-                    Tên thuốc
-                  </Label>
-                  <Item regular>
-                    <Input
-                      onChangeText={imgName => this.setState({ imgName })}
-                    />
-                  </Item>
-                </View>
-                <View>
-                  <Label style={{ marginTop: 30 }}>Ghi chú</Label>
-                  <Textarea
-                    rowSpan={3}
-                    bordered
-                    onChangeText={text => this.setState({ text })}
-                  />
-                </View>
-                <View style={{ flexDirection: "column" }}>
-                  <Label style={{ marginTop: 30, marginBottom: 10 }}>
-                    Hẹn giờ uống thuốc
-                  </Label>
-                  <View style={{ flexDirection: "row" }}>
-                    <CheckBox
-                      value={this.state.morning}
-                      onValueChange={() =>
-                        this.setState({ morning: !this.state.morning })
-                      }
-                    />
-                    <Text style={{ marginTop: 5 }}> Buổi sáng</Text>
-                  </View>
-                  <View style={{ flexDirection: "row" }}>
-                    <CheckBox
-                      value={this.state.afternoon}
-                      onValueChange={() =>
-                        this.setState({ afternoon: !this.state.afternoon })
-                      }
-                    />
-                    <Text style={{ marginTop: 5 }}> Buổi trưa</Text>
-                  </View>
-                  <View style={{ flexDirection: "row" }}>
-                    <CheckBox
-                      value={this.state.evening}
-                      onValueChange={() =>
-                        this.setState({ evening: !this.state.evening })
-                      }
-                    />
-                    <Text style={{ marginTop: 5 }}> Buổi tối</Text>
-                  </View>
-                </View>
-              </Form>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginTop: 40,
-                  marginBottom: 50
-                }}
-              >
-                <Button
-                  light
-                  onPress={this.handleCancel}
-                  style={{
-                    width: 100,
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <Text>HỦY</Text>
-                </Button>
-                <Button
-                  info
-                  onPress={this.handleOK}
-                  style={{
-                    width: 100,
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <Text>OK</Text>
-                </Button>
-              </View>
-            </Content>
-          </Container>
-        </Modal>
+              </Content>
+            </Container>
+          </Modal>
 
-        <Button
-          block
-          info
-          onPress={() => {
-            this.setModalVisible(true)
-          }}
-        >
-          <Text>NHẬP ĐƠN THUỐC</Text>
-        </Button>
+          <Button
+            block
+            info
+            onPress={() => {
+              this.setModalVisible(true)
+            }}
+          >
+            <Text>NHẬP ĐƠN THUỐC</Text>
+          </Button>
+        </View>
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  headerText: {
+    fontSize: 20,
+    textAlign: "center",
+    margin: 10,
+    fontWeight: "bold"
+  },
+  spinnerTextStyle: {
+    color: "#FFF"
+  }
+})
 
 export default AddMedicine
