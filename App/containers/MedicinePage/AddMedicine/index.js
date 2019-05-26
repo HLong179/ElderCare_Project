@@ -14,7 +14,6 @@ import {
 } from "native-base"
 import ImagePicker from "react-native-image-picker"
 import AsyncStorage from "@react-native-community/async-storage"
-import SETTINGS from "../../../settings"
 import config from "../../../Constant"
 
 class AddMedicine extends React.Component {
@@ -103,7 +102,7 @@ class AddMedicine extends React.Component {
       const storage = await AsyncStorage.getItem("curUser")
       const objStorage = JSON.parse(storage)
       const elderId = objStorage.elderId
-      console.log("id of elder: ", elderId);
+      console.log("id of elder: ", elderId)
       let storageRef = firebase
         .storage()
         .ref()
@@ -114,13 +113,10 @@ class AddMedicine extends React.Component {
         })
         .then(snapshot => {
           storageRef.getDownloadURL().then(url => {
-            fetch(`http://${SETTINGS.LOCAL_IP}:6900/medicine/addMedicine`, {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
+            firebase
+              .database()
+              .ref(`Patients/${elderId}/Medicines`)
+              .push({
                 elderId: elderId,
                 imageUrl: url,
                 name: this.state.imgName,
@@ -129,13 +125,10 @@ class AddMedicine extends React.Component {
                 afternoon: ~~this.state.afternoon,
                 evening: ~~this.state.evening
               })
-            })
-              .then(async response => {
-                response = await response.json()
-                console.log(
-                  "result we have after run this fucntion add medicine: ",
-                  response
-                )
+              .then(async data => {
+                //success callback
+                await console.log("data ", data)
+                
                 this.setModalVisible(false)
                 this.setState({
                   modalVisible: false,
@@ -151,7 +144,8 @@ class AddMedicine extends React.Component {
                 })
               })
               .catch(error => {
-                console.log(error)
+                //error callback
+                console.log("error ", error)
               })
           })
         })
