@@ -5,6 +5,7 @@ import { Button, } from 'native-base';
 import Menu, { MenuItem } from "react-native-material-menu";
 import { withNavigation } from 'react-navigation'
 import AsyncStorage from '@react-native-community/async-storage';
+import firebase from "react-native-firebase"
 
 class Bulb extends Component {
     _menu = null;
@@ -42,9 +43,13 @@ class Bulb extends Component {
 
     onSelectLogout = async () => {
         try {
+            let tempValue = await AsyncStorage.getItem('curUser');
+            idElder = JSON.parse(tempValue).elderId;
+            firebase.messaging().unsubscribeFromTopic(idElder);
             await AsyncStorage.removeItem('curUser');
             await AsyncStorage.setItem('isLogin', 'false');
             const { navigate } = this.props.navigation;
+            
             this.hideMenu();
             navigate('Login');
         }
