@@ -1,14 +1,6 @@
 import React from "react"
-// import firebase from "react-native-firebase"
 import firebase from "firebase"
-import {
-  Image,
-  Modal,
-  View,
-  CheckBox,
-  StyleSheet,
-  ActivityIndicator
-} from "react-native"
+import { Image, Modal, View, CheckBox, Alert } from "react-native"
 import {
   Button,
   Container,
@@ -19,38 +11,16 @@ import {
   Input,
   Item,
   Text
-  // ListItem,
-  // CheckBox,
-  // Body
 } from "native-base"
-import moment from "moment"
 import ImagePicker from "react-native-image-picker"
-import styled from "styled-components"
 import AsyncStorage from "@react-native-community/async-storage"
-import SETTINGS from "../../../settings"
 import config from "../../../Constant"
-
-const styles = StyleSheet.create({
-  loading: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    opacity: 0.5,
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignItems: "center"
-  }
-})
 
 class AddMedicine extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       modalVisible: false,
-      loading: false,
-      elderId: "",
       photo: null,
       text: "",
       imgName: "",
@@ -60,21 +30,11 @@ class AddMedicine extends React.Component {
       blobFile: null
     }
   }
-  componentDidMount = async () => {
-    const storage = await AsyncStorage.getItem("curUser")
-    const objStorage = JSON.parse(storage)
 
-    this.setState({
-      elderId: objStorage.elderId,
-      permission: objStorage.permission
-    })
-  }
   handleCancel = () => {
     this.setModalVisible(false)
     this.setState({
       modalVisible: false,
-      loading: false,
-      elderId: "",
       photo: null,
       text: "",
       imgName: "",
@@ -125,32 +85,39 @@ class AddMedicine extends React.Component {
     })
   }
 
-  handleOK = () => {
-    let source = this.state.blobFile
-   console.log("data firebase we have: ", firebase.apps);
-    if (!firebase.apps.length) {
-       firebase.initializeApp(config.opt);
-    } 
-      console.log("run this fucking functions");
+  handleOK = async () => {
+    const { photo, imgName, morning, afternoon, evening } = this.state
+    if (!photo) {
+      Alert.alert("Lỗi", "Chưa chọn hình ảnh thuốc")
+    } else if (!imgName) {
+      Alert.alert("Lỗi", "Chưa nhập tên thuốc")
+    } else if (!morning && !afternoon && !evening) {
+      Alert.alert("Lỗi", "Chưa hẹn giờ uống thuốc")
+    } else {
+      let source = this.state.blobFile
+      if (!firebase.apps.length) {
+        firebase.initializeApp(config.opt)
+      }
+      console.log("data firebase we have: ", firebase.apps)
+      const storage = await AsyncStorage.getItem("curUser")
+      const objStorage = JSON.parse(storage)
+      const elderId = objStorage.elderId
+      console.log("id of elder: ", elderId)
       let storageRef = firebase
         .storage()
         .ref()
-        .child(`${this.state.elderId}/${this.state.imgName}.jpg`)
-        
+        .child(`${elderId}/${this.state.imgName}.jpg`)
       storageRef
         .put(source, {
           contentType: "image/jpeg"
         })
         .then(snapshot => {
           storageRef.getDownloadURL().then(url => {
-            fetch(`http://${SETTINGS.LOCAL_IP}:6900/medicine/addMedicine`, {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                elderId: this.state.elderId,
+            firebase
+              .database()
+              .ref(`Patients/${elderId}/Medicines`)
+              .push({
+                elderId: elderId,
                 imageUrl: url,
                 name: this.state.imgName,
                 script: this.state.text,
@@ -158,11 +125,11 @@ class AddMedicine extends React.Component {
                 afternoon: ~~this.state.afternoon,
                 evening: ~~this.state.evening
               })
-            })
-              .then(async response => {
-                response = await response.json()
+              .then(async data => {
+                //success callback
+                await console.log("data ", data)
+                
                 this.setModalVisible(false)
-                console.log("result we have after run this fucntion add medicine: ", response)
                 this.setState({
                   modalVisible: false,
                   loading: false,
@@ -177,16 +144,16 @@ class AddMedicine extends React.Component {
                 })
               })
               .catch(error => {
-                console.log(error)
+                //error callback
+                console.log("error ", error)
               })
           })
         })
-    
+    }
   }
 
   render() {
     const { photo } = this.state
-    console.log(this.state.blobFile)
     return (
       <View style={{ marginTop: 22 }}>
         <Modal
@@ -311,11 +278,6 @@ class AddMedicine extends React.Component {
         >
           <Text>NHẬP ĐƠN THUỐC</Text>
         </Button>
-        {this.state.loading && (
-          <View style={styles.loading}>
-            <ActivityIndicator />
-          </View>
-        )}
       </View>
     )
   }

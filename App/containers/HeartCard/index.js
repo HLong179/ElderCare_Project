@@ -33,7 +33,7 @@ class HeartCard extends Component {
 
   render () {
     return (
-      <TouchableOpacity onPress={this.handleAddHeartData}>
+      <TouchableOpacity onPress={this.toHeartRate}>
         <CommonCard >
           <CardItem cardBody>
             <Left>

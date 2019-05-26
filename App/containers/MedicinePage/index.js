@@ -1,17 +1,23 @@
 import React from "React"
-import { Image } from "react-native"
-import { Container, Card, CardItem, Text, Body, Content } from "native-base"
-import drug from "../../images/drugs.jpg"
-import MedicineDetails from "../MedicineDetail"
+import { Container, Content } from "native-base"
 import AddMedicine from "./AddMedicine"
+import ListMedicines from "./ListMedicines"
+import firebase from "firebase"
+import config from "../../Constant"
 
 class MedicinePage extends React.Component {
+  componentDidMount() {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(config.opt)
+    }
+  }
+
   render() {
     return (
-      <Container style={{padding: 10}}>
+      <Container style={{ padding: 10 }}>
         <Content>
           <AddMedicine />
-          {/* <MedicineDetails /> */}
+          <ListMedicines />
         </Content>
       </Container>
     )
