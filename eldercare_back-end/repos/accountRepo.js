@@ -11,7 +11,7 @@ exports.logIn = (user) => {
 }
 
 exports.addElder = (elder) => {
-    var sql = `insert into elder(name, gender, age, ICID, doctorNumPhone) values ('${elder.name}', '${elder.gender}', ${elder.age}, '${elder.icid}', ${elder.doctorPhoneNum})`
+    var sql = `insert into elder(name, gender, age, ICID, doctorNumPhone) values ('${elder.name}', '${elder.gender}', ${elder.age}, '${elder.icid}', '${elder.doctorPhoneNum}')`
     return db.insert(sql);
 }
 
