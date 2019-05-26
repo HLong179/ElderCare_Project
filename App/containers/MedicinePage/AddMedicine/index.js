@@ -104,11 +104,9 @@ class AddMedicine extends React.Component {
       if (!firebase.apps.length) {
         firebase.initializeApp(config.opt)
       }
-      console.log("data firebase we have: ", firebase.apps)
       const storage = await AsyncStorage.getItem("curUser")
       const objStorage = JSON.parse(storage)
       const elderId = objStorage.elderId
-      console.log("id of elder: ", elderId)
       let storageRef = firebase
         .storage()
         .ref()
@@ -133,7 +131,6 @@ class AddMedicine extends React.Component {
               })
               .then(async data => {
                 //success callback
-                await console.log("data ", data)
                 this.setState({
                   modalVisible: false,
                   loading: false,

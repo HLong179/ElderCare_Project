@@ -28,15 +28,24 @@ class ListMedicines extends Component {
     const objStorage = JSON.parse(storage)
     const elderId = objStorage.elderId
     const patientsRef = firebase.database().ref("Patients")
-    await patientsRef.on("value", snapshot => {
+    patientsRef.on("value", snapshot => {
       let patients = snapshot.val()[elderId]["Medicines"]
-      for (let patient in patients) {
-        let data = patients[patient]
-        data.idMedicineFB = patient
-        this.setState({
-            medicineDatas: [...this.state.medicineDatas, data]
-        })
-      }
+      this.setState(
+        {
+          medicineDatas: []
+        },
+        () => {
+          let { medicineDatas } = this.state
+          for (let patient in patients) {
+            let data = patients[patient]
+            data.idMedicineFB = patient
+            medicineDatas.push(data)
+          }
+          this.setState({
+            medicineDatas
+          })
+        }
+      )
     })
   }
 
@@ -47,45 +56,45 @@ class ListMedicines extends Component {
     this.setState({ listViewData: newData })
   }
   render() {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+    console.log(this.state.medicineDatas)
     return (
-        <List
-          style={{ marginTop: 30 }}
-          leftOpenValue={75}
-          rightOpenValue={-75}
-          dataSource={this.ds.cloneWithRows(this.state.medicineDatas)}
-          renderRow={data => (
-            <ListItem thumbnail>
-              <Left>
-                <Thumbnail square source={{ uri: data.imageUrl }} />
-              </Left>
-              <Body>
-                <Text>{data.name}</Text>
-                <Text note numberOfLines={2}>
-                  {data.script}
-                </Text>
-                <Text note numberOfLines={1}>
-                  {data.morning ? "Sáng" : null}{" "}
-                  {data.afternoon ? " Trưa " : null} {data.evening ? "Tối" : null}
-                </Text>
-              </Body>
-            </ListItem>
-          )}
-          renderLeftHiddenRow={data => (
-            <Button full onPress={() => alert("hello")}>
-              <Icon active name="information-circle" />
-            </Button>
-          )}
-          renderRightHiddenRow={(data, secId, rowId, rowMap) => (
-            <Button
-              full
-              danger
-              onPress={_ => this.deleteRow(secId, rowId, rowMap)}
-            >
-              <Icon active name="trash" />
-            </Button>
-          )}
-        />
+      <List
+        style={{ marginTop: 30 }}
+        leftOpenValue={75}
+        rightOpenValue={-75}
+        dataSource={this.ds.cloneWithRows(this.state.medicineDatas)}
+        renderRow={data => (
+          <ListItem thumbnail>
+            <Left>
+              <Thumbnail square source={{ uri: data.imageUrl }} />
+            </Left>
+            <Body>
+              <Text>{data.name}</Text>
+              <Text note numberOfLines={2}>
+                {data.script}
+              </Text>
+              <Text note numberOfLines={1}>
+                {data.morning ? "Sáng" : null}{" "}
+                {data.afternoon ? " Trưa " : null} {data.evening ? "Tối" : null}
+              </Text>
+            </Body>
+          </ListItem>
+        )}
+        renderLeftHiddenRow={data => (
+          <Button full onPress={() => alert("hello")}>
+            <Icon active name="information-circle" />
+          </Button>
+        )}
+        renderRightHiddenRow={(data, secId, rowId, rowMap) => (
+          <Button
+            full
+            danger
+            onPress={_ => this.deleteRow(secId, rowId, rowMap)}
+          >
+            <Icon active name="trash" />
+          </Button>
+        )}
+      />
     )
   }
 }
