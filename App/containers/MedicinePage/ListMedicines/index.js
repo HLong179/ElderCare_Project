@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { ListView } from "react-native"
+import { ListView, Alert, StyleSheet } from "react-native"
 import {
   Button,
   Icon,
@@ -8,7 +8,9 @@ import {
   Text,
   Thumbnail,
   Left,
-  Body
+  Body,
+  View,
+  Spinner
 } from "native-base"
 import AsyncStorage from "@react-native-community/async-storage"
 import firebase from "firebase"
@@ -19,8 +21,14 @@ class ListMedicines extends Component {
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
     this.state = {
       basic: true,
-      medicineDatas: []
+      medicineDatas: [],
+      loading: false
     }
+  }
+  componentWillMount() {
+    this.setState({
+      loading: true
+    })
   }
 
   componentDidMount = async () => {
@@ -42,61 +50,120 @@ class ListMedicines extends Component {
             medicineDatas.push(data)
           }
           this.setState({
-            medicineDatas
+            medicineDatas,
+            loading: false
           })
         }
       )
     })
   }
 
-  deleteRow(secId, rowId, rowMap) {
+  deleteRow(data, secId, rowId, rowMap) {
     rowMap[`${secId}${rowId}`].props.closeRow()
-    const newData = [...this.state.listViewData]
-    newData.splice(rowId, 1)
-    this.setState({ listViewData: newData })
+    // const newData = [...this.state.listViewData]
+    // newData.splice(rowId, 1)
+    // this.setState({ listViewData: newData })
+    console.log("data: ", data)
+    console.log("secId: ", secId)
+    console.log("rowId: ", rowId)
+    console.log("rowMap: ", rowMap)
   }
   render() {
-    console.log(this.state.medicineDatas)
     return (
-      <List
-        style={{ marginTop: 30 }}
-        leftOpenValue={75}
-        rightOpenValue={-75}
-        dataSource={this.ds.cloneWithRows(this.state.medicineDatas)}
-        renderRow={data => (
-          <ListItem thumbnail>
-            <Left>
-              <Thumbnail square source={{ uri: data.imageUrl }} />
-            </Left>
-            <Body>
-              <Text>{data.name}</Text>
-              <Text note numberOfLines={2}>
-                {data.script}
-              </Text>
-              <Text note numberOfLines={1}>
-                {data.morning ? "Sáng" : null}{" "}
-                {data.afternoon ? " Trưa " : null} {data.evening ? "Tối" : null}
-              </Text>
-            </Body>
-          </ListItem>
+      <View>
+        {this.state.loading ? (
+          <View style={styles.textStyle}>
+            <Spinner color="blue" />
+          </View>
+        ) : !this.state.medicineDatas[0] ? (
+          <View style={styles.textStyle}>
+            <Text>Bạn chưa thêm đơn thuốc</Text>
+          </View>
+        ) : (
+          <List
+            style={{ marginTop: 30 }}
+            leftOpenValue={75}
+            rightOpenValue={-75}
+            dataSource={this.ds.cloneWithRows(this.state.medicineDatas)}
+            renderRow={data => (
+              <ListItem thumbnail>
+                <Left>
+                  <Thumbnail square source={{ uri: data.imageUrl }} />
+                </Left>
+                <Body>
+                  <Text>{data.name}</Text>
+                  <Text note numberOfLines={2}>
+                    {data.script}
+                  </Text>
+                  <Text note numberOfLines={1}>
+                    {data.morning ? "Sáng" : null}{" "}
+                    {data.afternoon ? " Trưa " : null}{" "}
+                    {data.evening ? "Tối" : null}
+                  </Text>
+                </Body>
+              </ListItem>
+            )}
+            renderLeftHiddenRow={data => (
+              <Button
+                style={styles.btnLayout}
+                full
+                info
+                onPress={() => alert("hello")}
+              >
+                <Icon active name="create" />
+                <Text style={{ marginTop: 5 }}>Sửa</Text>
+              </Button>
+            )}
+            renderRightHiddenRow={(data, secId, rowId, rowMap) => (
+              <Button
+                style={styles.btnLayout}
+                full
+                danger
+                onPress={() =>
+                  Alert.alert(
+                    "Thông báo",
+                    "Bạn chắc chắn xóa thuốc này",
+                    [
+                      {
+                        text: "Hủy",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                      },
+                      {
+                        text: "OK",
+                        onPress: () =>
+                          this.deleteRow(data, secId, rowId, rowMap)
+                      }
+                    ],
+                    { cancelable: false }
+                  )
+                }
+              >
+                <Icon active name="trash" />
+                <Text style={{ marginTop: 5 }}>Xóa</Text>
+              </Button>
+            )}
+          />
         )}
-        renderLeftHiddenRow={data => (
-          <Button full onPress={() => alert("hello")}>
-            <Icon active name="information-circle" />
-          </Button>
-        )}
-        renderRightHiddenRow={(data, secId, rowId, rowMap) => (
-          <Button
-            full
-            danger
-            onPress={_ => this.deleteRow(secId, rowId, rowMap)}
-          >
-            <Icon active name="trash" />
-          </Button>
-        )}
-      />
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  textStyle: {
+    minHeight: 300,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    color: "gray"
+  },
+  btnLayout: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center"
+  }
+})
 
 export default ListMedicines
