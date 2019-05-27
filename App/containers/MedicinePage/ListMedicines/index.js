@@ -14,6 +14,7 @@ import {
 } from "native-base"
 import AsyncStorage from "@react-native-community/async-storage"
 import firebase from "firebase"
+import UpdateMedicine from "./UpdateMedicine"
 
 class ListMedicines extends Component {
   constructor(props) {
@@ -22,7 +23,9 @@ class ListMedicines extends Component {
     this.state = {
       basic: true,
       medicineDatas: [],
-      loading: false
+      loading: false,
+      modalVisible: false,
+      dataUpdate: null
     }
   }
   componentWillMount() {
@@ -65,6 +68,12 @@ class ListMedicines extends Component {
       .ref(`Patients/${data.elderId}/Medicines/${data.idMedicineFB}`)
       .remove()
   }
+
+  handleVisible = visible => {
+    this.setState({
+      modalVisible: visible
+    })
+  }
   render() {
     return (
       <View>
@@ -93,9 +102,9 @@ class ListMedicines extends Component {
                     {data.script}
                   </Text>
                   <Text note numberOfLines={1}>
-                    {data.morning ? "Sáng" : null}
+                    {data.morning ? " Sáng " : null}
                     {data.afternoon ? " Trưa " : null}
-                    {data.evening ? "Tối" : null}
+                    {data.evening ? " Tối " : null}
                   </Text>
                 </Body>
               </ListItem>
@@ -105,7 +114,12 @@ class ListMedicines extends Component {
                 style={styles.btnLayout}
                 full
                 info
-                onPress={() => alert("hello")}
+                onPress={() =>
+                  this.setState({
+                    modalVisible: true,
+                    dataUpdate: data
+                  })
+                }
               >
                 <Icon active name="create" />
                 <Text style={{ marginTop: 5 }}>Sửa</Text>
@@ -139,6 +153,13 @@ class ListMedicines extends Component {
                 <Text style={{ marginTop: 5 }}>Xóa</Text>
               </Button>
             )}
+          />
+        )}
+        {this.state.modalVisible && (
+          <UpdateMedicine
+            medicineData={this.state.dataUpdate}
+            modalVisible={true}
+            handleVisible={this.handleVisible}
           />
         )}
       </View>
