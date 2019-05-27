@@ -97,6 +97,12 @@ class Login extends Component {
       console.log('sign up click');
       navigate('SignUp');
     }
+
+
+    onMainRelativeSignUp = () => {
+      const { navigate } = this.props.navigation;
+      navigate('MainRelativeSignUp');
+    }
  
     render() {
         const  initialValues  = this.state;
@@ -167,7 +173,6 @@ class Login extends Component {
                       title={translate("LOGIN_forgotPassword")}
                       onPress={this.handleForgotPassword}
                     />
-
                     <Button transparent color={'blue'} primary title={"Đăng kí tài khoản mới"} onPress={this.onClickSignUp} />
                   </Form>
                 )}

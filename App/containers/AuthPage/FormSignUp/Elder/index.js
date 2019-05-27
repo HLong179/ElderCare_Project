@@ -2,16 +2,15 @@ import React, {Component} from 'react';
 import {Text} from 'react-native';
 import styled from "styled-components";
 import {Content, Form, Label, Icon, Input, Toast, ListItem, Picker } from "native-base";
-import Item from "../../../components/CommonItemInput";
-import Button from "../../../components/CommonButton";
-import Wrapper from "../../../components/CommonWrapper";
-import SETTINGS from "../../../settings"
-import config from "../../../Constant";
+import Item from "../../../../components/CommonItemInput";
+import Button from "../../../../components/CommonButton";
+import Wrapper from "../../../../components/CommonWrapper";
 import { Formik } from 'formik';
 import getSchema from './validateSchema';
-import TextError from '../../../components/CommonFormError';
+import TextError from '../../../../components/CommonFormError/index';
 // import * as authServices from '../../../services/authServices';
-import { addElder } from '../../../services/authServices';
+import { addElder } from '../../../../services/authServices';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const maxAge = 100;
 
@@ -70,10 +69,20 @@ class SignUp extends Component {
 
 
       try {
-      const result = await addElder(data);
-      this.props.navigation.navigate('Login');
+      const response = await addElder(data);
+      await AsyncStorage.setItem('currElderId', data.icid);
+      Toast.show({
+        text: `${response.message}`,
+        buttonText: "OK",
+        type: 'success'
+      })
+      this.props.navigation.navigate('MainRelativeSignUp');
       } catch(error) {
-        alert(error);
+        Toast.show({
+          text: `${error}`,
+          buttonText: "OK",
+          type: 'danger'
+        })
       }
 }
 
