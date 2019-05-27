@@ -13,21 +13,20 @@ import {
   Text
 } from "native-base"
 import ImagePicker from "react-native-image-picker"
-import AsyncStorage from "@react-native-community/async-storage"
-import config from "../../../Constant"
 import Spinner from "react-native-loading-spinner-overlay"
 
-class AddMedicine extends React.Component {
+class UpdateMedicine extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      modalVisible: false,
+      modalVisible: this.props.modalVisible,
       photo: null,
-      text: "",
-      imgName: "",
-      morning: false,
-      afternoon: false,
-      evening: false,
+      imageUrl: this.props.medicineData.imageUrl,
+      text: this.props.medicineData.script,
+      imgName: this.props.medicineData.name,
+      morning: !!this.props.medicineData.morning,
+      afternoon: !!this.props.medicineData.afternoon,
+      evening: !!this.props.medicineData.evening,
       blobFile: null,
       spinner: false
     }
@@ -46,9 +45,11 @@ class AddMedicine extends React.Component {
       blobFile: null,
       spinner: false
     })
+    this.props.handleVisible(false)
   }
 
   setModalVisible(visible) {
+    this.props.handleVisible(visible)
     this.setState({ modalVisible: visible })
   }
 
@@ -69,20 +70,16 @@ class AddMedicine extends React.Component {
   uriToBlob = uri => {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
-
       xhr.onload = function() {
         // return the blob
         resolve(xhr.response)
       }
-
       xhr.onerror = function() {
         // something went wrong
         reject(new Error("uriToBlob failed"))
       }
-
       // this helps us get a blob
       xhr.responseType = "blob"
-
       xhr.open("GET", uri, true)
       xhr.send(null)
     })
@@ -90,68 +87,106 @@ class AddMedicine extends React.Component {
 
   handleOK = async () => {
     const { photo, imgName, morning, afternoon, evening } = this.state
-    if (!photo) {
-      Alert.alert("Lỗi", "Chưa chọn hình ảnh thuốc")
-    } else if (!imgName) {
+    if (!imgName) {
       Alert.alert("Lỗi", "Chưa nhập tên thuốc")
     } else if (!morning && !afternoon && !evening) {
       Alert.alert("Lỗi", "Chưa hẹn giờ uống thuốc")
     } else {
-      await this.setState({
+      this.setState({
         spinner: true
       })
-      let source = this.state.blobFile
-      if (!firebase.apps.length) {
-        firebase.initializeApp(config.opt)
-      }
-      const storage = await AsyncStorage.getItem("curUser")
-      const objStorage = JSON.parse(storage)
-      const elderId = objStorage.elderId
-      let storageRef = firebase
-        .storage()
-        .ref()
-        .child(`${elderId}/${this.state.imgName}.jpg`)
-      storageRef
-        .put(source, {
-          contentType: "image/jpeg"
-        })
-        .then(snapshot => {
-          storageRef.getDownloadURL().then(url => {
-            firebase
-              .database()
-              .ref(`Patients/${elderId}/Medicines`)
-              .push({
-                elderId: elderId,
-                imageUrl: url,
-                name: this.state.imgName,
-                script: this.state.text,
-                morning: ~~this.state.morning,
-                afternoon: ~~this.state.afternoon,
-                evening: ~~this.state.evening
-              })
-              .then(async data => {
-                //success callback
-                this.setState({
-                  modalVisible: false,
-                  loading: false,
-                  elderId: "",
-                  photo: null,
-                  text: "",
-                  imgName: "",
-                  morning: false,
-                  afternoon: false,
-                  evening: false,
-                  blobFile: null,
-                  spinner: false
-                })
-                this.setModalVisible(false)
-              })
-              .catch(error => {
-                //error callback
-                console.log("error ", error)
-              })
+      if (photo) {
+        let source = this.state.blobFile
+        if (!firebase.apps.length) {
+          firebase.initializeApp(config.opt)
+        }
+        let storageRef = firebase
+          .storage()
+          .ref()
+          .child(`${this.props.medicineData.elderId}/${this.state.imgName}.jpg`)
+        storageRef
+          .put(source, {
+            contentType: "image/jpeg"
           })
-        })
+          .then(snapshot => {
+            storageRef.getDownloadURL().then(url => {
+              firebase
+                .database()
+                .ref(
+                  `Patients/${this.props.medicineData.elderId}/Medicines/${
+                    this.props.medicineData.idMedicineFB
+                  }`
+                )
+                .update({
+                  imageUrl: url,
+                  name: this.state.imgName,
+                  script: this.state.text,
+                  morning: ~~this.state.morning,
+                  afternoon: ~~this.state.afternoon,
+                  evening: ~~this.state.evening
+                })
+                .then(async data => {
+                  //success callback
+                  this.setState({
+                    modalVisible: false,
+                    loading: false,
+                    elderId: "",
+                    photo: null,
+                    text: "",
+                    imgName: "",
+                    morning: false,
+                    afternoon: false,
+                    evening: false,
+                    blobFile: null,
+                    spinner: false
+                  })
+                  this.setModalVisible(false)
+                })
+                .catch(error => {
+                  //error callback
+                  console.log("error ", error)
+                })
+            })
+          })
+      }
+      if (!photo) {
+        firebase
+          .database()
+          .ref(
+            `Patients/${this.props.medicineData.elderId}/Medicines/${
+              this.props.medicineData.idMedicineFB
+            }`
+          )
+          .update({
+            imageUrl: this.state.imageUrl,
+            name: this.state.imgName,
+            script: this.state.text,
+            morning: ~~this.state.morning,
+            afternoon: ~~this.state.afternoon,
+            evening: ~~this.state.evening
+          })
+          .then(async data => {
+            //success callback
+            this.setState({
+              modalVisible: false,
+              loading: false,
+              elderId: "",
+              photo: null,
+              text: "",
+              imgName: "",
+              morning: false,
+              afternoon: false,
+              evening: false,
+              blobFile: null,
+              spinner: false
+            })
+            this.setModalVisible(false)
+          })
+          .catch(error => {
+            //error callback
+            console.log("error ", error)
+          })
+      }
     }
   }
 
@@ -174,23 +209,36 @@ class AddMedicine extends React.Component {
               <Content style={{ padding: 10 }}>
                 <Form>
                   <View style={{ marginTop: 20 }}>
-                    {photo && (
-                      <View
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center"
-                        }}
-                      >
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      {photo ? (
                         <Image
-                          source={{ uri: photo.uri }}
+                          source={{
+                            uri: photo.uri
+                          }}
                           style={{
                             width: 300,
                             height: 300,
                             marginBottom: 20
                           }}
                         />
-                      </View>
-                    )}
+                      ) : (
+                        <Image
+                          source={{
+                            uri: this.state.imageUrl
+                          }}
+                          style={{
+                            width: 300,
+                            height: 300,
+                            marginBottom: 20
+                          }}
+                        />
+                      )}
+                    </View>
                     <Button block info onPress={this.handleChoosePhoto}>
                       <Text>Chọn ảnh</Text>
                     </Button>
@@ -202,6 +250,7 @@ class AddMedicine extends React.Component {
                     <Item regular>
                       <Input
                         onChangeText={imgName => this.setState({ imgName })}
+                        value={this.state.imgName}
                       />
                     </Item>
                   </View>
@@ -211,6 +260,7 @@ class AddMedicine extends React.Component {
                       rowSpan={3}
                       bordered
                       onChangeText={text => this.setState({ text })}
+                      value={this.state.text}
                     />
                   </View>
                   <View style={{ flexDirection: "column" }}>
@@ -280,16 +330,6 @@ class AddMedicine extends React.Component {
               </Content>
             </Container>
           </Modal>
-
-          <Button
-            block
-            info
-            onPress={() => {
-              this.setModalVisible(true)
-            }}
-          >
-            <Text>NHẬP ĐƠN THUỐC</Text>
-          </Button>
         </View>
       </View>
     )
@@ -313,4 +353,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default AddMedicine
+export default UpdateMedicine
