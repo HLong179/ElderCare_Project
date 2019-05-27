@@ -15,11 +15,8 @@ import SetTime from "../containers/SetTime";
 import HeartRate from "../containers/HeartRate";
 import SleepScreen from "../containers/SleepScreen";
 import MedicinePage from '../containers/MedicinePage';
-import SignUp from '../containers/AuthPage/FormSignUp';
-
-
-
-
+import SignUp from '../containers/AuthPage/FormSignUp/Elder';
+import MainRelativeSignUp from '../containers/AuthPage/FormSignUp/MainRelative';
 
 
 const PrimaryNav = createStackNavigator(
@@ -39,6 +36,12 @@ const PrimaryNav = createStackNavigator(
               }),
         },
 
+        MainRelativeSignUp: {
+            screen: MainRelativeSignUp,
+            navigationOptions: () => {
+                return (<CommonHeader title='Main Relative SignUp'/>)
+            }
+        },
         // FormHeartRate: {
         //     screen: FormHeartRate,
         //     navigationOptions: () => ({

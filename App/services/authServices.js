@@ -82,3 +82,24 @@ export async function addElder(data) {
     const result = await response.json();
     return result;
 }
+
+export async function addMainRelative(data) {
+    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addMainUser`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            elder_id: data.icid,
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            address: data.address,
+            username: data.username,
+            password: data.password,
+        })
+    });
+    
+    return response;
+}
