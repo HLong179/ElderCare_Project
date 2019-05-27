@@ -58,15 +58,12 @@ class ListMedicines extends Component {
     })
   }
 
-  deleteRow(data, secId, rowId, rowMap) {
+  deleteRow = (data, secId, rowId, rowMap) => {
     rowMap[`${secId}${rowId}`].props.closeRow()
-    // const newData = [...this.state.listViewData]
-    // newData.splice(rowId, 1)
-    // this.setState({ listViewData: newData })
-    console.log("data: ", data)
-    console.log("secId: ", secId)
-    console.log("rowId: ", rowId)
-    console.log("rowMap: ", rowMap)
+    firebase
+      .database()
+      .ref(`Patients/${data.elderId}/Medicines/${data.idMedicineFB}`)
+      .remove()
   }
   render() {
     return (
@@ -96,8 +93,8 @@ class ListMedicines extends Component {
                     {data.script}
                   </Text>
                   <Text note numberOfLines={1}>
-                    {data.morning ? "Sáng" : null}{" "}
-                    {data.afternoon ? " Trưa " : null}{" "}
+                    {data.morning ? "Sáng" : null}
+                    {data.afternoon ? " Trưa " : null}
                     {data.evening ? "Tối" : null}
                   </Text>
                 </Body>
@@ -126,7 +123,6 @@ class ListMedicines extends Component {
                     [
                       {
                         text: "Hủy",
-                        onPress: () => console.log("Cancel Pressed"),
                         style: "cancel"
                       },
                       {
