@@ -158,7 +158,7 @@ class AddMedicine extends React.Component {
   render() {
     const { photo } = this.state
     return (
-      <View>
+      <View style={{ padding: 10 }}>
         <Spinner
           visible={this.state.spinner}
           textStyle={styles.spinnerTextStyle}

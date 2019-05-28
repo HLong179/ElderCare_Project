@@ -14,7 +14,7 @@ class MedicinePage extends React.Component {
 
   render() {
     return (
-      <Container style={{ padding: 10 }}>
+      <Container>
         <Content>
           <AddMedicine />
           <ListMedicines />
