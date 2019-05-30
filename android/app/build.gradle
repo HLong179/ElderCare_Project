@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-push-notification')
     implementation project(':react-native-image-picker')
     implementation project(':react-native-svg')
     implementation project(':@react-native-community_async-storage')
@@ -151,7 +152,7 @@ dependencies {
 
     implementation "com.google.android.gms:play-services-base:16.1.0"
     implementation "com.google.firebase:firebase-core:16.0.8"
-    implementation "com.google.firebase:firebase-database:16.1.0"
+    implementation "com.google.firebase:firebase-database:17.0.0"
     implementation "com.google.firebase:firebase-messaging:17.5.0"
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
 }

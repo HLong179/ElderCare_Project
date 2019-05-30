@@ -17,8 +17,7 @@ import createSagaMiddleware from 'redux-saga';
 import App from './App/navigation/AppNavigation';
 import { createAppContainer } from 'react-navigation';
 import { Root } from "native-base";
-
-
+import bgMessageService from './App/services/bgMessageService'
 const Navigation  = createAppContainer(App);
 
 import NavigationService from './App/services/navigationServices';
@@ -47,3 +46,4 @@ const RNRedux = () => (
 );
 
 AppRegistry.registerComponent(appName, () => RNRedux);
+AppRegistry.registerHeadlessTask('RNFirebaseBackgroundMessage', () => bgMessageService);

@@ -32,16 +32,20 @@ class SetTime extends React.Component {
         let emergency;
         let tempValue = await AsyncStorage.getItem('curUser');
         idElder = JSON.parse(tempValue).elderId;
+        console.log("clgt???")
         this.setState({elderId: idElder});
-        let snapshot = await firebase.database().ref(`Patients/${idElder}/Config/Emergency`).once("value");
-        if (snapshot.val()) {
-            emergency = snapshot.val();
-        } else emergency = false;
-        if(emergency === true) {
-            this.setState({
-                selectedOption: [1]
-            })
-        }  
+       firebase.database().ref(`Patients/${idElder}/Config/Emergency`).once("value", (snapshot) => {
+           console.log("can we get in there?")
+            if (snapshot.val()) {
+                emergency = snapshot.val();
+            } else emergency = false;
+            if(emergency === true) {
+                this.setState({
+                    selectedOption: [1]
+                })
+            }  
+       });
+        
     }
 
     showDateTimePicker = () => {
