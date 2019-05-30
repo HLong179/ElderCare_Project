@@ -12,6 +12,7 @@ import { Button } from 'react-native'
 class HeaderMultipleIcon extends Component {
 
     componentDidMount() {
+        const that = this;
         PushNotification.configure({
 
             // (optional) Called when Token is generated (iOS and Android)
@@ -24,8 +25,7 @@ class HeaderMultipleIcon extends Component {
                 console.log( 'NOTIFICATION:', notification );
                if (notification.message.includes("Số liệu nhịp tim")) {
                    // navigate to heart rate
-                   console.log(this.props);
-                   this.props.navigation.navigate('HeartRate')
+                   that.props.navigation.navigate('HeartRate')
 
 
 
@@ -57,23 +57,19 @@ class HeaderMultipleIcon extends Component {
 
          this.messageListener = firebase.messaging().onMessage((message: RemoteMessage) => {
         // Process your message as required
-        console.log("we create no0tificaton", message._data);
-
-        
-
-
+        console.log("we create no0tificaton", message, message.data);
          let mTitle, mMessage;
-           if (message._data.type === "Disconnect") {
+           if (message.data.type === "Disconnect") {
                mtitle = "Thông báo";
                mMessage = "Không tìm thấy số liệu đo, xem lại vị trí đeo của đồng hồ thông minh!"
            } else {
-               if (message._data.type === "Dangerous") {
+               if (message.data.type === "Dangerous") {
                     mtitle = "Thông báo sức khỏe bệnh nhân";
-                    mMessage = `Số liệu nhịp tim của bệnh nhân vào lúc ${message._data.time} đạt ngưỡng báo động ${message._data.value}`;
+                    mMessage = `Số liệu nhịp tim của bệnh nhân vào lúc ${message.data.time} đạt ngưỡng báo động ${message.data.value}`;
                } else {
-                   if (message._data.type === "HeartRate") {
+                   if (message.data.type === "HeartRate") {
                         mtitle = "Thông báo sức khỏe bệnh nhân";
-                        mMessage = `Số liệu nhịp tim của bệnh nhân vào lúc ${message._data.time} là ${message._data.value}`
+                        mMessage = `Số liệu nhịp tim của bệnh nhân vào lúc ${message.data.time} là ${message.data.value}`
                    }
                }
             }
