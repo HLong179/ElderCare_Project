@@ -6,7 +6,10 @@ import MoreComponent from './MoreComponent';
 import type { RemoteMessage } from 'react-native-firebase';
 import PushNotification from 'react-native-push-notification';
 import firebase from "react-native-firebase";
-export default class HeaderMultipleIconExample extends Component {
+import { withNavigation } from 'react-navigation';
+import { Button } from 'react-native'
+
+class HeaderMultipleIcon extends Component {
 
     componentDidMount() {
         PushNotification.configure({
@@ -21,6 +24,8 @@ export default class HeaderMultipleIconExample extends Component {
                 console.log( 'NOTIFICATION:', notification );
                if (notification.message.includes("Số liệu nhịp tim")) {
                    // navigate to heart rate
+                   console.log(this.props);
+                   this.props.navigation.navigate('HeartRate')
 
 
 
@@ -94,7 +99,10 @@ export default class HeaderMultipleIconExample extends Component {
                     <PersonComponent/>
                     {/*<MoreComponent/>*/}
                 </Right>
+                {/* <Button onPress={() => this.props.navigation.navigate('HeartRate')} title="HIHI"></Button> */}
             </Header>
         );
     }
 }
+
+export default withNavigation(HeaderMultipleIcon);
