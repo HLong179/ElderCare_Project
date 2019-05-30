@@ -40,24 +40,31 @@ class ListMedicines extends Component {
     const elderId = objStorage.elderId
     const patientsRef = firebase.database().ref("Patients")
     patientsRef.on("value", snapshot => {
-      let patients = snapshot.val()[elderId]["Medicines"]
-      this.setState(
-        {
-          medicineDatas: []
-        },
-        () => {
-          let { medicineDatas } = this.state
-          for (let patient in patients) {
-            let data = patients[patient]
-            data.idMedicineFB = patient
-            medicineDatas.push(data)
+      let patients = snapshot.val()[elderId]
+      if (patients) {
+        patients = patients["Medicines"]
+        this.setState(
+          {
+            medicineDatas: []
+          },
+          () => {
+            let { medicineDatas } = this.state
+            for (let patient in patients) {
+              let data = patients[patient]
+              data.idMedicineFB = patient
+              medicineDatas.push(data)
+            }
+            this.setState({
+              medicineDatas,
+              loading: false
+            })
           }
-          this.setState({
-            medicineDatas,
-            loading: false
-          })
-        }
-      )
+        )
+      } else {
+        this.setState({
+          loading: false
+        })
+      }
     })
   }
 
@@ -83,7 +90,7 @@ class ListMedicines extends Component {
           </View>
         ) : !this.state.medicineDatas[0] ? (
           <View style={styles.textStyle}>
-            <Text>Bạn chưa thêm đơn thuốc</Text>
+            <Text>Hiện tại chưa có đơn thuốc</Text>
           </View>
         ) : (
           <List
@@ -94,7 +101,11 @@ class ListMedicines extends Component {
             renderRow={data => (
               <ListItem thumbnail>
                 <Left>
-                  <Thumbnail square source={{ uri: data.imageUrl }} />
+                  <Thumbnail
+                    style={{ marginLeft: 20, marginRight: 20 }}
+                    square
+                    source={{ uri: data.imageUrl }}
+                  />
                 </Left>
                 <Body>
                   <Text>{data.name}</Text>
@@ -169,7 +180,7 @@ class ListMedicines extends Component {
 
 const styles = StyleSheet.create({
   textStyle: {
-    minHeight: 300,
+    minHeight: 200,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
