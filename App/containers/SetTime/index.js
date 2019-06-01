@@ -7,6 +7,7 @@ import moment from 'moment'
 import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
 import { getUserData } from '../../services/authServices';
+import timeConvert from '../../utils/timeConvert.util';
 
 
 class SetTime extends React.Component {
@@ -23,7 +24,8 @@ class SetTime extends React.Component {
             hour: 0,
             minute: 0,
             second: 0, 
-            elderId: ''
+            elderId: '',
+            interval: '',
         };
     }
 
@@ -34,7 +36,7 @@ class SetTime extends React.Component {
         idElder = JSON.parse(tempValue).elderId;
         console.log("clgt???")
         this.setState({elderId: idElder});
-       firebase.database().ref(`Patients/${idElder}/Config/Emergency`).once("value", (snapshot) => {
+       await firebase.database().ref(`Patients/${idElder}/Config/Emergency`).once("value", (snapshot) => {
            console.log("can we get in there?")
             if (snapshot.val()) {
                 emergency = snapshot.val();
@@ -45,6 +47,18 @@ class SetTime extends React.Component {
                 })
             }  
        });
+
+       await firebase.database().ref(`Patients/${idElder}/Config/Interval`).once("value", (snapshot) => {
+         if (snapshot.val()) {
+             interval = snapshot.val();
+             let { fHours, rMinute } = timeConvert(interval);
+             this.setState({
+                 hour: fHours,
+                 minute: rMinute,
+             })
+           
+         } else return;
+    });
         
     }
 
@@ -144,8 +158,8 @@ class SetTime extends React.Component {
                         {/* <Dialog.Description>
                             Set an interval time for getting data.
                         </Dialog.Description> */}
-                        <Dialog.Input label="Giờ" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeHour.bind(this)}></Dialog.Input>
-                        <Dialog.Input label="Phút" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeMinute.bind(this)}></Dialog.Input>
+                        <Dialog.Input label="Giờ" style={{borderColor: 'gray', borderWidth: 1}} value={this.state.hour.toString()} keyboardType={'numeric'} onChangeText={this.handleChangeHour.bind(this)}></Dialog.Input>
+                        <Dialog.Input label="Phút" style={{borderColor: 'gray', borderWidth: 1}} value={this.state.minute.toString()} keyboardType={'numeric'} onChangeText={this.handleChangeMinute.bind(this)}></Dialog.Input>
                         <Dialog.Input label="Giây" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeSecond.bind(this)}></Dialog.Input>
                         <Dialog.Button label="Hủy" onPress={this.handleCancel} />
                         <Dialog.Button label="OK" onPress={this.handleOK} />
