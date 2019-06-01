@@ -6,12 +6,11 @@ import Item from "../../../../components/CommonItemInput";
 import Button from "../../../../components/CommonButton";
 import Wrapper from "../../../../components/CommonWrapper";
 import { Formik } from 'formik';
-import getSchema from './validateSchema';
 import TextError from '../../../../components/CommonFormError/index';
 // import * as authServices from '../../../services/authServices';
 import { addElder } from '../../../../services/authServices';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import getSchema from './validateSchema';
 const maxAge = 100;
 
 const StyleHeader = styled(Text)`
@@ -104,7 +103,7 @@ class SignUp extends Component {
               <Formik
                 initialValues={initialValues}
                 onSubmit={this.handleAddElder}
-                // validationSchema={getSchema()}
+                validationSchema={getSchema()}
               >
                 {props => (
                   <Form>
@@ -120,6 +119,10 @@ class SignUp extends Component {
                       />
                       <Icon active name="person-add" />
                     </Item>
+
+                    <TextError>
+                      {props.touched.icid && props.errors.icid}
+                    </TextError>
 
                     <Item >
                       <Picker
@@ -147,12 +150,16 @@ class SignUp extends Component {
                         placeholder={"Tên"}
                         name={"name"}
                         onChangeText={props.handleChange("name")}
-                        autoFocus={true}
+                        // autoFocus={true}
                         value={props.values.name}
                         autoCapitalize={"none"}
                       />
                       <Icon active name="person-add" />
                     </Item>
+
+                    <TextError>
+                      {props.touched.name && props.errors.name}
+                    </TextError>
 
                     <Item >
                       <Picker
@@ -180,7 +187,6 @@ class SignUp extends Component {
                         placeholder={"Số điện thoại bác sỹ"}
                         name={"docterPhoneNum"}
                         onChangeText={props.handleChange("docterPhoneNum")}
-                        autoFocus={true}
                         value={props.values.docterPhoneNum}
                         autoCapitalize={"none"}
                       />

@@ -1,10 +1,15 @@
 import React, { Component } from "react";
-import { Container, Content, Form, Input, Item, Label } from "native-base";
+import { Container, Content, Form, Input, Item, Label, Toast } from "native-base";
 import styled from "styled-components";
 import AsyncStorage from '@react-native-community/async-storage';
 import CommonItem from "../../components/CommonItemInput";
 import CommonButton from "../../components/CommonButton";
 import * as authServices from '../../services/authServices'; 
+import { Formik } from 'formik';
+import TextError from '../../components/CommonFormError';
+import getSchema from './validationSchema';
+import Button from "../../components/CommonButton";
+
 
 const Wrapper = styled(Container)`
   flex-direction: row;
@@ -43,10 +48,27 @@ class AddRelative extends Component {
       })
   }
 
-  handleSubmit = async () => {
-    const data = this.state;
+  handleSubmit = async (values) => {
+    const data = values;
+    data.id = this.state.id;
+    data.permission = this.state.permission;
+
     if(data.permission  === 'Main') {
-      const reponse = await authServices.AddRelative(data);
+
+      try {
+        const reponse = await authServices.AddRelative(data);
+        Toast.show({
+          text: "Add success",
+          buttonText: "OK",
+          type: "success"
+        });
+      } catch (error) {
+        Toast.show({
+          text: `${error}`,
+          buttonText: "OK",
+          type: "danger"
+        });
+      }
     } else {
       alert('Not permited');
     }
@@ -55,18 +77,133 @@ class AddRelative extends Component {
   };
 
   render() {
+
+    const initialValues = this.state;
+
     return (
       <Wrapper>
-        <Content>
-          <Form>
+        <Content>    
+
+        <Formik
+          initialValues={initialValues}
+          onSubmit={this.handleSubmit}
+          validationSchema={getSchema()}
+        >
+          {props => (
+            <Form>
+              <CommonItem stackedLabel>
+                <Label>Id</Label>
+                <Input
+                  value={this.state.id}
+                  autoCapitalize={"none"}
+                  editable={false}
+                />
+              </CommonItem>
+
+              <CommonItem stackedLabel>
+                <Label>Họ và tên</Label>
+                <Input
+                  name={"name"}
+                  onChangeText={props.handleChange("name")}
+                  autoCapitalize={"none"}
+                  value={props.values.name}
+                />
+              </CommonItem>
+
+              <TextError>
+                {props.touched.name && props.errors.name}
+              </TextError>
+
+              <CommonItem stackedLabel>
+                <Label>Email</Label>
+                <Input
+                  autoCapitalize={"none"}
+                  name={"email"}
+                  onChangeText={props.handleChange("email")}
+                  value={props.values.email}
+                />
+              </CommonItem>
+
+              <TextError>
+                {props.touched.email && props.errors.email}
+              </TextError>
+
+              <CommonItem stackedLabel>
+                <Label>Số điện thoại</Label>
+                <Input
+                  name={"phone"}
+                  onChangeText={props.handleChange("phone")}
+                  autoCapitalize={"none"}
+                  value={props.values.phone}
+                />
+              </CommonItem>
+
+              <TextError>
+                {props.touched.phone && props.errors.phone}
+              </TextError>
+
+              <CommonItem stackedLabel>
+                <Label>Username</Label>
+                <Input
+                  name="username"
+                  onChangeText={props.handleChange("username")}
+                  autoCapitalize={"none"}
+                  value={props.values.username}
+                />
+              </CommonItem>
+
+              <TextError>
+                {props.touched.username && props.errors.username}
+              </TextError>
+
+              <CommonItem stackedLabel>
+                <Label>Password</Label>
+                <Input
+                  name="password"
+                  onChangeText={props.handleChange("password")}
+                  autoCapitalize={"none"}
+                  value={props.values.password}
+                />
+              </CommonItem>
+
+              <TextError>
+                {props.touched.password && props.errors.password}
+              </TextError>
+
+              <CommonItem stackedLabel >
+                <Label>Địa chỉ</Label>
+                <Input
+                  name={"address"}
+                  onChangeText={props.handleChange("address")}
+                  autoCapitalize={"none"}
+                  value={props.values.address}
+
+                />
+              </CommonItem>
+
+              <TextError>
+                {props.touched.address && props.errors.address}
+              </TextError>
+              <Button
+                onPress={props.handleSubmit}
+                title="Thêm người thân"
+              />
+            </Form>
+          )}
+        </Formik>
+
+        {/* <Form>
             <CommonItem stackedLabel>
               <Label>Id</Label>
               <Input
                 value={this.state.id}
                 autoCapitalize={"none"}
                 editable={false}
+                name={'name'}
               />
             </CommonItem>
+
+
             <CommonItem stackedLabel>
               <Label>Họ và tên</Label>
               <Input
@@ -113,6 +250,7 @@ class AddRelative extends Component {
             </CommonItem>
             <CommonButton onPress={this.handleSubmit} title="Thêm người thân" />
           </Form>
+        </Content> */}
         </Content>
       </Wrapper>
     );

@@ -27,7 +27,7 @@ class HeaderMultipleIcon extends Component {
                    // navigate to heart rate
                    that.props.navigation.navigate('HeartRate')
 
-
+                
 
                    
                }

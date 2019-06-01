@@ -9,7 +9,7 @@ import { Formik } from 'formik';
 import * as authServices from '../../../../services/authServices';
 import AsyncStorage from '@react-native-community/async-storage';
 import TextError from '../../../../components/CommonFormError';
-
+import getSchema from './validationSchema';
 
 
 const StyleHeader = styled(Text)`
@@ -92,7 +92,7 @@ class MainRelative extends React.Component {
               <Formik
                 initialValues={initialValues}
                 onSubmit={this.handleAddMain}
-                // validationSchema={getSchema()}
+                validationSchema={getSchema()}
               >
                 {props => (
                   <Form>
@@ -115,9 +115,14 @@ class MainRelative extends React.Component {
                         onChangeText={props.handleChange("name")}
                         value={props.values.name}
                         autoCapitalize={"none"}
+                        autoFocus
                       />
                       <Icon active name="person-add" />
                     </Item>
+
+                    <TextError>
+                      {props.touched.name && props.errors.name}
+                    </TextError>
 
 
                     <Item>
@@ -131,6 +136,10 @@ class MainRelative extends React.Component {
                       <Icon active name="mail" />
                     </Item>
 
+                    <TextError>
+                      {props.touched.email && props.errors.email}
+                    </TextError>
+
                     <Item>
                       <Input
                         placeholder={"Phone"}
@@ -141,6 +150,9 @@ class MainRelative extends React.Component {
                       />
                       <Icon active name="call" />
                     </Item>
+                    <TextError>
+                      {props.touched.phone && props.errors.phone}
+                    </TextError>
                     
                     <Item>
                       <Input
@@ -153,6 +165,10 @@ class MainRelative extends React.Component {
                       <Icon active name="locate" />
                     </Item>
 
+                    <TextError>
+                      {props.touched.address && props.errors.address}
+                    </TextError>
+
                     <Item>
                       <Input
                         placeholder={"Tên đăng nhập"}
@@ -163,6 +179,12 @@ class MainRelative extends React.Component {
                       />
                       <Icon active name="body" />
                     </Item>
+
+                    
+                    <TextError>
+                      {props.touched.username && props.errors.username}
+                    </TextError>
+
                     <Item>
                       <Input
                         placeholder={"Mật khẩu"}
@@ -170,9 +192,15 @@ class MainRelative extends React.Component {
                         onChangeText={props.handleChange("password")}
                         value={props.values.password}
                         autoCapitalize={"none"}
+                        secureTextEntry={true}
+
                       />
                       <Icon active name="lock" />
                     </Item>
+                    <TextError>
+                      {props.touched.password && props.errors.password}
+                    </TextError>
+
                     <Item>
                       <Input
                         placeholder={"Xác nhận mật khẩu"}
@@ -180,13 +208,15 @@ class MainRelative extends React.Component {
                         onChangeText={props.handleChange("confirmPassword")}
                         value={props.values.confirmPassword}
                         autoCapitalize={"none"}
+                        secureTextEntry={true}
+
                       />
                       <Icon active name="lock" />
                     </Item>
 
 
                     <TextError>
-                      {props.touched.username && props.errors.username}
+                      {props.touched.confirmPassword && props.errors.confirmPassword}
                     </TextError>
 
                     <Button
