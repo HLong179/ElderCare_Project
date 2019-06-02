@@ -21,8 +21,8 @@ class SetTime extends React.Component {
             options: [{ id: 1, key: 'Khẩn cấp' }],
             selectedOption: [],
             dialogVisible: false,
-            hour: 0,
-            minute: 0,
+            hour: '0',
+            minute: '0',
             second: 0, 
             elderId: '',
             interval: '',
@@ -52,9 +52,10 @@ class SetTime extends React.Component {
          if (snapshot.val()) {
              interval = snapshot.val();
              let { fHours, rMinute } = timeConvert(interval);
+             
              this.setState({
-                 hour: fHours,
-                 minute: rMinute,
+                 hour: fHours.toString(),
+                 minute: rMinute.toString(),
              })
            
          } else return;
@@ -100,22 +101,22 @@ class SetTime extends React.Component {
         this.setState({ dialogVisible: true });
     };
     handleChangeHour = (h) => {
-        let intH = parseInt(h);
-        this.setState({hour: intH});
+        // let intH = parseInt(h);
+        this.setState({hour: h});
         // console.log("Hour:", this.state.hour);
         // console.log(typeof this.state.hour);
     }
     
     handleChangeMinute = (m) => {
-        let intM = parseInt(m);
-        this.setState({minute: intM});
+        // let intM = parseInt(m);
+        this.setState({minute: m});
         // console.log("Minute:", this.state.minute);
         // console.log(typeof this.state.minute);
     }
 
     handleChangeSecond = (s) => {
         let intS = parseInt(s);
-        this.setState({second: intS});
+        this.setState({second: s});
         // console.log("Second:", this.state.second);
         // console.log(typeof this.state.second);
     }
@@ -125,8 +126,12 @@ class SetTime extends React.Component {
     };
 
     handleOK = () => {
-        let newItv = (this.state.hour)*60 + (this.state.minute);
-        console.log("New interval (seconds):", newItv);
+        const { hour, minute } = this.state;
+
+        // let newItv = (this.state.hour)*60 + (this.state.minute);
+        let newItv = parseInt(hour) * 60 + parseInt(minute);
+
+        // alert(newItv);
        
         
         // elderId = JSON.parse(user).elderId;
@@ -158,8 +163,8 @@ class SetTime extends React.Component {
                         {/* <Dialog.Description>
                             Set an interval time for getting data.
                         </Dialog.Description> */}
-                        <Dialog.Input label="Giờ" style={{borderColor: 'gray', borderWidth: 1}} value={this.state.hour.toString()} keyboardType={'numeric'} onChangeText={this.handleChangeHour.bind(this)}></Dialog.Input>
-                        <Dialog.Input label="Phút" style={{borderColor: 'gray', borderWidth: 1}} value={this.state.minute.toString()} keyboardType={'numeric'} onChangeText={this.handleChangeMinute.bind(this)}></Dialog.Input>
+                        <Dialog.Input label="Giờ" style={{borderColor: 'gray', borderWidth: 1}}  value={this.state.hour} keyboardType={'numeric'} onChangeText={this.handleChangeHour.bind(this)}></Dialog.Input>
+                        <Dialog.Input label="Phút" style={{borderColor: 'gray', borderWidth: 1}}  value={this.state.minute} keyboardType={'numeric'} onChangeText={this.handleChangeMinute.bind(this)}></Dialog.Input>
                         <Dialog.Input label="Giây" style={{borderColor: 'gray', borderWidth: 1}} keyboardType={'numeric'} onChangeText={this.handleChangeSecond.bind(this)}></Dialog.Input>
                         <Dialog.Button label="Hủy" onPress={this.handleCancel} />
                         <Dialog.Button label="OK" onPress={this.handleOK} />
