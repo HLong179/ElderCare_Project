@@ -21,11 +21,11 @@ class FooterTabs extends Component {
             active={this.props.navigation.state.routeName === "NotePage"}
             onPress={() => this.props.navigation.navigate("NotePage")}
           >
-            <Icon android="md-people" ios="ios-people" />
+            <Icon android="md-chatboxes" ios="ios-people" />
             {/* <Text>Together</Text> */}
           </Button>
           <Button vertical>
-            <Icon name="person" android="md-compass" ios="ios-compass" />
+            <Icon name="md-people" android="md-compass" ios="ios-compass" />
             {/* <Text>Contact</Text> */}
           </Button>
         </FooterTab>
