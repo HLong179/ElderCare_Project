@@ -12,7 +12,7 @@ router.post('/addElder', (req, res) => {
         gender: req.body.gender,
         age: req.body.age,
         icid: req.body.icid,
-        weight: 0
+        weight: 0,
         doctorPhoneNum: req.body.doctorPhoneNum
     }
     accountRepo.addElder(elder).then(
