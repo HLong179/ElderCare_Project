@@ -11,7 +11,31 @@ exports.logIn = (user) => {
 }
 
 exports.addElder = (elder) => {
-    var sql = `insert into elder(name, gender, age, ICID, doctorNumPhone) values ('${elder.name}', '${elder.gender}', ${elder.age}, '${elder.icid}', '${elder.doctorPhoneNum}')`
+    var sql = `insert into elder(name, gender, age, ICID, weight, doctorNumPhone) values ('${elder.name}', '${elder.gender}', ${elder.age}, '${elder.icid}', ${elder.weight}, '${elder.doctorPhoneNum}')`
+    return db.insert(sql);
+}
+exports.updateElderWeight = (elderId, value) => {
+    var sql = `update elder set weight = ${value} where ICID = '${elderId}'`;
+    return db.insert(sql);
+}
+
+
+exports.addNote = (note) => {
+    var sql = `insert into note(elderId, time, title, script) value values('${note.elderId}', '${note.time}', '${note.title}', '${note.script}')`;
+    return db.insert(sql);
+}
+exports.getNotes = (elderId) => {
+    var sql = `select * from note  where elderId = '${elderId}'`;
+    return db.load(sql);
+}
+
+exports.removeNote = (noteId) => {
+    var sql = `delete from note where id = ${noteId}`;
+    return db.delete(sql);
+}
+
+exports.updateNote = (note) => {
+    var sql = `update note set time = '${note.time}', title = '${note.title}', script = '${note.script}' where id = ${note.id}`;
     return db.insert(sql);
 }
 

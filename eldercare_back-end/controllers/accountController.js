@@ -12,6 +12,7 @@ router.post('/addElder', (req, res) => {
         gender: req.body.gender,
         age: req.body.age,
         icid: req.body.icid,
+        weight: 0
         doctorPhoneNum: req.body.doctorPhoneNum
     }
     accountRepo.addElder(elder).then(
@@ -19,6 +20,68 @@ router.post('/addElder', (req, res) => {
             res.json({
                 status: 200,
                 message: 'Create Elder Success!'
+            })
+        },
+        err => res.json(err)
+    )
+})
+
+
+router.post('/updateWeight', (req, res ) => {
+    let elderId = req.body.elderId,
+        value = req.body.value;
+    accountRepo.updateElderWeight(elderId, value).then(
+        next => {
+            req.json({
+                msg: "update success!"
+            })
+        },
+        err => res.json(err)
+    )
+})
+
+router.post('/addNote', (req,res) => {
+    let note = {
+        elderId: req.body.elderId,
+        time: req.body.time,
+        title: req.body.title,
+        script: req.body.script
+    }
+    accountRepo.addNote(note).then(
+        next => {
+            res.json({
+                ...note,
+                msg: "add note success"
+            })
+        },
+        err => res.json(err)
+    )
+})
+
+router.post("/removeNote", (req, res) => {
+    let noteId = req.body.noteId;
+    accountRepo.removeNote(noteId).then(
+        next => {
+            res.json({
+                msg: "remove note success"
+            })
+        },
+        err => res.json(err)
+    )
+})
+
+router.post("/updateNote", (req,res) => {
+    let note = {
+        id: req.body.noteId,
+        time: req.body.time,
+        title: req.body.title,
+        script: req.body.script
+    };
+    accountRepo.updateNote(note).then(
+        next => {
+            res.json({
+                ...note,
+                msg: "update note success"
             })
         },
         err => res.json(err)
