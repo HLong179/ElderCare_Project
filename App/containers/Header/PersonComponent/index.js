@@ -6,6 +6,7 @@ import Menu, { MenuItem } from "react-native-material-menu";
 import { withNavigation } from 'react-navigation'
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from "react-native-firebase"
+import PushNotification from 'react-native-push-notification';
 
 class Bulb extends Component {
     _menu = null;
@@ -57,6 +58,14 @@ class Bulb extends Component {
             console.log("[LOG-OUT ERROR]");
         }
     }
+    onNotify = () => {
+        PushNotification.localNotification({
+            title : "Canh bao", // (optional)
+            message: "Nhip tim vua nhan duoc", // (required)
+            vibrate: true,
+            vibration: 5000
+        })
+    }
     render() {
         const { navigate } = this.props.navigation;
 
@@ -71,7 +80,7 @@ class Bulb extends Component {
                         <MenuItem onPress={this.onSelectMenu}>Thêm người thân phụ</MenuItem>
                         <MenuItem onPress={this.onSelectSetTime}>Hẹn giờ</MenuItem>
                         <MenuItem onPress={this.onSelectDrugDetail}>Chi tiết đơn thuốc</MenuItem>
-
+                        <MenuItem onPress={this.onNotify}>Notify</MenuItem>
                         <MenuItem onPress={this.onSelectLogout}>Đăng xuất</MenuItem>
 
                     </Menu>

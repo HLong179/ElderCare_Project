@@ -7,7 +7,7 @@ import type { RemoteMessage } from 'react-native-firebase';
 import PushNotification from 'react-native-push-notification';
 import firebase from "react-native-firebase";
 import { withNavigation } from 'react-navigation';
-import { Button } from 'react-native'
+import { Button, Vibration} from 'react-native'
 
 class HeaderMultipleIcon extends Component {
 
@@ -25,8 +25,8 @@ class HeaderMultipleIcon extends Component {
                 console.log( 'NOTIFICATION:', notification );
                if (notification.message.includes("Số liệu nhịp tim")) {
                    // navigate to heart rate
-                   that.props.navigation.navigate('HeartRate')
-
+                   Vibration.cancel();
+                   that.props.navigation.navigate('HeartRate')                 
                 
 
                    
