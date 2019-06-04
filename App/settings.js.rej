@@ -1,7 +1,0 @@
-diff a/App/settings.js b/App/settings.js	(rejected hunks)
-@@ -1,4 +1,5 @@
-  module.exports = Object({
-++<<<<<<< Updated upstream
- +  LOCAL_IP: "192.168.1.127"
- +=======
-    LOCAL_IP: "192.168.1.8"
