@@ -27,12 +27,12 @@ export default () => {
       username: Yup.string()
       .required("Vui lòng nhập tên đăng nhập")
       .max(30, "Vui lòng nhập nhỏ hơn 30 kí tự")
-      .min(8, "Vui lòng nhập lớn hơn 8 kí tự"),
+      .min(3, "Vui lòng nhập lớn hơn 8 kí tự"),
 
       password: Yup.string()
       .required("Vui lòng nhập mật khẩu")
       .max(30, "Vui lòng nhập nhỏ hơn 30 kí tự")
-      .min(8, "Vui lòng nhập lớn hơn 8 kí tự"),
+      .min(3, "Vui lòng nhập lớn hơn 8 kí tự"),
 
       confirmPassword: Yup.string()
       .required("Vui lòng nhập lại mật khẩu")
