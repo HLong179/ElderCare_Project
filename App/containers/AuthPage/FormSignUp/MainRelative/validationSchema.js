@@ -27,7 +27,7 @@ export default () => {
       username: Yup.string()
       .required("Vui lòng nhập tên đăng nhập")
       .max(30, "Vui lòng nhập nhỏ hơn 30 kí tự")
-      .min(3, "Vui lòng nhập lớn hơn 8 kí tự"),
+      .min(3, "Vui lòng nhập lớn hơn 3 kí tự"),
 
       password: Yup.string()
       .required("Vui lòng nhập mật khẩu")
