@@ -10,12 +10,13 @@ import {
   Left,
   Body,
   View,
-  Spinner
+  Spinner,
+  Toast
 } from "native-base"
 import AsyncStorage from "@react-native-community/async-storage"
 // import UpdateMedicine from "./UpdateMedicine"
 import { connect } from "react-redux"
-import { getNotes } from "../action"
+import { getNotes, removeNote } from "../action"
 import SETTINGS from "../../../settings"
 
 class ListNotes extends Component {
@@ -61,10 +62,23 @@ class ListNotes extends Component {
 
   deleteRow = (data, secId, rowId, rowMap) => {
     rowMap[`${secId}${rowId}`].props.closeRow()
-    firebase
-      .database()
-      .ref(`Patients/${data.elderId}/Medicines/${data.idMedicineFB}`)
-      .remove()
+    fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/removeNote`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        noteId: data.id
+      })
+    })
+    this.props.removeNote(data.id)
+    Toast.show({
+      text: "Đã xóa ghi chú",
+      buttonText: "x",
+      duration: 3000,
+      type: "success"
+    })
   }
 
   handleVisible = visible => {
@@ -73,6 +87,7 @@ class ListNotes extends Component {
     })
   }
   render() {
+    console.log(this.props.notes.notes)
     return (
       <View>
         {this.state.loading ? (
@@ -181,7 +196,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getNotes: data => dispatch(getNotes(data))
+    getNotes: data => dispatch(getNotes(data)),
+    removeNote: id => dispatch(removeNote(id))
   }
 }
 

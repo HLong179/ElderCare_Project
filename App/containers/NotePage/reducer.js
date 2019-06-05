@@ -3,10 +3,13 @@ const initialState = {
 }
 export default function authReducer(state = initialState, action) {
   switch (action.type) {
-    case "ADD_NOTE":
+    case "REMOVE_NOTE":
+      let notes = state.notes.filter(note => {
+        return note.id !== action.payload
+      })
       return {
         ...state,
-        notes: [...notes, action.payload]
+        notes
       }
     case "GET_NOTES":
       return {

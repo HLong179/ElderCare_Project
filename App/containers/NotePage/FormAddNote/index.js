@@ -16,7 +16,8 @@ import AsyncStorage from "@react-native-community/async-storage"
 import Spinner from "react-native-loading-spinner-overlay"
 import moment from "moment"
 import SETTINGS from "../../../settings"
-
+import { connect } from "react-redux"
+import { getNotes } from "../action"
 class AddNote extends React.Component {
   constructor(props) {
     super(props)
@@ -58,7 +59,6 @@ class AddNote extends React.Component {
       const storage = await AsyncStorage.getItem("curUser")
       const objStorage = JSON.parse(storage)
       const elderId = objStorage.elderId
-      let timeNow = new Date().getTime()
 
       fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addNote`, {
         method: "POST",
@@ -74,20 +74,36 @@ class AddNote extends React.Component {
         })
       })
         .then(async response => {
+          fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/getNotes`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              elderId: elderId
+            })
+          }).then(async response => {
+            response = await response.json()
+            this.props.getNotes(response)
+          })
           response = await response.json()
-
-          this.setState({
-            title: null,
-            text: null,
-            spinner: false
-          })
-          this.setModalVisible(false)
-          Toast.show({
-            text: "Thêm ghi chú thành công",
-            buttonText: "x",
-            type: "success",
-            duration: 2000
-          })
+          this.setState(
+            {
+              title: null,
+              text: null,
+              spinner: false
+            },
+            () => {
+              this.setModalVisible(false)
+              Toast.show({
+                text: "Thêm ghi chú thành công",
+                buttonText: "x",
+                type: "success",
+                duration: 3000
+              })
+            }
+          )
         })
         .catch(error => {
           //error callback
@@ -199,4 +215,13 @@ const styles = StyleSheet.create({
   }
 })
 
-export default AddNote
+const mapDispatchToProps = dispatch => {
+  return {
+    getNotes: data => dispatch(getNotes(data))
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AddNote)

@@ -13,11 +13,11 @@ import {
 
 import FooterTab from "../FooterTabs"
 import AddNote from "./FormAddNote"
-import ListNotes from "./ListNotes";
+import ListNotes from "./ListNotes"
 
 class NotePage extends Component {
   state = {
-    modalVisible: false
+    modalVisible: false,
   }
   handleVisible = visible => {
     this.setState({

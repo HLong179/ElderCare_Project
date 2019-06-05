@@ -1,9 +1,7 @@
-import AsyncStorage from "@react-native-community/async-storage"
-
-export function addNote(data) {
+export function removeNote(id) {
   return {
-    type: "ADD_NOTES",
-    payload: data
+    type: "REMOVE_NOTE",
+    payload: id
   }
 }
 
