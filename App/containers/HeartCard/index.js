@@ -39,9 +39,6 @@ class HeartCard extends Component {
             <Left>
               <IconWithText icon="heart" text="Nhịp tim" color="tomato"></IconWithText>
             </Left>
-            <Right>
-              <CommonButton onPress={this.toHeartRate} title="Biểu đồ"></CommonButton>
-            </Right>
           </CardItem>
           <TextWrapper>
           <CommonText text="BPM"></CommonText>

@@ -23,7 +23,8 @@ class Home extends Component {
     YellowBox.ignoreWarnings([
       "Warning: ListView",
       "Setting a timer for a long",
-      "Warning: Can't perform a React state"
+      "Warning: Can't perform a React state",
+      "Possible Unhandled"
     ])
   }
   async componentDidMount() {

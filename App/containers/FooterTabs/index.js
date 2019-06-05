@@ -1,27 +1,37 @@
-import React, {Component} from 'react'
+import React, { Component } from "react"
 // import PropTypes from 'prop-types';
-import {Container, Header, Content, Footer, FooterTab, Button, Icon, Text} from 'native-base';
+import { Footer, FooterTab, Button, Icon } from "native-base"
+import { withNavigation } from "react-navigation"
 
-
-export default class FooterTabs extends Component {
-    render() {
-        return (
-            <Footer>
-                <FooterTab>
-                    <Button vertical active>
-                        <Icon android="md-home" ios="ios-home"/>
-                        {/* <Text>Home</Text> */}
-                    </Button>
-                    <Button vertical>
-                        <Icon android="md-people" ios="ios-people"/>
-                        {/* <Text>Together</Text> */}
-                    </Button>
-                    <Button vertical>
-                        <Icon name="person" android="md-compass" ios="ios-compass"/>
-                        {/* <Text>Contact</Text> */}
-                    </Button>
-                </FooterTab>
-            </Footer>
-        )
-    }
+class FooterTabs extends Component {
+  render() {
+    return (
+      <Footer>
+        <FooterTab>
+          <Button
+            vertical
+            active={this.props.navigation.state.routeName === "Home"}
+            onPress={() => this.props.navigation.navigate("Home")}
+          >
+            <Icon android="md-home" ios="ios-home" />
+            {/* <Text>Home</Text> */}
+          </Button>
+          <Button
+            vertical
+            active={this.props.navigation.state.routeName === "NotePage"}
+            onPress={() => this.props.navigation.navigate("NotePage")}
+          >
+            <Icon android="md-chatboxes" ios="ios-people" />
+            {/* <Text>Together</Text> */}
+          </Button>
+          <Button vertical>
+            <Icon name="md-people" android="md-compass" ios="ios-compass" />
+            {/* <Text>Contact</Text> */}
+          </Button>
+        </FooterTab>
+      </Footer>
+    )
+  }
 }
+
+export default withNavigation(FooterTabs)

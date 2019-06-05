@@ -32,9 +32,6 @@ class SleepCard extends Component {
             <Left>
               <IconWithText icon="moon" text="Giấc ngủ" color="blue"></IconWithText>
             </Left>
-            <Right>
-              <CommonButton title="Theo dõi" onPress={this.toSleep}></CommonButton>
-            </Right>
           </CardItem>
           <TextWrapper>
           <CommonText text="Theo dõi giấc ngủ"></CommonText>

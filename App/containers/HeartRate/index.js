@@ -76,7 +76,6 @@ class HeartRate extends React.Component {
       response = await response.json()
       this.setState({ drPhoneNo: response.doctorPhoneNum })
     })
-
     const patientsRef = firebase
       .database()
       .ref("Patients")
@@ -85,14 +84,45 @@ class HeartRate extends React.Component {
         let patients = await snapshot.val()[jsonData.elderId].HeartRate
         for (let patient in patients) {
           let heartRateValue = patients[patient]["value"]
-          let timeLabel = new Date(+patients[patient]["time"])
+          let timeLabel = patients[patient]["time"]
           dataset.push({ x: timeLabel, y: heartRateValue })
         }
-        this.setState({
-          displayHeartData: dataset,
-          heartData: dataset,
-          loading: false
+
+        let result = []
+        // store flags
+        let flags = []
+
+        for (i = 0; i < dataset.length; i++) {
+          // dont run the rest of the loop if we already have this timestamp
+          if (flags[dataset[i].x]) continue
+
+          // if we didn't have the flag stored, then we need to record it in the result
+          result.push(dataset[i])
+
+          // if we don't yet have the flag, then store it so we skip it next time
+          flags[dataset[i].x] = true
+        }
+
+        result.sort(function(a, b) {
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(a.x) - new Date(b.x)
         })
+        this.setState(
+          {
+            displayHeartData: result,
+            heartData: result,
+            loading: false
+          },
+          () => {
+            for (i = 0; i < result.length; i++) {
+              result[i].x = new Date(+result[i].x)
+            }
+            this.setState({
+              displayHeartData: result
+            })
+          }
+        )
       })
   }
   pressDayBtn = () => {
