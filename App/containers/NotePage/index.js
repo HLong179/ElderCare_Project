@@ -13,6 +13,7 @@ import {
 
 import FooterTab from "../FooterTabs"
 import AddNote from "./FormAddNote"
+import ListNotes from "./ListNotes";
 
 class NotePage extends Component {
   state = {
@@ -49,6 +50,7 @@ class NotePage extends Component {
               handleVisible={this.handleVisible}
             />
           )}
+          <ListNotes />
         </Content>
         <FooterTab />
       </Container>

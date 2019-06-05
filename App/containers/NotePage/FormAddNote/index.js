@@ -10,10 +10,12 @@ import {
   Input,
   Item,
   Text,
-  Title
+  Toast
 } from "native-base"
 import AsyncStorage from "@react-native-community/async-storage"
 import Spinner from "react-native-loading-spinner-overlay"
+import moment from "moment"
+import SETTINGS from "../../../settings"
 
 class AddNote extends React.Component {
   constructor(props) {
@@ -43,10 +45,11 @@ class AddNote extends React.Component {
   }
 
   handleOK = async () => {
+    console.log("ok")
     const { title, text } = this.state
     if (!title) {
       Alert.alert("Lỗi", "Chưa nhập tiêu đề")
-    } else if (!imgName) {
+    } else if (!text) {
       Alert.alert("Lỗi", "Chưa nhập ghi chú")
     } else {
       await this.setState({
@@ -55,51 +58,41 @@ class AddNote extends React.Component {
       const storage = await AsyncStorage.getItem("curUser")
       const objStorage = JSON.parse(storage)
       const elderId = objStorage.elderId
-      //   let storageRef = firebase
-      //     .storage()
-      //     .ref()
-      //     .child(`${elderId}/${this.state.imgName}.jpg`)
-      //   storageRef
-      //     .put(source, {
-      //       contentType: "image/jpeg"
-      //     })
-      //     .then(snapshot => {
-      //       storageRef.getDownloadURL().then(url => {
-      //         firebase
-      //           .database()
-      //           .ref(`Patients/${elderId}/Medicines`)
-      //           .push({
-      //             elderId: elderId,
-      //             imageUrl: url,
-      //             name: this.state.imgName,
-      //             script: this.state.text,
-      //             morning: ~~this.state.morning,
-      //             afternoon: ~~this.state.afternoon,
-      //             evening: ~~this.state.evening
-      //           })
-      //           .then(async data => {
-      //             //success callback
-      //             this.setState({
-      //               modalVisible: false,
-      //               loading: false,
-      //               elderId: "",
-      //               photo: null,
-      //               text: "",
-      //               imgName: "",
-      //               morning: false,
-      //               afternoon: false,
-      //               evening: false,
-      //               blobFile: null,
-      //               spinner: false
-      //             })
-      //             this.setModalVisible(false)
-      //           })
-      //           .catch(error => {
-      //             //error callback
-      //             console.log("error ", error)
-      //           })
-      //       })
-      //     })
+      let timeNow = new Date().getTime()
+
+      fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addNote`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          elderId: elderId,
+          time: moment().format("DD/MM/YYYY HH:mm:ss"),
+          title: title,
+          script: text
+        })
+      })
+        .then(async response => {
+          response = await response.json()
+
+          this.setState({
+            title: null,
+            text: null,
+            spinner: false
+          })
+          this.setModalVisible(false)
+          Toast.show({
+            text: "Thêm ghi chú thành công",
+            buttonText: "x",
+            type: "success",
+            duration: 2000
+          })
+        })
+        .catch(error => {
+          //error callback
+          console.log("error ", error)
+        })
     }
   }
 
@@ -118,8 +111,17 @@ class AddNote extends React.Component {
             visible={this.state.modalVisible}
           >
             <Container>
-              <View >
-                <Text style={{fontWeight: "500", fontSize: 24, textAlign: "center", marginTop: 30}}>Ghi chú quan trọng</Text>
+              <View>
+                <Text
+                  style={{
+                    fontWeight: "500",
+                    fontSize: 24,
+                    textAlign: "center",
+                    marginTop: 30
+                  }}
+                >
+                  Ghi chú quan trọng
+                </Text>
               </View>
               <Content style={{ padding: 10 }}>
                 <Form>
