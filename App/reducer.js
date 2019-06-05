@@ -1,6 +1,7 @@
 import {createStore, combineReducers, applyMiddleware} from "redux";
 import createSagaMiddleware from 'redux-saga';
 
+import noteReducer from "./containers/NotePage/reducer"
 import authReducer from './containers/AuthPage/reducer';
 import rootSaga from './containers/AuthPage/saga'
 
@@ -10,7 +11,8 @@ const initialState = {
 
 const rootReducer = combineReducers({
     ini: initialState,
-    auth: authReducer
+    auth: authReducer,
+    notes: noteReducer
 });
 
 

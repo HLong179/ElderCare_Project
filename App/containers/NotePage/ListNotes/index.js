@@ -13,7 +13,10 @@ import {
   Spinner
 } from "native-base"
 import AsyncStorage from "@react-native-community/async-storage"
-import UpdateMedicine from "./UpdateMedicine"
+// import UpdateMedicine from "./UpdateMedicine"
+import { connect } from "react-redux"
+import { getNotes } from "../action"
+import SETTINGS from "../../../settings"
 
 class ListNotes extends Component {
   constructor(props) {
@@ -23,7 +26,8 @@ class ListNotes extends Component {
       basic: true,
       loading: false,
       modalVisible: false,
-      dataUpdate: null
+      dataUpdate: null,
+      notes: []
     }
   }
   componentWillMount() {
@@ -32,39 +36,28 @@ class ListNotes extends Component {
     })
   }
 
-  //   componentDidMount = async () => {
-  //     const storage = await AsyncStorage.getItem("curUser")
-  //     const objStorage = JSON.parse(storage)
-  //     const elderId = objStorage.elderId
-  //     const patientsRef = firebase.database().ref("Patients")
-  //     patientsRef.on("value", snapshot => {
-  //       let patients = snapshot.val()[elderId]
-  //       if (patients) {
-  //         patients = patients["Medicines"]
-  //         this.setState(
-  //           {
-  //             medicineDatas: []
-  //           },
-  //           () => {
-  //             let { medicineDatas } = this.state
-  //             for (let patient in patients) {
-  //               let data = patients[patient]
-  //               data.idMedicineFB = patient
-  //               medicineDatas.push(data)
-  //             }
-  //             this.setState({
-  //               medicineDatas,
-  //               loading: false
-  //             })
-  //           }
-  //         )
-  //       } else {
-  //         this.setState({
-  //           loading: false
-  //         })
-  //       }
-  //     })
-  //   }
+  componentDidMount = async () => {
+    const storage = await AsyncStorage.getItem("curUser")
+    const objStorage = JSON.parse(storage)
+    const elderId = objStorage.elderId
+    fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/getNotes`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        elderId: elderId
+      })
+    }).then(async response => {
+      response = await response.json()
+      this.props.getNotes(response)
+      this.setState({
+        notes: this.props.notes,
+        loading: false
+      })
+    })
+  }
 
   deleteRow = (data, secId, rowId, rowMap) => {
     rowMap[`${secId}${rowId}`].props.closeRow()
@@ -82,90 +75,78 @@ class ListNotes extends Component {
   render() {
     return (
       <View>
-        {/* {this.state.loading ? (
+        {this.state.loading ? (
           <View style={styles.textStyle}>
             <Spinner color="blue" />
           </View>
-        ) : !this.state.medicineDatas[0] ? (
+        ) : !this.state.notes.notes[0] ? (
           <View style={styles.textStyle}>
-            <Text>Hiện tại chưa có đơn thuốc</Text>
+            <Text>Hiện tại chưa có ghi chú</Text>
           </View>
-        ) : ( */}
-        <List
-          style={{ marginTop: 30 }}
-          leftOpenValue={75}
-          rightOpenValue={-75}
-          dataSource={this.ds.cloneWithRows(this.state.medicineDatas)}
-          renderRow={data => (
-            <ListItem thumbnail>
-              <Left>
-                <Thumbnail
-                  style={{ marginLeft: 20, marginRight: 20 }}
-                  square
-                  source={{ uri: data.imageUrl }}
-                />
-              </Left>
-              <Body>
-                <Text>{data.name}</Text>
-                <Text note numberOfLines={2}>
-                  {data.script}
-                </Text>
-                <Text note numberOfLines={1}>
-                  {data.morning ? " Sáng " : null}
-                  {data.afternoon ? " Trưa " : null}
-                  {data.evening ? " Tối " : null}
-                </Text>
-              </Body>
-            </ListItem>
-          )}
-          renderLeftHiddenRow={data => (
-            <Button
-              style={styles.btnLayout}
-              full
-              info
-              onPress={() =>
-                this.setState({
-                  modalVisible: true,
-                  dataUpdate: data
-                })
-              }
-            >
-              <Icon active name="create" />
-              <Text style={{ marginTop: 5 }}>Sửa</Text>
-            </Button>
-          )}
-          renderRightHiddenRow={(data, secId, rowId, rowMap) => (
-            <Button
-              style={styles.btnLayout}
-              full
-              danger
-              onPress={() =>
-                Alert.alert(
-                  "Thông báo",
-                  "Bạn chắc chắn xóa thuốc này",
-                  [
-                    {
-                      text: "Hủy",
-                      style: "cancel"
-                    },
-                    {
-                      text: "OK",
-                      onPress: () => this.deleteRow(data, secId, rowId, rowMap)
-                    }
-                  ],
-                  { cancelable: false }
-                )
-              }
-            >
-              <Icon active name="trash" />
-              <Text style={{ marginTop: 5 }}>Xóa</Text>
-            </Button>
-          )}
-        />
-        {/* )
-        // }
-        {this.state.modalVisible && (
-          <UpdateMedicine
+        ) : (
+          <List
+            style={{ marginTop: 30 }}
+            leftOpenValue={75}
+            rightOpenValue={-75}
+            dataSource={this.ds.cloneWithRows(this.props.notes.notes)}
+            renderRow={data => (
+              <ListItem thumbnail>
+                <Body>
+                  <Text>{data.title}</Text>
+                  <Text>{data.script}</Text>
+                  <Text note>{data.time}</Text>
+                </Body>
+              </ListItem>
+            )}
+            renderLeftHiddenRow={data => (
+              <Button
+                style={styles.btnLayout}
+                full
+                info
+                onPress={() =>
+                  this.setState({
+                    modalVisible: true
+                    // dataUpdate: data
+                  })
+                }
+              >
+                <Icon active name="create" />
+                <Text style={{ marginTop: 5 }}>Sửa</Text>
+              </Button>
+            )}
+            renderRightHiddenRow={(data, secId, rowId, rowMap) => (
+              <Button
+                style={styles.btnLayout}
+                full
+                danger
+                onPress={() =>
+                  Alert.alert(
+                    "Thông báo",
+                    "Bạn chắc chắn xóa thuốc này",
+                    [
+                      {
+                        text: "Hủy",
+                        style: "cancel"
+                      },
+                      {
+                        text: "OK",
+                        onPress: () =>
+                          this.deleteRow(data, secId, rowId, rowMap)
+                      }
+                    ],
+                    { cancelable: false }
+                  )
+                }
+              >
+                <Icon active name="trash" />
+                <Text style={{ marginTop: 5 }}>Xóa</Text>
+              </Button>
+            )}
+          />
+        )}
+
+        {/* {this.state.modalVisible && (
+          <UpdateNote
             medicineData={this.state.dataUpdate}
             modalVisible={true}
             handleVisible={this.handleVisible}
@@ -192,4 +173,19 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ListNotes
+const mapStateToProps = state => {
+  return {
+    notes: state.notes
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getNotes: data => dispatch(getNotes(data))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ListNotes)
