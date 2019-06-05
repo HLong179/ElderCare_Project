@@ -46,7 +46,6 @@ class AddNote extends React.Component {
   }
 
   handleOK = async () => {
-    console.log("ok")
     const { title, text } = this.state
     if (!title) {
       Alert.alert("Lỗi", "Chưa nhập tiêu đề")

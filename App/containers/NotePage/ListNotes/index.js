@@ -6,18 +6,16 @@ import {
   List,
   ListItem,
   Text,
-  Thumbnail,
-  Left,
   Body,
   View,
   Spinner,
   Toast
 } from "native-base"
 import AsyncStorage from "@react-native-community/async-storage"
-// import UpdateMedicine from "./UpdateMedicine"
 import { connect } from "react-redux"
 import { getNotes, removeNote } from "../action"
 import SETTINGS from "../../../settings"
+import UpdateNote from "../FormUpdateNote"
 
 class ListNotes extends Component {
   constructor(props) {
@@ -87,7 +85,6 @@ class ListNotes extends Component {
     })
   }
   render() {
-    console.log(this.props.notes.notes)
     return (
       <View>
         {this.state.loading ? (
@@ -120,8 +117,8 @@ class ListNotes extends Component {
                 info
                 onPress={() =>
                   this.setState({
-                    modalVisible: true
-                    // dataUpdate: data
+                    modalVisible: true,
+                    dataUpdate: data
                   })
                 }
               >
@@ -137,7 +134,7 @@ class ListNotes extends Component {
                 onPress={() =>
                   Alert.alert(
                     "Thông báo",
-                    "Bạn chắc chắn xóa thuốc này",
+                    "Bạn chắc chắn xóa ghi chú này",
                     [
                       {
                         text: "Hủy",
@@ -160,13 +157,13 @@ class ListNotes extends Component {
           />
         )}
 
-        {/* {this.state.modalVisible && (
+        {this.state.modalVisible && (
           <UpdateNote
-            medicineData={this.state.dataUpdate}
+            noteData={this.state.dataUpdate}
             modalVisible={true}
             handleVisible={this.handleVisible}
           />
-        )} */}
+        )}
       </View>
     )
   }

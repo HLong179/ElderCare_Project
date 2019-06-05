@@ -25,7 +25,6 @@ class NotePage extends Component {
     })
   }
   render() {
-    console.log(this.state.modalVisible)
     return (
       <Container>
         <Header>

@@ -5,6 +5,13 @@ export function removeNote(id) {
   }
 }
 
+export function updateNote(data) {
+  return {
+    type: "UPDATE_NOTE",
+    payload: data
+  }
+}
+
 export const getNotes = data => {
   return {
     type: "GET_NOTES",
