@@ -46,10 +46,7 @@ router.post('/getNotes', (req, res) => {
     accountRepo.getNotes(elderId).then(
         listNotes => {
             console.log("list Notes we got: ", listNotes)
-            res.json({
-                ...listNotes,
-                msg: "get Success"
-            })
+            res.json(listNotes);
         },
         err => res.json(err)
     )

@@ -81,24 +81,24 @@ firebase.initializeApp(config);
 //     })
 //   })
   
-//   var afternoon = schedule.scheduleJob('30 10 * * *', () => {
-//     var ref = firebase.database().ref('/Patients');
-//     ref.once("value", (snapshot) => {
-//         // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
-//         Object.keys(snapshot.val()).forEach(elderId => {
-//             var medicinePath = firebase.database().ref(`Patients/${elderId}/Config/MedicineTime`);
-//             medicinePath.set(true, (e) => {
-//                 if (e) {
-//                     console.log('we get some error here: ', e);
-//                 } else {
-//                     console.log('set time medicine success')
-//                 }
-//             })
-//         });
-//     })
-//   })
+  var afternoon = schedule.scheduleJob('43 16 * * *', () => {
+    var ref = firebase.database().ref('/Patients');
+    ref.once("value", (snapshot) => {
+        // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
+        Object.keys(snapshot.val()).forEach(elderId => {
+            var medicinePath = firebase.database().ref(`Patients/${elderId}/Config/MedicineTime`);
+            medicinePath.set(new Date().getTime(), (e) => {
+                if (e) {
+                    console.log('we get some error here: ', e);
+                } else {
+                    console.log('set time medicine success')
+                }
+            })
+        });
+    })
+  })
 
-//   var eve = schedule.scheduleJob('53 16 * * *', () => {
+//   var eve = schedule.scheduleJob('32 16 * * *', () => {
 //     var ref = firebase.database().ref('/Patients');
 //     ref.once("value", (snapshot) => {
 //         // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
