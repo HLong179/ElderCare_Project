@@ -45,6 +45,7 @@ router.post('/getNotes', (req, res) => {
     let elderId = req.body.elderId;
     accountRepo.getNotes(elderId).then(
         listNotes => {
+            console.log("list Notes we got: ", listNotes)
             res.json({
                 ...listNotes,
                 msg: "get Success"
@@ -63,12 +64,13 @@ router.post('/addNote', (req,res) => {
     }
     accountRepo.addNote(note).then(
         next => {
+            console.log("success??")
             res.json({
                 ...note,
                 msg: "add note success"
             })
         },
-        err => res.json(err)
+        err => console.log(err)
     )
 })
 

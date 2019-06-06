@@ -21,7 +21,7 @@ exports.updateElderWeight = (elderId, value) => {
 
 
 exports.addNote = (note) => {
-    var sql = `insert into note(elderId, time, title, script) value values('${note.elderId}', '${note.time}', '${note.title}', '${note.script}')`;
+    var sql = `insert into note(elderId, time, title, script) values('${note.elderId}', '${note.time}', '${note.title}', '${note.script}')`;
     return db.insert(sql);
 }
 exports.getNotes = (elderId) => {
