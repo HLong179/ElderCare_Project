@@ -84,9 +84,9 @@ class AddNote extends React.Component {
             })
           }).then(async response => {
             response = await response.json()
+            console.log(response)
             this.props.getNotes(response)
           })
-          response = await response.json()
           this.setState(
             {
               title: null,
@@ -113,7 +113,7 @@ class AddNote extends React.Component {
 
   render() {
     return (
-      <View style={{ padding: 10 }}>
+      <View style={styles.container}>
         <Spinner
           visible={this.state.spinner}
           textStyle={styles.spinnerTextStyle}
@@ -202,12 +202,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
-  },
-  headerText: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10,
-    fontWeight: "bold"
   },
   spinnerTextStyle: {
     color: "#FFF"
