@@ -17,7 +17,7 @@ import ListNotes from "./ListNotes"
 
 class NotePage extends Component {
   state = {
-    modalVisible: false,
+    modalVisible: false
   }
   handleVisible = visible => {
     this.setState({

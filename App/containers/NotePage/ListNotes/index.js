@@ -85,28 +85,32 @@ class ListNotes extends Component {
     })
   }
   render() {
+    console.log(this.state)
     return (
       <View>
         {this.state.loading ? (
           <View style={styles.textStyle}>
             <Spinner color="blue" />
           </View>
-        ) : !this.state.notes.notes[0] ? (
+        ) : !this.props.notes.notes[0] ? (
           <View style={styles.textStyle}>
             <Text>Hiện tại chưa có ghi chú</Text>
           </View>
         ) : (
           <List
-            style={{ marginTop: 30 }}
             leftOpenValue={75}
             rightOpenValue={-75}
             dataSource={this.ds.cloneWithRows(this.props.notes.notes)}
             renderRow={data => (
               <ListItem thumbnail>
                 <Body>
-                  <Text>{data.title}</Text>
-                  <Text>{data.script}</Text>
-                  <Text note>{data.time}</Text>
+                  <Text style={{ fontSize: 18, color: "#4267b2" }}>
+                    {data.title}
+                  </Text>
+                  <Text style={{ marginTop: 5 }}>{data.script}</Text>
+                  <Text note style={{ marginTop: 5 }}>
+                    {data.time}
+                  </Text>
                 </Body>
               </ListItem>
             )}
@@ -171,7 +175,7 @@ class ListNotes extends Component {
 
 const styles = StyleSheet.create({
   textStyle: {
-    minHeight: 200,
+    minHeight: 400,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
