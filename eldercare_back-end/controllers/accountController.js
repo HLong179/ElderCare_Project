@@ -40,6 +40,20 @@ router.post('/updateWeight', (req, res ) => {
     )
 })
 
+
+router.post('/getNotes', (req, res) => {
+    let elderId = req.body.elderId;
+    accountRepo.getNotes(elderId).then(
+        listNotes => {
+            res.json({
+                ...listNotes,
+                msg: "get Success"
+            })
+        },
+        err => res.json(err)
+    )
+})
+
 router.post('/addNote', (req,res) => {
     let note = {
         elderId: req.body.elderId,
