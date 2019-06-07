@@ -119,3 +119,22 @@ export async function updateElderWeight(data) {
     
     return response;
 }
+
+
+export async function getElderDetail(id) {
+    console.log(id);
+    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/elderDetail`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            elderId: id,
+        })
+    }) 
+
+    const result = await response.json();
+    return result;
+
+}

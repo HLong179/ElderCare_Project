@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { View, StyleSheet,  } from "react-native";
 import Slider from "react-native-slider";
 import Dialog from "react-native-dialog";
-import { updateElderWeight } from '../../../services/authServices';
+import { updateElderWeight, getElderDetail } from '../../../services/authServices';
 import CommonCard from '../../../components/CommonCard';
 import AsyncStorage from "@react-native-community/async-storage";
 
@@ -30,8 +30,8 @@ class CardDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      weight: 50,
-      newWeight: 50,
+      weight: 0,
+      newWeight: 0,
       isShowUpdateForm: false,
       visible: false,
       id: '',
@@ -40,8 +40,14 @@ class CardDetail extends React.Component {
 
   componentDidMount =  async () => {
     let dataCur = await AsyncStorage.getItem("curUser")
-    let jsonData = JSON.parse(dataCur)
-    this.setState({id: jsonData.elderId}, () => console.log(this.state.id));
+    let jsonData = JSON.parse(dataCur);
+    let id = jsonData.elderId;
+
+
+    let response = await getElderDetail(id);
+    let weight = response.weight ? response.weight : 0;
+
+    this.setState({ id, weight, newWeight: weight }, () => console.log(this.state));
   }
 
   handleUpdate = () => {
@@ -87,7 +93,7 @@ class CardDetail extends React.Component {
   }
 
   render() {
-    const { visible, weight, newWeight, id } = this.state;
+    const { visible, weight, newWeight } = this.state;
 
       return (
         <CommonCard>
