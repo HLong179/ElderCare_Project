@@ -33,6 +33,7 @@ router.post('/updateWeight', (req, res ) => {
     accountRepo.updateElderWeight(elderId, value).then(
         next => {
             req.json({
+            return res.json({
                 msg: "update success!"
             })
         },
