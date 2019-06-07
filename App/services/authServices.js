@@ -103,3 +103,19 @@ export async function addMainRelative(data) {
     
     return response;
 }
+
+export async function updateElderWeight(data) {
+    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/updateWeight`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            elderId: data.id,
+            value: data.weight,
+        })
+    });
+    
+    return response;
+}
