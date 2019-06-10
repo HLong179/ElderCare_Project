@@ -54,6 +54,7 @@ export default class DateTimePickerTester extends Component {
   }
 
   render () {
+    console.log('form heart rate socket', this.props.socket)
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         {/* <TouchableOpacity onPress={this._showDateTimePicker}>

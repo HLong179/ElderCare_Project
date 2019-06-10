@@ -1,3 +1,3 @@
 module.exports = Object({
-  LOCAL_IP: "192.168.1.127"
+  LOCAL_IP: "172.16.3.22"
 })

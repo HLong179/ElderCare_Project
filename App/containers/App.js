@@ -4,6 +4,8 @@ import {Platform, View} from 'react-native';
 
 import PrimaryNav from "../navigation/AppNavigation";
 
+
+// const socket = SocketIOClient(`http://${SETTINGS.LOCAL_IP}:6900`, {transports: ['websocket']});
 const AppContainer = createAppContainer(PrimaryNav)
 
 
@@ -16,12 +18,26 @@ const instructions = Platform.select({
 
 
 export default class App extends Component {
+
+    // constructor(props) {
+    //     super(props);
+    //     console.log("run socket")
+
+       
+        
+    // }
+
+
     render() {
-        console.log(this.props);
+        console.log('Helo World');
         return (
-            <View style={{flex: 1}}>
-                <AppContainer/>
+            <View style={{ flex: 1 }}>
+                <AppContainer screenProps={{
+                    handler: () => { },
+                    hello: "World"
+                }} />
             </View>
+          
         );
     }
 }

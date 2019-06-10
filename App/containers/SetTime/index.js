@@ -9,10 +9,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { getUserData } from '../../services/authServices';
 import timeConvert from '../../utils/timeConvert.util';
 
+import { withSocketContext } from '../../../socketContext';
 
 class SetTime extends React.Component {
     constructor(props) {
         super(props);
+       
+        console.log("fuck props: ",this.props.socket)
         this.state = {
             isDateTimePickerVisible: false,
             time: '',
@@ -30,6 +33,14 @@ class SetTime extends React.Component {
     }
 
     componentDidMount = async () => {
+
+
+        const { socket } = this.props;
+        if(!!socket) {
+            if(socket.connected) {
+               console.log("socket connected");
+            }
+        }
         let idElder;
         let emergency;
         let tempValue = await AsyncStorage.getItem('curUser');
@@ -127,6 +138,7 @@ class SetTime extends React.Component {
 
     handleOK = () => {
         const { hour, minute } = this.state;
+        const {socket } = this.props;
 
         // let newItv = (this.state.hour)*60 + (this.state.minute);
         let newItv = parseInt(hour) * 60 + parseInt(minute);
@@ -137,6 +149,14 @@ class SetTime extends React.Component {
         // elderId = JSON.parse(user).elderId;
         // console.log(elderId)
         firebase.database().ref(`Patients/${this.state.elderId}/Config/Interval`).set(+newItv);
+   
+
+
+        
+        socket.emit("data-interval", {
+            elderId: this.state.elderId,
+            value: newItv
+        })
         console.log('we set interval value success')
 
         //update khoang thoi gian moi nhap vao db
@@ -145,6 +165,8 @@ class SetTime extends React.Component {
     };
 
     render() {
+    console.log('name', this.props.hello);
+
         return (
 
             <Container>
@@ -204,7 +226,7 @@ class SetTime extends React.Component {
 
 }
 
-export default SetTime;
+export default withSocketContext(SetTime);
 
 
 

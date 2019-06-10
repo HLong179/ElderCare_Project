@@ -14,10 +14,13 @@ import SleepCard from "./SleepCard"
 import WeightCard from "./WeightCard"
 import MedicineCard from "./MedicineCard"
 import HeartCard from "./HeartCard"
-
+import SetTimeCard from "./SetTimeCard";
 class Home extends Component {
   constructor(props) {
     super(props)
+    // this.state = {
+    //   socket: null
+    // }
   }
   componentWillMount() {
     YellowBox.ignoreWarnings([
@@ -27,52 +30,67 @@ class Home extends Component {
       "Possible Unhandled"
     ])
   }
-  async componentDidMount() {
+   componentDidMount() {
+    // this.connectSocket();   
+
+
     BackHandler.addEventListener("hardwareBackPress", () => {
       this.props.navigation.goBack()
       return true
     })
-    try {
-      const data = await AsyncStorage.getItem("curUser")
-      // if (data!= null) {
-      //     alert(data);
-      // }
-    } catch (err) {
-      console.log(err)
-    }
+    // try {
+    //   // const data =  AsyncStorage.getItem("curUser")
+    //   // if (data!= null) {
+    //   //     alert(data);
+    //   // }
+    // } catch (err) {
+    //   console.log(err)
+    // }
   }
 
-  render() {
-    return (
-      <Container>
-        {/*<HeaderWithIcon />*/}
-        <Content padder>
-          <Grid>
-            <Row>
-              <Col>
-                <HeartCard />
-              </Col>
-            </Row>
+  
 
-            <Row>
-              <Col>
-                <SleepCard />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <WeightCard />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <MedicineCard />
-              </Col>
-            </Row>
-          </Grid>
-        </Content>
-        <FooterTabs />
-      </Container>
+  render() {
+    // console.log("this socket we've created: ", this.state.socket)
+    // console.log("test stringify: ",JSON.stringify(this.state.socket));
+    return (
+      // <SocketProvider socket={this.state.socket}>
+        <Container>
+          {/*<HeaderWithIcon />*/}
+          <Content padder>
+            <Grid>
+              <Row>
+                <Col>
+                  <HeartCard  />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <SleepCard />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <WeightCard />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <MedicineCard />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <SetTimeCard />
+                </Col>
+              </Row>
+            </Grid>
+          </Content>
+          <FooterTabs />
+        </Container>
+      // </SocketProvider>
     )
   }
 }
