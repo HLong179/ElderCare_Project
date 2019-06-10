@@ -6,7 +6,9 @@ import CommonButton from '../../components/CommonButton'
 import IconWithText from '../../components/IconWithText'
 import CommonCard from '../../components/CommonCard'
 import TextWrapper from '../../components/TextWrapper'
-import CommonText from '../../components/CommonText'
+import CommonText from '../../components/CommonText';
+import { withNavigation } from 'react-navigation';
+
 
 class WeightCard extends Component {
   constructor (props) {
@@ -22,9 +24,14 @@ class WeightCard extends Component {
     })
   }
 
+  onClick = () => {
+    alert('')
+    this.props.navigation.navigate('WeightDetail');
+  }
+
   render () {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={this.onClick}>
         <CommonCard>
           <CardItem cardBody>
             <Left>
@@ -41,14 +48,4 @@ class WeightCard extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
-
-export default WeightCard
+export default withNavigation(WeightCard);

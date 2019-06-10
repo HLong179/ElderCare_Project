@@ -18,6 +18,7 @@ import NotePage from "../containers/NotePage"
 
 import { View, StyleSheet, Button } from "react-native"
 import { Text, Icon, Container, Header, Content } from "native-base"
+import WeightDetail from '../containers/WeightCard/WeightDetail';
 
 const HomeNav = createStackNavigator(
   {
@@ -91,6 +92,12 @@ const HomeNav = createStackNavigator(
           // )
         }
       }
+    },
+    WeightDetail: {
+      screen: WeightDetail,
+      navigationOptions: () => ({
+        title: `Cân nặng`,
+      })
     }
   },
   {
