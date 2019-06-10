@@ -2,13 +2,29 @@ import React, { Component } from 'react';
 import CommonIcon from '../../../components/CommonIcon';
 import { Text, View } from 'react-native';
 import { Button, } from 'native-base';
-import Menu, { MenuItem } from "react-native-material-menu";
+import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import { withNavigation } from 'react-navigation'
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from "react-native-firebase"
 import PushNotification from 'react-native-push-notification';
+import { getCurrentUser } from '../../../services/authServices';
+import { Divider } from 'react-native-elements';
 
 class Bulb extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            permission: '',
+        }
+    }
+
+    componentDidMount = async () => {
+        const data = await getCurrentUser();
+        console.log('data', data.permission);
+        this.setState({
+            permission: data.permission
+        })
+    }
     _menu = null;
 
     setMenuRef = ref => {
@@ -50,6 +66,9 @@ class Bulb extends Component {
             await AsyncStorage.removeItem('curUser');
             await AsyncStorage.setItem('isLogin', 'false');
             const { navigate } = this.props.navigation;
+            this.setState({
+                permission: '',
+            });
             
             this.hideMenu();
             navigate('Login');
@@ -67,7 +86,8 @@ class Bulb extends Component {
         })
     }
     render() {
-        const { navigate } = this.props.navigation;
+        const { permission } = this.state;
+        console.log('permission', permission);
 
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 20, maginBottom: 100 }}>
@@ -77,10 +97,13 @@ class Bulb extends Component {
                         button={<Text onPress={this.showMenu}><CommonIcon name="person" /></Text>
                         }
                     >
-                        <MenuItem onPress={this.onSelectMenu}>Thêm người thân phụ</MenuItem>
+                        { permission === 'Main'? <MenuItem onPress={this.onSelectMenu}>Thêm người thân phụ</MenuItem> : null }
                         <MenuItem onPress={this.onSelectSetTime}>Hẹn giờ</MenuItem>
                         <MenuItem onPress={this.onSelectDrugDetail}>Chi tiết đơn thuốc</MenuItem>
                         <MenuItem onPress={this.onNotify}>Notify</MenuItem>
+
+                        <MenuDivider style={{color: 'green'}}></MenuDivider>
+
                         <MenuItem onPress={this.onSelectLogout}>Đăng xuất</MenuItem>
 
                     </Menu>

@@ -25,7 +25,6 @@ class WeightCard extends Component {
   }
 
   onClick = () => {
-    alert('')
     this.props.navigation.navigate('WeightDetail');
   }
 
