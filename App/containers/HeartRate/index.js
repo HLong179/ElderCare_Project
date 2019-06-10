@@ -191,6 +191,8 @@ class HeartRate extends React.Component {
   }
 
   render() {
+    console.log('form heart rate socket', this.props.socket);
+  
     if (this.state.loading) {
       return (
         <View style={styles.textStyle}>

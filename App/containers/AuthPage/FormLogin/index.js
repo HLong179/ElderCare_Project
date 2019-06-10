@@ -17,6 +17,7 @@ import { Formik } from 'formik';
 import getSchema from './validateSchema';
 import TextError from '../../../components/CommonFormError';
 
+
 const StyleHeader = styled(Text)`
     font-size: 30;
     font-weight: bold;
@@ -38,9 +39,10 @@ class Login extends Component {
             password: '',
             isLogged: '',
         }
+            
     }
-
     handleLogin = (values) => {
+      
         const { username, password } = values;
         const data = {
             username: username.trim(),
@@ -61,6 +63,7 @@ class Login extends Component {
             response = await response.json();
             console.log(response);
             if (response.auth) {
+              
               console.log("clgt what the fuck is happend?????")
                 const result = await AsyncStorage.multiSet([['curUser', JSON.stringify(response.curUser[0])],['isLogin', 'true']]);
                 console.log("our firebae application already have? : " , firebase.apps)
