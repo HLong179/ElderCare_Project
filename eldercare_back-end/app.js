@@ -4,19 +4,17 @@ var express = require("express"),
 
 var schedule = require('node-schedule');
 var app = express();
-var firebase = require('firebase'),
-    nodeMailer = require('nodemailer');
+var firebase = require('firebase');
 var socketIO = require('socket.io');
-
 app.use(bodyParser.json());
 app.use(cors());
  app.use(bodyParser.urlencoded({
      extended: true
  }));
-
+ 
  var accountController = require('./controllers/accountController');
  var medicineController = require('./controllers/medicineController');
- var accountRepository = require('./repos/accountRepo');
+ var mailer = require('./sendMail');
 //  var healthIndexesController = require('./controllers/healthIndexesController');
  // default route
 
@@ -49,6 +47,8 @@ var config = {
     appId: "1:49718683704:web:7deb43f5933fa2b3"
   };
 firebase.initializeApp(config);
+
+
 
 
 
@@ -105,6 +105,13 @@ io.sockets.on('connection', (socket) => {
         
     })
 })
+
+schedule.scheduleJob('SendMail', '19 * * 6', () => {
+    console.log("we send email");
+    mailer.sendEmail();
+})
+
+
 schedule.scheduleJob('Tonghop', '*/5 * * * *', () => {
     console.log("all jobs now: ", Object.keys(schedule.scheduledJobs));
 })
@@ -145,7 +152,6 @@ schedule.scheduleJob('Tonghop', '*/5 * * * *', () => {
 //     // console.log('The answer to life, the universe, and everything!');
 
 //   });
-
 
 //   var morning = schedule.scheduleJob('5 7 * * * ', () => {
 //     var ref = firebase.database().ref('/Patients');
@@ -199,7 +205,6 @@ schedule.scheduleJob('Tonghop', '*/5 * * * *', () => {
 //         });
 //     })
 //   })
-
 
 //   schedule.scheduleJob('toltalJob', '30 17 * * *', () => {
 //       console.log("all job run: ", Object.keys(schedule.scheduledJobs))
