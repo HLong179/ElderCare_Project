@@ -73,7 +73,12 @@ exports.addDoctor = doctor => {
   return db.insert(sql)
 }
 
-exports.getRelativeSendEmailInfo = () => {
-  let sql = `select email, elderId from relative where permission="Main"`
+exports.getElderIdFromRelative = () => {
+  let sql = `select DISTINCT elderId from relative`
+  return db.load(sql)
+}
+
+exports.getEmailRelativeByElderId = (elderId) => {
+  let sql = `select email from relative where elderId = "${elderId}"`
   return db.load(sql)
 }
