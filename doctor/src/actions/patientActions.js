@@ -1,29 +1,29 @@
 import axios from "axios"
 import {
-  FETCH_PATIENTS,
+  FETCH_PATIENT,
   FETCH_RELATIVES,
   FETCH_PRESCIPTION,
   CLEAR_PRESCIPTION
 } from "../constants"
 
-export const addPatient = userData => dispatch => {
-  axios
-    .post("http://localhost:6900/doctor/addElder", userData)
-    .then(res => dispatch(fetchPatients({ doctorId: userData.doctorId })))
-    .catch()
-}
+// export const addPatient = userData => dispatch => {
+//   axios
+//     .post("http://localhost:6900/doctor/addElder", userData)
+//     .then(res => dispatch(fetchPatients({ doctorId: userData.doctorId })))
+//     .catch()
+// }
 
-export const fetchPatients = doctorId => async dispatch => {
-  await axios
-    .post("http://localhost:6900/doctor/listElders", doctorId)
-    .then(res => {
-      dispatch({
-        type: FETCH_PATIENTS,
-        payload: res.data
-      })
-    })
-    .catch()
-}
+// export const fetchPatients = doctorId => async dispatch => {
+//   await axios
+//     .post("http://localhost:6900/doctor/listElders", doctorId)
+//     .then(res => {
+//       dispatch({
+//         type: FETCH_PATIENTS,
+//         payload: res.data
+//       })
+//     })
+//     .catch()
+// }
 
 export const addRelative = userData => dispatch => {
   axios
@@ -84,4 +84,16 @@ export const clearPresciption = () => dispatch => {
   dispatch({
     type: CLEAR_PRESCIPTION
   })
+}
+
+export const fetchPatient = elderId => dispatch => {
+  axios
+    .post("http://localhost:6900/account/elderDetail", { elderId: elderId })
+    .then(res => {
+      dispatch({
+        type: FETCH_PATIENT,
+        payload: res.data
+      })
+    })
+    .catch()
 }

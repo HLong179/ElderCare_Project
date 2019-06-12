@@ -1,12 +1,12 @@
 import {
-  FETCH_PATIENTS,
+  FETCH_PATIENT,
   FETCH_RELATIVES,
   FETCH_PRESCIPTION,
   CLEAR_PRESCIPTION
 } from "../constants"
 
 const initialState = {
-  listPatients: [],
+  elder: null,
   listRelatives: [],
   listPrescription: []
 }
@@ -18,16 +18,10 @@ const patientReducer = (state = initialState, action) => {
     //     ...state,
 
     //   }
-    case FETCH_PATIENTS:
-      let listPatients = action.payload.map((patient, index) => {
-        return {
-          ...patient,
-          key: index
-        }
-      })
+    case FETCH_PATIENT:
       return {
         ...state,
-        listPatients: [...listPatients]
+        elder: action.payload
       }
     case FETCH_RELATIVES:
       let listRelatives = action.payload.map((relative, index) => {
