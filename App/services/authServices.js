@@ -4,6 +4,9 @@ import SETTINGS from "../settings"
 import firebase from 'react-native-firebase';
 import config from '../Constant';
 
+import AsyncStorage from '@react-native-community/async-storage';
+
+
 export async function Login(data) {
     const response = await  fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/login`, {
         method: 'POST',
@@ -137,4 +140,11 @@ export async function getElderDetail(id) {
     const result = await response.json();
     return result;
 
+}
+
+
+export async function getCurrentUser() {
+    const curUser = await AsyncStorage.getItem('curUser');
+    const objCurUser = JSON.parse(curUser);
+    return objCurUser;
 }
