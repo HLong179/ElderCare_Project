@@ -50,12 +50,6 @@ class Home extends Component {
     if (!this.props.auth.isAuthenticated) {
       this.props.history.push("/login")
     }
-    if (
-      this.props.auth.isAuthenticated &&
-      this.props.auth.user.permission === "admin"
-    ) {
-      this.props.history.push("/admin/register")
-    }
   }
 
   render() {
@@ -66,9 +60,13 @@ class Home extends Component {
           <AHeader />
           <Switch>
             <Route path="/dashboard" component={DashboardContent} />
-            <Route path="/list-patients" component={ListPatients} />
+            
+            {/* <Route path="/medicines" component={DashboardContent} />
+            <Route path="/relatives" component={DashboardContent} /> */}
+
+            {/* <Route path="/list-patients" component={ListPatients} />
             <Route path="/schedules" component={Schedules} />
-            <Route path="/patient/:icid" component={PatientDetail} />
+            <Route path="/patient/:icid" component={PatientDetail} /> */}
           </Switch>
           <AFooter />
         </Layout>

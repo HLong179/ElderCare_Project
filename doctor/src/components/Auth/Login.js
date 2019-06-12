@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { Form, Icon, Input, Button, Typography, Alert } from "antd"
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
-import { loginUser } from "../../actions/authActions"
+import { login } from "../../actions/authActions"
 
 import "./login.css"
 
@@ -13,7 +13,7 @@ class NormalLoginForm extends Component {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.loginUser(values, this.props.history)
+        this.props.login(values, this.props.history)
       }
     })
   }
@@ -45,10 +45,7 @@ class NormalLoginForm extends Component {
             </Title>
             <div className="alert-box">
               {this.props.auth.errors ? (
-                <Alert
-                  message={this.props.auth.errors.message}
-                  type="error"
-                />
+                <Alert message={this.props.auth.errors.message} type="error" />
               ) : null}
             </div>
             <Form onSubmit={this.handleSubmit} className="login-form">
@@ -103,7 +100,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    loginUser: (userData, history) => dispatch(loginUser(userData, history))
+    login: (userData, history) => dispatch(login(userData, history))
   }
 }
 
