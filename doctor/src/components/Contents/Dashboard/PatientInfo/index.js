@@ -12,7 +12,7 @@ const PatientInfo = props => {
         Thông tin chi tiết
       </Title>
       {patient && (
-        <div>
+        <div style={{marginTop: 30}}>
           <Col span={8}>
             <p>
               <span className="patientDetails-title">Họ và tên:</span>{" "}
@@ -36,10 +36,6 @@ const PatientInfo = props => {
             <p>
               <span className="patientDetails-title">Cân nặng:</span>{" "}
               <span>{patient.weight} kg</span>
-            </p>
-            <p>
-              <span className="patientDetails-title">Chiều cao:</span>{" "}
-              <span>{patient.height} cm</span>
             </p>
           </Col>
           <Col span={8} style={{ display: "flex" }} />

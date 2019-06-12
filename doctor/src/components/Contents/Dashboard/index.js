@@ -2,7 +2,8 @@ import React, { Component } from "react"
 import { Layout } from "antd"
 import { connect } from "react-redux"
 import { fetchPatient } from "../../../actions/patientActions"
-import PatientInfo from "./PatientInfo";
+import PatientInfo from "./PatientInfo"
+import HeartRate from "./HeartRate"
 
 const { Content } = Layout
 
@@ -17,10 +18,7 @@ class DashboardContent extends Component {
       <Content style={{ margin: "16px 16px" }}>
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
           <PatientInfo />
-          {/* <Relatives elderId={this.state.patient.ICID} />
-          <ListDrugs elderId={this.state.patient.ICID} />
-          <HeartRate />
-          <SleepChart /> */}
+          {this.props.elder && <HeartRate elder={this.props.elder} />}
         </div>
       </Content>
     )
@@ -29,7 +27,8 @@ class DashboardContent extends Component {
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    elder: state.patient.elder
   }
 }
 

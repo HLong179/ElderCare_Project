@@ -7,7 +7,7 @@ import moment from "moment"
 
 const { Title } = Typography
 
-export default class HeartRate extends Component {
+class HeartRate extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -16,26 +16,31 @@ export default class HeartRate extends Component {
     }
   }
 
-  componentWillMount = async () => {
-    const patientsRef = firebase.database().ref("Patients")
-    await patientsRef.on("value", async snapshot => {
-      let patients = snapshot.val()["184305179"]["HeartRate"]
-      for (let patient in patients) {
-        let timeLabel = moment(patients[patient]["time"]).format(
-          "DD/MM/YYYY HH:mm:ss"
-        )
-        await this.setState({
-          labels: [...this.state.labels, timeLabel],
-          heartRates: [...this.state.heartRates, patients[patient]["value"]]
+  componentDidMount = async () => {
+    console.log(this.props.elder)
+    if (this.props.elder) {
+      if (this.props.elder.ICID) {
+        const patientsRef = firebase.database().ref("Patients")
+        await patientsRef.on("value", async snapshot => {
+          let patients = snapshot.val()[this.props.elder.ICID]["HeartRate"]
+          for (let patient in patients) {
+            let timeLabel = moment(patients[patient]["time"]).format(
+              "DD/MM/YYYY HH:mm:ss"
+            )
+            await this.setState({
+              labels: [...this.state.labels, timeLabel],
+              heartRates: [...this.state.heartRates, patients[patient]["value"]]
+            })
+          }
         })
       }
-    })
+    }
   }
 
   render() {
     const chartData = {
       labels:
-        this.state.labels.length >=15
+        this.state.labels.length >= 15
           ? this.state.labels.slice(
               this.state.labels.length - 15,
               this.state.labels.length
@@ -76,7 +81,7 @@ export default class HeartRate extends Component {
             ticks: {
               beginAtZero: true,
               min: 0,
-              max: 200
+              max: 160
             }
           }
         ]
@@ -84,7 +89,7 @@ export default class HeartRate extends Component {
     }
     return (
       <div>
-        <Title level={3} style={{ marginTop: 50 }}>
+        <Title level={3} style={{ marginTop: 40 }}>
           Nhịp tim của bệnh nhân
         </Title>
         <Line data={chartData} options={chartOption} />
@@ -92,3 +97,5 @@ export default class HeartRate extends Component {
     )
   }
 }
+
+export default HeartRate

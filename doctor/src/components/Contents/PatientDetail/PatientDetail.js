@@ -28,11 +28,11 @@ class PatientDetail extends Component {
     return (
       <Content style={{ margin: "16px 16px" }}>
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
-          <PatientInfo patient={this.state.patient} />
-          <Relatives elderId={this.state.patient.ICID} />
-          <ListDrugs elderId={this.state.patient.ICID} />
-          <HeartRate />
-          <SleepChart />
+          {/* <PatientInfo patient={this.state.patient} /> */}
+          {/* <Relatives elderId={this.state.patient.ICID} /> */}
+          {/* <ListDrugs elderId={this.state.patient.ICID} /> */}
+          {/* <HeartRate />
+          <SleepChart /> */}
         </div>
       </Content>
     )
