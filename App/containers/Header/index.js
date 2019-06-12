@@ -94,7 +94,9 @@ class HeaderMultipleIcon extends Component {
                                     mMessage = JSON.parse(previousData).message;
         
                                 } else {
-                                    return;
+                                    isNotHearRate = true;
+                                    mTitle = "Thông báo";
+                                    mMessage= "Dữ liệu có thể bị trùng hoặc không xác định"
                                 }
                                 
                                 console.log("data previous: ",previousData)
