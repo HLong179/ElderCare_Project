@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import Home from "./components/Home"
 import Login from "./components/Auth/Login"
 
-import { setCurrentUser } from "./actions/authActions"
+import { setCurrentUser, logout } from "./actions/authActions"
 import store from "./store"
-import AdminPage from "./components/Admin/AdminPage";
+import AdminPage from "./components/Admin/AdminPage"
 
 if (localStorage.getItem("userData")) {
   let data = localStorage.getItem("userData")
@@ -26,6 +26,5 @@ class App extends Component {
     )
   }
 }
-
 
 export default App

@@ -1,35 +1,23 @@
-import axios from "axios"
 import { LOGOUT_USER, SET_CURRENT_USER } from "../constants"
+import SETTING from "../setting"
 
 export const registerUser = (userData, history) => dispatch => {}
 
-export const loginUser = (userData, history) => dispatch => {
-  if (userData.username === "admin") {
-    const user = {
-      name: "Admin",
-      username: "admin",
-      permission: "admin"
-    }
-    localStorage.setItem("userData", JSON.stringify(user))
-    dispatch(setCurrentUser(user))
-  } else {
-    axios
-      .post("http://localhost:6900/doctor/login", userData)
-      .then(res => {
-        const user = {
-          doctorId: res.data[0].doctorId,
-          name: res.data[0].name,
-          email: res.data[0].email,
-          phone: res.data[0].phone,
-          specializeIn: res.data[0].specializeIn,
-          username: res.data[0].username,
-          permission: res.data[0].permission
-        }
-        localStorage.setItem("userData", JSON.stringify(user))
-        dispatch(setCurrentUser(user))
-      })
-      .catch()
-  }
+export const loginUser = (data, history) => async dispatch => {
+  const response = await fetch(`http://${SETTING}:6900/account/login`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      username: data.username,
+      password: data.password
+    })
+  })
+
+  const result = await response.json()
+  dispatch(setCurrentUser(result))
 }
 
 export const setCurrentUser = data => {
