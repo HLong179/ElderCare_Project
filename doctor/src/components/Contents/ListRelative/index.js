@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import { Typography, Table, Layout, Divider, Popconfirm } from "antd"
 import { connect } from "react-redux"
 import { fetchRelatives, removeSubUser } from "../../../actions/patientActions"
+import AddRelative from "./AddRelative"
+import "./style.css"
 
 const { Title } = Typography
 const { Content } = Layout
@@ -71,9 +73,9 @@ class Relatives extends Component {
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
           <div className="top-content">
             <Title level={3}>Danh sách người thân</Title>
-            {/* {!this.props.listRelatives[0] ? (
-            <AddRelative ICID={this.props.elderId} />
-          ) : null} */}
+            {this.props.listRelatives.length <= 5 ? (
+              <AddRelative ICID={this.props.auth.user.elderId} />
+            ) : null}
           </div>
 
           <Table

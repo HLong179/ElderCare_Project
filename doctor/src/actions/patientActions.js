@@ -1,15 +1,15 @@
 import axios from "axios"
-import { FETCH_PATIENT, FETCH_RELATIVES, REMOVE_SUBUSER } from "../constants"
+import {
+  FETCH_PATIENT,
+  FETCH_RELATIVES,
+  REMOVE_SUBUSER,
+} from "../constants"
 import SETTING from "../setting"
 
-export const addRelative = userData => dispatch => {
+export const addSubRelative = userData => dispatch => {
   axios
-    .post(`http://${SETTING}:6900/account/addMainUser`, userData)
+    .post(`http://${SETTING}:6900/account/addSubUser`, userData)
     .then(res => {
-      // dispatch({
-      //   type: ADD_RELATIVE,
-      //   payload: res.data
-      // })
       dispatch(fetchRelatives({ elderId: userData.elder_id }))
     })
     .catch()
