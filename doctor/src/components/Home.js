@@ -19,6 +19,7 @@ import { logout } from "../actions/authActions"
 import "firebase/auth"
 import "firebase/firestore"
 import MedicinePage from "./Contents/MedicinePage"
+import ListRelative from "./Contents/ListRelative";
 
 class Home extends Component {
   componentWillMount() {
@@ -65,11 +66,8 @@ class Home extends Component {
           <Switch>
             <Route path="/dashboard" component={DashboardContent} />
             <Route path="/medicines" component={MedicinePage} />
-            {/* <Route path="/relatives" component={DashboardContent} /> */}
+            <Route path="/relatives" component={ListRelative} />
 
-            {/* <Route path="/list-patients" component={ListPatients} />
-            <Route path="/schedules" component={Schedules} />
-            <Route path="/patient/:icid" component={PatientDetail} /> */}
           </Switch>
           <AFooter />
         </Layout>

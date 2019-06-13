@@ -1,8 +1,6 @@
 import {
   FETCH_PATIENT,
-  FETCH_RELATIVES,
-  FETCH_PRESCIPTION,
-  CLEAR_PRESCIPTION
+  FETCH_RELATIVES
 } from "../constants"
 
 const initialState = {
@@ -34,21 +32,6 @@ const patientReducer = (state = initialState, action) => {
         ...state,
         listRelatives: [...listRelatives]
       }
-    case FETCH_PRESCIPTION:
-      let listPrescription = action.payload.map((prescription, index) => {
-        return {
-          ...prescription,
-          key: index
-        }
-      })
-      return {
-        ...state,
-        listPrescription: [...listPrescription]
-      }
-    case CLEAR_PRESCIPTION:
-      state.listPrescription = []
-      return state
-
     default:
       return state
   }

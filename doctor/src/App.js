@@ -5,7 +5,6 @@ import Login from "./components/Auth/Login"
 
 import { setCurrentUser } from "./actions/authActions"
 import store from "./store"
-import AdminPage from "./components/Admin/AdminPage"
 
 if (localStorage.getItem("userData")) {
   let data = localStorage.getItem("userData")
@@ -19,7 +18,6 @@ class App extends Component {
       <Router>
         <Switch>
           <Route exact path="/login" component={Login} />
-          <Route path="/admin" component={AdminPage} />
           <Route path="/" component={Home} />
         </Switch>
       </Router>
