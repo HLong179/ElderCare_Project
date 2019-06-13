@@ -1,7 +1,8 @@
-import React, { Component } from "react"
+import React from "react"
 import { connect } from "react-redux"
 import { Typography, Layout } from "antd"
 import ListMedicines from "./ListMedicines"
+import AddMedicine from "./AddMedicine"
 
 const { Title } = Typography
 const { Content } = Layout
@@ -9,10 +10,25 @@ const { Content } = Layout
 const MedicinePage = props => {
   return (
     <Content style={{ margin: "16px 16px" }}>
-      <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
-        <Title level={3} style={{ marginBottom: 20 }}>
-          Quản lý thuốc
-        </Title>
+      <div
+        style={{
+          padding: 24,
+          minHeight: 460,
+          backgroundColor: "#fff"
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}
+        >
+          <Title level={3} style={{ marginBottom: 20 }}>
+            Quản lý thuốc
+          </Title>
+          <AddMedicine />
+        </div>
         {props.elder && <ListMedicines elder={props.elder} />}
       </div>
     </Content>

@@ -11,7 +11,6 @@ class ListMedicines extends Component {
     }
   }
   componentDidMount() {
-    console.log(this.props.elder)
     if (this.props.elder) {
       const elderId = this.props.elder.ICID
       if (firebase) {
@@ -61,10 +60,10 @@ class ListMedicines extends Component {
       })
     }
 
-    const IconText = ({ type, text }) => (
+    const IconText = ({ type, text, style }) => (
       <span>
-        <Icon type={type} style={{ marginRight: 8 }} />
-        {text}
+        <Icon type={type} style={style} />
+        <span style={style}> {text}</span>
       </span>
     )
     return (
@@ -73,15 +72,17 @@ class ListMedicines extends Component {
         style={{ marginTop: 50 }}
         loading={this.state.loading}
         itemLayout="vertical"
+        pagination={{
+          pageSize: 5
+        }}
         dataSource={listData}
         renderItem={item => (
           <List.Item
             key={item.title}
-            // actions={[
-            //   <IconText type="star-o" text="156" />,
-            //   <IconText type="like-o" text="156" />,
-            //   <IconText type="message" text="2" />
-            // ]}
+            actions={[
+              <IconText type="edit" text="Sửa" style={{ color: "#108ee9" }} />,
+              <IconText type="delete" text="Xóa" style={{ color: "red" }} />
+            ]}
             extra={<img width={272} alt="medicine" src={item.imageUrl} />}
           >
             <List.Item.Meta title={item.title} description={item.description} />
