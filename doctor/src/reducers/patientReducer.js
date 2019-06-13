@@ -1,7 +1,4 @@
-import {
-  FETCH_PATIENT,
-  FETCH_RELATIVES
-} from "../constants"
+import { FETCH_PATIENT, FETCH_RELATIVES, REMOVE_SUBUSER } from "../constants"
 
 const initialState = {
   elder: null,
@@ -31,6 +28,14 @@ const patientReducer = (state = initialState, action) => {
       return {
         ...state,
         listRelatives: [...listRelatives]
+      }
+    case REMOVE_SUBUSER:
+      let list = state.listRelatives.filter(
+        relative => relative.relativeId !== action.payload
+      )
+      return {
+        ...state,
+        listRelatives: [...list]
       }
     default:
       return state

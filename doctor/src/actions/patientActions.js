@@ -1,8 +1,5 @@
 import axios from "axios"
-import {
-  FETCH_PATIENT,
-  FETCH_RELATIVES
-} from "../constants"
+import { FETCH_PATIENT, FETCH_RELATIVES, REMOVE_SUBUSER } from "../constants"
 import SETTING from "../setting"
 
 export const addRelative = userData => dispatch => {
@@ -37,6 +34,19 @@ export const fetchPatient = elderId => dispatch => {
       dispatch({
         type: FETCH_PATIENT,
         payload: res.data
+      })
+    })
+    .catch()
+}
+export const removeSubUser = relativeId => dispatch => {
+  axios
+    .post(`http://${SETTING}:6900/account/removeSubUser`, {
+      relativeId: relativeId
+    })
+    .then(res => {
+      dispatch({
+        type: REMOVE_SUBUSER,
+        payload: relativeId
       })
     })
     .catch()

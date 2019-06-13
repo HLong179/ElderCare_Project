@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { Typography, Table, Layout, Divider, Popconfirm } from "antd"
 import { connect } from "react-redux"
-import { fetchRelatives } from "../../../actions/patientActions"
+import { fetchRelatives, removeSubUser } from "../../../actions/patientActions"
 
 const { Title } = Typography
 const { Content } = Layout
@@ -12,7 +12,7 @@ class Relatives extends Component {
   }
 
   deleteSubUser = data => {
-    console.log(data)
+    this.props.removeSubUser(data.relativeId)
   }
 
   render() {
@@ -97,7 +97,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchRelatives: elderId => dispatch(fetchRelatives(elderId))
+    fetchRelatives: elderId => dispatch(fetchRelatives(elderId)),
+    removeSubUser: relativeId => dispatch(removeSubUser(relativeId))
   }
 }
 
