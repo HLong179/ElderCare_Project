@@ -13,11 +13,12 @@ import DashboardContent from "./Contents/Dashboard"
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 import * as firebase from "firebase/app"
+import { fetchPatient } from "../actions/patientActions"
 import { logout } from "../actions/authActions"
-
 // Add the Firebase services that you want to use
 import "firebase/auth"
 import "firebase/firestore"
+import MedicinePage from "./Contents/MedicinePage"
 
 class Home extends Component {
   componentWillMount() {
@@ -29,7 +30,7 @@ class Home extends Component {
     let timeNow = new Date().getTime()
     if (timeNow - data.lastLogin >= 60 * 60 * 1000) {
       this.props.logout(this.props.history)
-      message.warn("Phiên đăng nhập đã hết hạn. Mời bạn đăng nhập lại", 5)
+      message.warn("Phiên đăng nhập đã hết hạn. Mời bạn đăng nhập lại", 3)
     }
     if (!firebase.apps.length) {
       console.log("we connect firebase")
@@ -49,6 +50,9 @@ class Home extends Component {
   componentDidMount() {
     if (!this.props.auth.isAuthenticated) {
       this.props.history.push("/login")
+    } else {
+      let elderId = this.props.auth.user.elderId
+      this.props.fetchPatient(elderId)
     }
   }
 
@@ -60,9 +64,8 @@ class Home extends Component {
           <AHeader />
           <Switch>
             <Route path="/dashboard" component={DashboardContent} />
-            
-            {/* <Route path="/medicines" component={DashboardContent} />
-            <Route path="/relatives" component={DashboardContent} /> */}
+            <Route path="/medicines" component={MedicinePage} />
+            {/* <Route path="/relatives" component={DashboardContent} /> */}
 
             {/* <Route path="/list-patients" component={ListPatients} />
             <Route path="/schedules" component={Schedules} />
@@ -83,7 +86,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    logout: history => dispatch(logout(history))
+    logout: history => dispatch(logout(history)),
+    fetchPatient: elderId => dispatch(fetchPatient(elderId))
   }
 }
 

@@ -4,6 +4,7 @@ import * as firebase from "firebase/app"
 import "firebase/database"
 import { Typography } from "antd"
 import moment from "moment"
+import Loader from "react-loader-spinner"
 
 const { Title } = Typography
 
@@ -12,29 +13,29 @@ class HeartRate extends Component {
     super(props)
     this.state = {
       labels: [],
-      heartRates: []
+      heartRates: [],
+      loading: true
     }
   }
 
   componentDidMount = async () => {
-    console.log(this.props.elder)
-    if (this.props.elder) {
-      if (this.props.elder.ICID) {
-        const patientsRef = firebase.database().ref("Patients")
-        await patientsRef.on("value", async snapshot => {
-          let patients = snapshot.val()[this.props.elder.ICID]["HeartRate"]
-          for (let patient in patients) {
-            let timeLabel = moment(patients[patient]["time"]).format(
-              "DD/MM/YYYY HH:mm:ss"
-            )
-            await this.setState({
-              labels: [...this.state.labels, timeLabel],
-              heartRates: [...this.state.heartRates, patients[patient]["value"]]
-            })
-          }
-        })
+    let { labels, heartRates } = this.state
+    const patientsRef = firebase.database().ref("Patients")
+    patientsRef.on("value", async snapshot => {
+      let patients = snapshot.val()[this.props.elder.ICID]["HeartRate"]
+      for (let patient in patients) {
+        let timeLabel = moment(patients[patient]["time"]).format(
+          "DD/MM/YYYY HH:mm:ss"
+        )
+        labels.push(timeLabel)
+        heartRates.push(patients[patient]["value"])
       }
-    }
+      this.setState({
+        labels,
+        heartRates,
+        loading: false
+      })
+    })
   }
 
   render() {
@@ -92,7 +93,21 @@ class HeartRate extends Component {
         <Title level={3} style={{ marginTop: 40 }}>
           Nhịp tim của bệnh nhân
         </Title>
-        <Line data={chartData} options={chartOption} />
+        {this.state.loading ? (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: 200
+            }}
+          >
+            <Loader type="ThreeDots" color="#00BFFF" height="50" width="50" />
+          </div>
+        ) : (
+          <Line data={chartData} options={chartOption} />
+        )}
       </div>
     )
   }
