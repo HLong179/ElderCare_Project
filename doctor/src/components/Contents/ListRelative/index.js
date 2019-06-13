@@ -4,17 +4,31 @@ import { connect } from "react-redux"
 import { fetchRelatives, removeSubUser } from "../../../actions/patientActions"
 import AddRelative from "./AddRelative"
 import "./style.css"
+import UpdateRelative from "./UpdateRelative"
 
 const { Title } = Typography
 const { Content } = Layout
 
 class Relatives extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      visible: false,
+      dataUpdate: null
+    }
+  }
   componentDidMount() {
     this.props.fetchRelatives({ elderId: this.props.auth.user.elderId })
   }
 
   deleteSubUser = data => {
     this.props.removeSubUser(data.relativeId)
+  }
+
+  handleVisible = visible => {
+    this.setState({
+      visible: visible
+    })
   }
 
   render() {
@@ -49,7 +63,15 @@ class Relatives extends Component {
         key: "action",
         render: (text, record) => (
           <span>
-            <span style={{ color: "#108ee9", cursor: "pointer", padding: 10 }}>
+            <span
+              style={{ color: "#108ee9", cursor: "pointer", padding: 10 }}
+              onClick={() =>
+                this.setState({
+                  visible: true,
+                  dataUpdate: record
+                })
+              }
+            >
               Sửa
             </span>
             <Divider type="vertical" />
@@ -77,6 +99,13 @@ class Relatives extends Component {
               <AddRelative ICID={this.props.auth.user.elderId} />
             ) : null}
           </div>
+          {this.state.visible && (
+            <UpdateRelative
+              relativeData={this.state.dataUpdate}
+              modalVisible={true}
+              handleVisible={this.handleVisible}
+            />
+          )}
 
           <Table
             columns={columns}

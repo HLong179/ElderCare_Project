@@ -51,3 +51,11 @@ export const removeSubUser = relativeId => dispatch => {
     })
     .catch()
 }
+export const updateRelative = data => dispatch => {
+  axios
+    .post(`http://${SETTING}:6900/account/updateSubUser`, data)
+    .then(res => {
+      dispatch(fetchRelatives({ elderId: data.elderId }))
+    })
+    .catch()
+}

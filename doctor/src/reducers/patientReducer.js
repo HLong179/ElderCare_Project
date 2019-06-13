@@ -8,11 +8,6 @@ const initialState = {
 
 const patientReducer = (state = initialState, action) => {
   switch (action.type) {
-    // case ADD_PATIENT:
-    //   return {
-    //     ...state,
-
-    //   }
     case FETCH_PATIENT:
       return {
         ...state,

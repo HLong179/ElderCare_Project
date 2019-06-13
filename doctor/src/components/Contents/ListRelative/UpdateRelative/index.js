@@ -1,15 +1,27 @@
 import React, { Component } from "react"
-import { Input, Button, Modal, Form, message } from "antd"
-import { addSubRelative } from "../../../../actions/patientActions"
+import { Input, Modal, Form, message } from "antd"
+import { updateRelative } from "../../../../actions/patientActions"
 import { connect } from "react-redux"
 
 class RelativesWithForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      visible: false,
+      visible: this.props.modalVisible,
+      name: this.props.relativeData.name,
+      relativeId: this.props.relativeData.relativeId,
+      email: this.props.relativeData.email,
+      phone: this.props.relativeData.phone,
+      address: this.props.relativeData.address,
+      rlUsername: this.props.relativeData.rlUsername,
+      rlPassword: this.props.relativeData.rlPassword,
       confirmDirty: false
     }
+  }
+
+  setModalVisible(visible) {
+    this.props.handleVisible(visible)
+    this.setState({ visible: visible })
   }
 
   showModal = () => {
@@ -21,8 +33,18 @@ class RelativesWithForm extends Component {
 
   handleCancel = e => {
     this.setState({
-      visible: false
+      visible: false,
+      name: null,
+      relativeId: null,
+      email: null,
+      phone: null,
+      address: null,
+      rlUsername: null,
+      rlPassword: null,
+      confirmDirty: false
     })
+    this.setModalVisible(false)
+    this.props.form.resetFields()
   }
 
   handleSubmit = e => {
@@ -30,20 +52,16 @@ class RelativesWithForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const data = {
-          elder_id: this.props.ICID,
           name: values.name,
           email: values.email,
           phone: values.phone,
           address: values.address,
-          username: values.rlUsername,
-          password: values.rlPassword
+          relativeId: this.state.relativeId,
+          elderId: this.props.auth.user.elderId
         }
-        this.props.addSubRelative(data)
-        this.props.form.resetFields()
-        this.setState({
-          visible: false
-        })
-        message.success("Thêm người thân phụ thành công")
+        this.props.updateRelative(data)
+        this.handleCancel()
+        message.success("Chỉnh sửa người thân phụ thành công")
       } else {
         console.log(err)
       }
@@ -66,16 +84,9 @@ class RelativesWithForm extends Component {
         sm: { span: 16 }
       }
     }
+    console.log(this.state)
     return (
       <div>
-        <Button
-          type="primary"
-          icon="user-add"
-          onClick={this.showModal}
-          style={{ marginBottom: 20 }}
-        >
-          Thêm người thân phụ
-        </Button>
         <Modal
           title="Tạo tài khoản cho người thân phụ"
           visible={this.state.visible}
@@ -97,7 +108,8 @@ class RelativesWithForm extends Component {
                     required: true,
                     message: "Họ và tên không được để trống"
                   }
-                ]
+                ],
+                initialValue: this.state.name
               })(<Input type="text" onBlur={this.handleConfirmBlur} />)}
             </Form.Item>
             <Form.Item label="Tên đăng nhập">
@@ -107,8 +119,9 @@ class RelativesWithForm extends Component {
                     required: true,
                     message: "Tên đăng nhập không được để trống"
                   }
-                ]
-              })(<Input />)}
+                ],
+                initialValue: this.state.rlUsername
+              })(<Input disabled />)}
             </Form.Item>
             <Form.Item label="E-mail">
               {getFieldDecorator("email", {
@@ -121,7 +134,8 @@ class RelativesWithForm extends Component {
                     required: true,
                     message: "Emai không được để trống"
                   }
-                ]
+                ],
+                initialValue: this.state.email
               })(<Input />)}
             </Form.Item>
             <Form.Item label="Password">
@@ -131,8 +145,9 @@ class RelativesWithForm extends Component {
                     required: true,
                     message: "Mật khẩu không được để trống"
                   }
-                ]
-              })(<Input type="password" />)}
+                ],
+                initialValue: this.state.rlPassword
+              })(<Input type="password" disabled />)}
             </Form.Item>
             <Form.Item label="Địa chỉ">
               {getFieldDecorator("address", {
@@ -141,7 +156,8 @@ class RelativesWithForm extends Component {
                     required: true,
                     message: "Địa chỉ không được để trống"
                   }
-                ]
+                ],
+                initialValue: this.state.address
               })(<Input type="text" onBlur={this.handleConfirmBlur} />)}
             </Form.Item>
             <Form.Item label="Số điện thoại">
@@ -151,7 +167,8 @@ class RelativesWithForm extends Component {
                     required: true,
                     message: "Số điện thoại không được để trống"
                   }
-                ]
+                ],
+                initialValue: this.state.phone
               })(<Input addonBefore={"+84"} style={{ width: "100%" }} />)}
             </Form.Item>
           </Form>
@@ -165,7 +182,7 @@ class RelativesWithForm extends Component {
   }
 }
 
-const AddRelatives = Form.create({ name: "relatives" })(RelativesWithForm)
+const UpdateRelative = Form.create({ name: "relatives" })(RelativesWithForm)
 
 const mapStateToProps = state => {
   return {
@@ -175,11 +192,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addSubRelative: userData => dispatch(addSubRelative(userData))
+    updateRelative: userData => dispatch(updateRelative(userData))
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddRelatives)
+)(UpdateRelative)

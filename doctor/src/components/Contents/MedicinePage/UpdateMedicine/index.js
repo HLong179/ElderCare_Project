@@ -210,7 +210,7 @@ class UpdateMedicineWithForm extends Component {
       <React.Fragment>
         <div className="list-drug">
           <Modal
-            title="Thêm thuốc"
+            title="Chỉnh sửa thuốc"
             visible={this.state.visible}
             onOk={this.handleSubmit}
             onCancel={this.handleCancel}
