@@ -1,0 +1,7 @@
+.list-medicine .ant-list-item-main {
+  position: relative;
+}
+.list-medicine ul.ant-list-item-action {
+  position: absolute;
+  bottom: 8%;
+}

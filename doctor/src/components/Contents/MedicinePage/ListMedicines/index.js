@@ -1,6 +1,7 @@
 import React, { Component } from "react"
-import { List, Icon } from "antd"
+import { List, Icon, Popconfirm } from "antd"
 import * as firebase from "firebase/app"
+import "../style.css"
 
 class ListMedicines extends Component {
   constructor(props) {
@@ -45,11 +46,18 @@ class ListMedicines extends Component {
       }
     }
   }
-
+  deleteMedicine = data => {
+    const elderId = this.props.elder.ICID
+    firebase
+      .database()
+      .ref(`Patients/${elderId}/Medicines/${data}`)
+      .remove()
+  }
   render() {
     const listData = []
     for (let i = 0; i < this.state.medicineDatas.length; i++) {
       listData.push({
+        idMedicineFB: this.state.medicineDatas[i].idMedicineFB,
         title: this.state.medicineDatas[i].name,
         description: `
           ${this.state.medicineDatas[i].morning ? " Sáng " : ""}
@@ -60,12 +68,6 @@ class ListMedicines extends Component {
       })
     }
 
-    const IconText = ({ type, text, style }) => (
-      <span>
-        <Icon type={type} style={style} />
-        <span style={style}> {text}</span>
-      </span>
-    )
     return (
       <List
         bordered
@@ -80,10 +82,24 @@ class ListMedicines extends Component {
           <List.Item
             key={item.title}
             actions={[
-              <IconText type="edit" text="Sửa" style={{ color: "#108ee9" }} />,
-              <IconText type="delete" text="Xóa" style={{ color: "red" }} />
+              <span style={{ color: "#108ee9" }}>
+                <Icon type="edit" />
+                <span> Sửa</span>
+              </span>,
+              <Popconfirm
+                title="Bạn chắc chắn xóa mục này ?"
+                onConfirm={() => this.deleteMedicine(item.idMedicineFB)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <span style={{ color: "red" }}>
+                  <Icon type="delete" />
+                  <span> Xóa</span>
+                </span>
+              </Popconfirm>
             ]}
             extra={<img width={272} alt="medicine" src={item.imageUrl} />}
+            className="list-medicine"
           >
             <List.Item.Meta title={item.title} description={item.description} />
             {item.content}
