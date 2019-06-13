@@ -1,34 +1,30 @@
 import React, { Component } from "react"
-import {
-  Button,
-  Icon,
-  Modal,
-  Form,
-  Input,
-  Upload,
-  message,
-  Checkbox
-} from "antd"
+import { Icon, Modal, Form, Input, Upload, message, Checkbox } from "antd"
 import * as firebase from "firebase/app"
 import "firebase/storage"
 import { connect } from "react-redux"
 
 const { TextArea } = Input
 
-class AddDrugsWithForm extends Component {
+class UpdateMedicineWithForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      visible: false,
+      visible: this.props.modalVisible,
       loading: false,
-      imageUrl: null,
-      morning: false,
-      afternoon: false,
-      evening: false,
-      text: "",
-      imgName: "",
-      done: false
+      imageUrl: this.props.medicineData.imageUrl,
+      morning: this.props.medicineData.morning,
+      afternoon: this.props.medicineData.afternoon,
+      evening: this.props.medicineData.evening,
+      text: this.props.medicineData.content,
+      imgName: this.props.medicineData.title,
+      done: true,
+      photo: null
     }
+  }
+  setModalVisible(visible) {
+    this.props.handleVisible(visible)
+    this.setState({ visible: visible })
   }
   showModal = () => {
     this.props.form.resetFields()
@@ -49,14 +45,12 @@ class AddDrugsWithForm extends Component {
       imgName: "",
       done: false
     })
+    this.props.handleVisible(false)
     this.props.form.resetFields()
   }
   handleSubmit = e => {
-    this.setState({
-      loading: true
-    })
     e.preventDefault()
-    const { imageUrl, morning, afternoon, evening } = this.state
+    const { imageUrl, morning, afternoon, evening, photo } = this.state
     this.props.form.validateFields((err, values) => {
       if (!err) {
         if (values.imgName.length < 2) {
@@ -66,50 +60,95 @@ class AddDrugsWithForm extends Component {
         } else {
           const elderId = this.props.auth.user.elderId
           if (firebase) {
-            let storageRef = firebase
-              .storage()
-              .ref()
-              .child(`${elderId}/${values.imgName}.jpg`)
-            storageRef
-              .putString(imageUrl, "data_url", {
-                contentType: "image/jpeg"
-              })
-              .then(snapshot => {
-                storageRef.getDownloadURL().then(url => {
-                  firebase
-                    .database()
-                    .ref(`Patients/${elderId}/Medicines`)
-                    .push({
-                      elderId: elderId,
-                      imageUrl: url,
-                      name: values.imgName,
-                      script: values.text,
-                      morning: ~~this.state.morning,
-                      afternoon: ~~this.state.afternoon,
-                      evening: ~~this.state.evening
-                    })
-                    .then(data => {
-                      //success callback
-                      this.setState({
-                        visible: false,
-                        loading: false,
-                        imageUrl: null,
-                        morning: false,
-                        afternoon: false,
-                        evening: false,
-                        text: "",
-                        imgName: "",
-                        done: false
-                      })
-                      message.success("Thêm thuốc thành công", 3)
-                      this.props.form.resetFields()
-                    })
-                    .catch(error => {
-                      //error callback
-                      console.log("error ", error)
-                    })
+            if (photo) {
+              let storageRef = firebase
+                .storage()
+                .ref()
+                .child(`${elderId}/${values.imgName}.jpg`)
+              storageRef
+                .putString(imageUrl, "data_url", {
+                  contentType: "image/jpeg"
                 })
-              })
+                .then(snapshot => {
+                  storageRef.getDownloadURL().then(url => {
+                    firebase
+                      .database()
+                      .ref(
+                        `Patients/${elderId}/Medicines/${
+                          this.props.medicineData.idMedicineFB
+                        }`
+                      )
+                      .update({
+                        elderId: elderId,
+                        imageUrl: url,
+                        name: values.imgName,
+                        script: values.text,
+                        morning: ~~this.state.morning,
+                        afternoon: ~~this.state.afternoon,
+                        evening: ~~this.state.evening
+                      })
+                      .then(data => {
+                        //success callback
+                        this.setState({
+                          visible: false,
+                          loading: false,
+                          imageUrl: null,
+                          morning: false,
+                          afternoon: false,
+                          evening: false,
+                          text: "",
+                          imgName: "",
+                          done: false
+                        })
+                        message.success("Sửa đơn thuốc thành công", 3)
+                        this.props.form.resetFields()
+                        this.setModalVisible(false)
+                      })
+                      .catch(error => {
+                        //error callback
+                        console.log("error ", error)
+                      })
+                  })
+                })
+            } else {
+              let body = {
+                imageUrl: this.state.imageUrl,
+                name: values.imgName,
+                script: values.text,
+                morning: ~~this.state.morning,
+                afternoon: ~~this.state.afternoon,
+                evening: ~~this.state.evening
+              }
+              if (firebase) {
+                firebase
+                  .database()
+                  .ref(
+                    `Patients/${elderId}/Medicines/${
+                      this.props.medicineData.idMedicineFB
+                    }`
+                  )
+                  .update(body)
+                  .then(async data => {
+                    //success callback
+                    this.setState({
+                      visible: false,
+                      loading: false,
+                      imageUrl: null,
+                      morning: false,
+                      afternoon: false,
+                      evening: false,
+                      text: "",
+                      imgName: "",
+                      done: false
+                    })
+                    this.setModalVisible(false)
+                  })
+                  .catch(error => {
+                    //error callback
+                    console.log("error ", error)
+                  })
+              }
+            }
           }
         }
       } else {
@@ -119,6 +158,9 @@ class AddDrugsWithForm extends Component {
   }
 
   handleChangePicture = info => {
+    this.setState({
+      done: false
+    })
     if (info.file.status === "uploading") {
       this.setState({ loading: true })
       return
@@ -129,6 +171,7 @@ class AddDrugsWithForm extends Component {
         this.setState({
           imageUrl,
           loading: false,
+          photo: imageUrl,
           done: true
         })
       })
@@ -166,9 +209,6 @@ class AddDrugsWithForm extends Component {
     return (
       <React.Fragment>
         <div className="list-drug">
-          <Button type="primary" onClick={this.showModal}>
-            <Icon type="plus" /> Thêm thuốc
-          </Button>
           <Modal
             title="Thêm thuốc"
             visible={this.state.visible}
@@ -177,7 +217,6 @@ class AddDrugsWithForm extends Component {
             okButtonProps={{ disabled: !this.state.done }}
           >
             <Form onSubmit={this.handleSubmit}>
-           
               <Form.Item label="Hình ảnh thuốc">
                 {getFieldDecorator("drugPicture", {})(
                   <div className="clearfix" style={{ marginTop: 20 }}>
@@ -208,12 +247,12 @@ class AddDrugsWithForm extends Component {
             <Form onSubmit={this.handleSubmit}>
               <Form.Item label="Tên thuốc">
                 {getFieldDecorator("imgName", {
-                  initialValue: ""
+                  initialValue: this.state.imgName
                 })(<Input />)}
               </Form.Item>
               <Form.Item label="Ghi chú">
                 {getFieldDecorator("text", {
-                  initialValue: ""
+                  initialValue: this.state.text
                 })(<TextArea />)}
               </Form.Item>
               <Form.Item label="Hẹn giờ uống thuốc">
@@ -229,6 +268,7 @@ class AddDrugsWithForm extends Component {
                     }}
                   >
                     <Checkbox
+                      checked={this.state.morning}
                       onChange={() =>
                         this.setState({
                           morning: !this.state.morning
@@ -238,6 +278,7 @@ class AddDrugsWithForm extends Component {
                       Buổi sáng
                     </Checkbox>
                     <Checkbox
+                      checked={this.state.afternoon}
                       onChange={() =>
                         this.setState({
                           afternoon: !this.state.afternoon
@@ -247,6 +288,7 @@ class AddDrugsWithForm extends Component {
                       Buổi trưa
                     </Checkbox>
                     <Checkbox
+                      checked={this.state.evening}
                       onChange={() =>
                         this.setState({ evening: !this.state.evening })
                       }
@@ -267,7 +309,9 @@ class AddDrugsWithForm extends Component {
   }
 }
 
-const AddMedicine = Form.create({ name: "add_drugs" })(AddDrugsWithForm)
+const UpdateMedicine = Form.create({ name: "update_drugs" })(
+  UpdateMedicineWithForm
+)
 
 const mapStateToProps = state => {
   return {
@@ -282,4 +326,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddMedicine)
+)(UpdateMedicine)
