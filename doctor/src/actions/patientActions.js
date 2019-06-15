@@ -81,3 +81,12 @@ export const addNote = userData => dispatch => {
     })
     .catch()
 }
+
+export const updateNote = data => dispatch => {
+  axios
+    .post(`http://${SETTING}:6900/account/updateNote`, data)
+    .then(res => {
+      dispatch(fetchNotes({ elderId: data.elderId }))
+    })
+    .catch()
+}

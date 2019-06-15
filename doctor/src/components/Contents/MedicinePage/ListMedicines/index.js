@@ -96,7 +96,7 @@ class ListMedicines extends Component {
               key={item.title}
               actions={[
                 <span
-                  style={{ color: "#108ee9" }}
+                  style={{ color: "#108ee9", fontSize: 12 }}
                   onClick={() =>
                     this.setState({
                       modalVisible: true,
@@ -113,7 +113,7 @@ class ListMedicines extends Component {
                   okText="Yes"
                   cancelText="No"
                 >
-                  <span style={{ color: "red" }}>
+                  <span style={{ color: "red", fontSize: 12 }}>
                     <Icon type="delete" />
                     <span> Xóa</span>
                   </span>
@@ -122,15 +122,16 @@ class ListMedicines extends Component {
               extra={
                 <div
                   style={{
-                    width: 240,
-                    height: 240,
+                    marginTop: 10,
+                    width: 200,
+                    height: 200,
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center"
                   }}
                 >
                   <img
-                    style={{ maxWidth: 240, maxHeight: 240 }}
+                    style={{ maxWidth: 200, maxHeight: 200 }}
                     alt="medicine"
                     src={item.imageUrl}
                   />

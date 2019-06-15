@@ -42,7 +42,7 @@ class AddNoteWithForm extends Component {
           elderId: elderId,
           title: values.title,
           script: values.script,
-          time: moment().format("DD/MM/YYY HH:mm:ss")
+          time: moment().format("DD/MM/YYYY HH:mm:ss")
         }
         this.props.addNote(note)
         this.props.form.resetFields()

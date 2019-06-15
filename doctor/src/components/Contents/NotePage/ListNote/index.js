@@ -3,18 +3,27 @@ import { List, Icon, Popconfirm } from "antd"
 import { connect } from "react-redux"
 import { fetchNotes } from "../../../../actions/patientActions"
 import "../style.css"
+import UpdateNote from "../UpdateNote"
 
 class ListNote extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loading: true
+      loading: true,
+      visible: false,
+      dataUpdate: null
     }
   }
   componentDidMount() {
     this.props.fetchNotes({ elderId: this.props.auth.user.elderId })
     this.setState({
       loading: false
+    })
+  }
+
+  handleVisible = visible => {
+    this.setState({
+      visible: visible
     })
   }
 
@@ -45,10 +54,10 @@ class ListNote extends Component {
               key={item.title}
               actions={[
                 <span
-                  style={{ color: "#108ee9" }}
+                  style={{ color: "#108ee9", fontSize: 12 }}
                   onClick={() =>
                     this.setState({
-                      modalVisible: true,
+                      visible: true,
                       dataUpdate: item
                     })
                   }
@@ -62,7 +71,7 @@ class ListNote extends Component {
                   okText="Yes"
                   cancelText="No"
                 >
-                  <span style={{ color: "red" }}>
+                  <span style={{ color: "red", fontSize: 12 }}>
                     <Icon type="delete" />
                     <span> Xóa</span>
                   </span>
@@ -78,13 +87,13 @@ class ListNote extends Component {
             </List.Item>
           )}
         />
-        {/* {this.state.modalVisible && (
-          <UpdateMedicine
-            medicineData={this.state.dataUpdate}
+        {this.state.visible && (
+          <UpdateNote
+            noteData={this.state.dataUpdate}
             modalVisible={true}
             handleVisible={this.handleVisible}
           />
-        )} */}
+        )}
       </React.Fragment>
     )
   }

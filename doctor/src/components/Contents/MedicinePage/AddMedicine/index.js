@@ -225,7 +225,7 @@ class AddDrugsWithForm extends Component {
                       width: "100%",
                       display: "flex",
                       justifyContent: "space-between",
-                      marginTop: 30
+                      marginTop: 10
                     }}
                   >
                     <Checkbox
