@@ -3,8 +3,9 @@ import { Layout } from "antd"
 import { connect } from "react-redux"
 import { fetchPatient } from "../../../actions/patientActions"
 import PatientInfo from "./PatientInfo"
-import HeartRate from "./HeartRate"
-import StepCount from "./StepCount"
+import HeartRate from "./HeartRateChart"
+import StepCount from "./StepCountChart"
+import CaloriesChart from "./CaloriesChart";
 
 const { Content } = Layout
 
@@ -21,6 +22,7 @@ class DashboardContent extends Component {
           <PatientInfo />
           {this.props.elder && <HeartRate elder={this.props.elder} />}
           {this.props.elder && <StepCount elder={this.props.elder} />}
+          {this.props.elder && <CaloriesChart elder={this.props.elder} />}
         </div>
       </Content>
     )
