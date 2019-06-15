@@ -42,6 +42,12 @@ class ASider extends Component {
               <span>Quản lý thuốc</span>
             </NavLink>
           </Menu.Item>
+          <Menu.Item key="notes">
+            <NavLink to={"/notes"}>
+              <Icon type="file-done" />
+              <span>Quản lý ghi chú</span>
+            </NavLink>
+          </Menu.Item>
           <Menu.Item key="relatives">
             <NavLink to={"/relatives"}>
               <Icon type="user" />

@@ -3,6 +3,7 @@ import {
   FETCH_PATIENT,
   FETCH_RELATIVES,
   REMOVE_SUBUSER,
+  FETCH_NOTES
 } from "../constants"
 import SETTING from "../setting"
 
@@ -56,6 +57,18 @@ export const updateRelative = data => dispatch => {
     .post(`http://${SETTING}:6900/account/updateSubUser`, data)
     .then(res => {
       dispatch(fetchRelatives({ elderId: data.elderId }))
+    })
+    .catch()
+}
+
+export const fetchNotes = elderId => async dispatch => {
+  await axios
+    .post(`http://${SETTING}:6900/account/getNotes`, elderId)
+    .then(res => {
+      dispatch({
+        type: FETCH_NOTES,
+        payload: res.data
+      })
     })
     .catch()
 }

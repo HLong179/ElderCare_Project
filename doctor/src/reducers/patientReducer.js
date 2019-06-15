@@ -1,9 +1,15 @@
-import { FETCH_PATIENT, FETCH_RELATIVES, REMOVE_SUBUSER } from "../constants"
+import {
+  FETCH_PATIENT,
+  FETCH_RELATIVES,
+  REMOVE_SUBUSER,
+  FETCH_NOTES
+} from "../constants"
 
 const initialState = {
   elder: null,
   listRelatives: [],
-  listPrescription: []
+  listPrescription: [],
+  listNotes: []
 }
 
 const patientReducer = (state = initialState, action) => {
@@ -31,6 +37,11 @@ const patientReducer = (state = initialState, action) => {
       return {
         ...state,
         listRelatives: [...list]
+      }
+    case FETCH_NOTES:
+      return {
+        ...state,
+        listNotes: action.payload
       }
     default:
       return state

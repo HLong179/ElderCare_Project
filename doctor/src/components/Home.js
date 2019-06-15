@@ -6,20 +6,17 @@ import AHeader from "./Layout/Header"
 import AFooter from "./Layout/AFooter"
 import "./Home.css"
 import DashboardContent from "./Contents/Dashboard"
-// import ListPatients from "./Contents/ListPatients/ListPatients"
-// import Schedules from "./Contents/Schedules"
-// import PatientDetail from "./Contents/PatientDetail/PatientDetail"
 
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 import * as firebase from "firebase/app"
 import { fetchPatient } from "../actions/patientActions"
 import { logout } from "../actions/authActions"
-// Add the Firebase services that you want to use
 import "firebase/auth"
 import "firebase/firestore"
 import MedicinePage from "./Contents/MedicinePage"
 import ListRelative from "./Contents/ListRelative";
+import NotePage from "./Contents/NotePage";
 
 class Home extends Component {
   componentWillMount() {
@@ -67,7 +64,7 @@ class Home extends Component {
             <Route path="/dashboard" component={DashboardContent} />
             <Route path="/medicines" component={MedicinePage} />
             <Route path="/relatives" component={ListRelative} />
-
+            <Route path="/notes" component={NotePage} />
           </Switch>
           <AFooter />
         </Layout>

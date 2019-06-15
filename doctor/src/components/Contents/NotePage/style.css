@@ -1,0 +1,16 @@
+.list-notes {
+  position: relative;
+}
+
+.list-notes .ant-list-item-meta-description {
+  font-size: 12px;
+}
+
+.list-notes ul.ant-list-item-action {
+  position: absolute;
+  bottom: 8%;
+}
+
+.list-notes .meta-data-content {
+  margin-bottom: 50px;
+}
