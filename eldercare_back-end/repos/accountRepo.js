@@ -82,3 +82,24 @@ exports.getEmailRelativeByElderId = (elderId) => {
   let sql = `select email from relative where elderId = "${elderId}"`
   return db.load(sql)
 }
+
+exports.getListRelatives = (elderId) => {
+  let sql = `select * from relative where elderId="${elderId}" and permission="Sub"`
+  return db.load(sql)
+}
+
+
+exports.removeSubUser = relativeId => {
+  var sql = `delete from relative where relativeId = ${relativeId}`
+  return db.delete(sql)
+}
+
+
+exports.updateSubUser = data => {
+  var sql = `update relative set name = '${data.name}', email = '${
+    data.email
+  }', phone = '${data.phone}', address= '${data.address}' where relativeId = ${
+    data.relativeId
+  }`
+  return db.insert(sql)
+}

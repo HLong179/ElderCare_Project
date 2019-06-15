@@ -53,68 +53,68 @@ firebase.initializeApp(config);
 
 
 
-var io = socketIO(server);
+// var io = socketIO(server);
 
 
-let patientsRef = firebase.database().ref("Patients");
-patientsRef.once("value", (snapshot) => {
-    Object.keys(snapshot.val()).forEach(elderId => {
-        patientsRef.child(elderId).child("Config").child("Interval").once("value", (interval) => {
-            console.log("value interval of this elderID: ", elderId, interval.val())
-            if (interval.val()) {
-                console.log("we start schedule functions to get data");
-                schedule.scheduleJob(`${elderId}`, `*/${interval.val()} * * * *`, () => {
-                    console.log("elder with id: ", elderId, "get data from watch: ", new Date().getMinutes());
-                    patientsRef.child(elderId).child("Config").child("ValueTime").set(
-                        new Date().getTime(), (e)=> {
-                            if (e) {
-                                console.log(e);
-                            }
-                        }
-                    )
-                })
-            } else {
-                console.log("elder does'nt have any interval time to get data");
-            }
+// let patientsRef = firebase.database().ref("Patients");
+// patientsRef.once("value", (snapshot) => {
+//     Object.keys(snapshot.val()).forEach(elderId => {
+//         patientsRef.child(elderId).child("Config").child("Interval").once("value", (interval) => {
+//             console.log("value interval of this elderID: ", elderId, interval.val())
+//             if (interval.val()) {
+//                 console.log("we start schedule functions to get data");
+//                 schedule.scheduleJob(`${elderId}`, `*/${interval.val()} * * * *`, () => {
+//                     console.log("elder with id: ", elderId, "get data from watch: ", new Date().getMinutes());
+//                     patientsRef.child(elderId).child("Config").child("ValueTime").set(
+//                         new Date().getTime(), (e)=> {
+//                             if (e) {
+//                                 console.log(e);
+//                             }
+//                         }
+//                     )
+//                 })
+//             } else {
+//                 console.log("elder does'nt have any interval time to get data");
+//             }
            
-        })
-    })
-})
+//         })
+//     })
+// })
 
 
 
-io.sockets.on('connection', (socket) => {
-    console.log("a socket connected");
-    socket.on('disconnect', function(){
-        console.log('user disconnected');
-    });
-    socket.on("data-interval", data=> {
-        console.log("data interval changed: ", data);
-       if ( schedule.scheduledJobs[data.elderId]) {
-            console.log("we cancel this elder schedule")
-            schedule.scheduledJobs[data.elderId].cancel();
-       }
-        schedule.scheduleJob(`${data.elderId}`,`*/${data.value} * * * *`, () => {
-            console.log("this time need to get data :))", new Date().getMinutes())
-            firebase.database().ref('Patients').child(data.elderId).child("Config").child("ValueTime").set(new Date().getTime(), (e) => {
-                if (e) {
-                    console.log("some thing wrong: ", e);
-                }
-            });
-        })
+// io.sockets.on('connection', (socket) => {
+//     console.log("a socket connected");
+//     socket.on('disconnect', function(){
+//         console.log('user disconnected');
+//     });
+//     socket.on("data-interval", data=> {
+//         console.log("data interval changed: ", data);
+//        if ( schedule.scheduledJobs[data.elderId]) {
+//             console.log("we cancel this elder schedule")
+//             schedule.scheduledJobs[data.elderId].cancel();
+//        }
+//         schedule.scheduleJob(`${data.elderId}`,`*/${data.value} * * * *`, () => {
+//             console.log("this time need to get data :))", new Date().getMinutes())
+//             firebase.database().ref('Patients').child(data.elderId).child("Config").child("ValueTime").set(new Date().getTime(), (e) => {
+//                 if (e) {
+//                     console.log("some thing wrong: ", e);
+//                 }
+//             });
+//         })
         
-    })
-})
+//     })
+// })
 
-schedule.scheduleJob('SendMail', '19 * * 6', () => {
-    console.log("we send email");
-    mailer.sendEmail();
-})
+// schedule.scheduleJob('SendMail', '19 * * 6', () => {
+//     console.log("we send email");
+//     mailer.sendEmail();
+// })
 
 
-schedule.scheduleJob('Tonghop', '*/5 * * * *', () => {
-    console.log("all jobs now: ", Object.keys(schedule.scheduledJobs));
-})
+// schedule.scheduleJob('Tonghop', '*/5 * * * *', () => {
+//     console.log("all jobs now: ", Object.keys(schedule.scheduledJobs));
+// })
 
 
 
