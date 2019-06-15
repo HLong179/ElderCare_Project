@@ -72,3 +72,12 @@ export const fetchNotes = elderId => async dispatch => {
     })
     .catch()
 }
+
+export const addNote = userData => dispatch => {
+  axios
+    .post(`http://${SETTING}:6900/account/addNote`, userData)
+    .then(res => {
+      dispatch(fetchNotes({ elderId: userData.elderId }))
+    })
+    .catch()
+}

@@ -1,7 +1,8 @@
 import React, { Component } from "react"
-import { Typography, Table, Layout, Divider, Popconfirm } from "antd"
+import { Typography, Layout } from "antd"
 import { connect } from "react-redux"
-import ListNote from "./ListNote";
+import ListNote from "./ListNote"
+import AddNote from "./AddNote"
 
 const { Title } = Typography
 const { Content } = Layout
@@ -13,9 +14,7 @@ class NotePage extends Component {
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
           <div className="top-content">
             <Title level={3}>Quản lý ghi chú</Title>
-            {/* {this.props.listRelatives.length <= 5 ? (
-              <AddRelative ICID={this.props.auth.user.elderId} />
-            ) : null} */}
+            <AddNote />
           </div>
           <ListNote />
         </div>

@@ -5,8 +5,17 @@ import { fetchNotes } from "../../../../actions/patientActions"
 import "../style.css"
 
 class ListNote extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loading: true
+    }
+  }
   componentDidMount() {
     this.props.fetchNotes({ elderId: this.props.auth.user.elderId })
+    this.setState({
+      loading: false
+    })
   }
 
   render() {
@@ -24,9 +33,8 @@ class ListNote extends Component {
     return (
       <React.Fragment>
         <List
-          bordered
-          style={{ marginTop: 50 }}
-          //   loading={this.state.loading}
+          style={{ marginTop: 30 }}
+          loading={this.state.loading}
           itemLayout="vertical"
           pagination={{
             pageSize: 5
