@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Typography, Table, Layout, Divider, Popconfirm } from "antd"
+import { Typography, Table, Layout, Divider, Popconfirm, message } from "antd"
 import { connect } from "react-redux"
 import { fetchRelatives, removeSubUser } from "../../../actions/patientActions"
 import AddRelative from "./AddRelative"
@@ -23,6 +23,7 @@ class Relatives extends Component {
 
   deleteSubUser = data => {
     this.props.removeSubUser(data.relativeId)
+    message.success("Xóa người thân thành công", 3)
   }
 
   handleVisible = visible => {
@@ -51,7 +52,8 @@ class Relatives extends Component {
       {
         title: "Địa chỉ",
         dataIndex: "address",
-        key: "address"
+        key: "address",
+        width: 220
       },
       {
         title: "Username",
@@ -111,7 +113,7 @@ class Relatives extends Component {
             columns={columns}
             dataSource={this.props.listRelatives}
             pagination={false}
-            style={{ marginTop: 50 }}
+            style={{ marginTop: 50, width: "100%" }}
           />
         </div>
       </Content>

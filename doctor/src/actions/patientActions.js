@@ -56,6 +56,7 @@ export const updateRelative = data => dispatch => {
   axios
     .post(`http://${SETTING}:6900/account/updateSubUser`, data)
     .then(res => {
+      console.log(res)
       dispatch(fetchRelatives({ elderId: data.elderId }))
     })
     .catch()

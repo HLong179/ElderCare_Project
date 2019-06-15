@@ -84,7 +84,6 @@ class RelativesWithForm extends Component {
         sm: { span: 16 }
       }
     }
-    console.log(this.state)
     return (
       <div>
         <Modal
