@@ -4,6 +4,7 @@ import { connect } from "react-redux"
 import { fetchPatient } from "../../../actions/patientActions"
 import PatientInfo from "./PatientInfo"
 import HeartRate from "./HeartRate"
+import StepCount from "./StepCount"
 
 const { Content } = Layout
 
@@ -19,6 +20,7 @@ class DashboardContent extends Component {
         <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
           <PatientInfo />
           {this.props.elder && <HeartRate elder={this.props.elder} />}
+          {this.props.elder && <StepCount elder={this.props.elder} />}
         </div>
       </Content>
     )
