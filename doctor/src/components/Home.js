@@ -15,8 +15,9 @@ import { logout } from "../actions/authActions"
 import "firebase/auth"
 import "firebase/firestore"
 import MedicinePage from "./Contents/MedicinePage"
-import ListRelative from "./Contents/ListRelative";
-import NotePage from "./Contents/NotePage";
+import ListRelative from "./Contents/ListRelative"
+import NotePage from "./Contents/NotePage"
+import ErrorPage from "./ErrorPage"
 
 class Home extends Component {
   componentWillMount() {
@@ -55,20 +56,40 @@ class Home extends Component {
   }
 
   render() {
+    const routeLink = this.props.history.location.pathname
+    let displayErrorPage = false
+    if (
+      routeLink !== "/login" &&
+      routeLink !== "/dashboard" &&
+      routeLink !== "/medicines" &&
+      routeLink !== "/notes" &&
+      routeLink !== "/relatives" &&
+      routeLink !== "/"
+    ) {
+      displayErrorPage = true
+    }
     return (
-      <Layout style={{ minHeight: "100vh" }}>
-        <ASider />
-        <Layout>
-          <AHeader />
-          <Switch>
-            <Route path="/dashboard" component={DashboardContent} />
-            <Route path="/medicines" component={MedicinePage} />
-            <Route path="/relatives" component={ListRelative} />
-            <Route path="/notes" component={NotePage} />
-          </Switch>
-          <AFooter />
-        </Layout>
-      </Layout>
+      <React.Fragment>
+        {displayErrorPage ? (
+          <ErrorPage />
+        ) : (
+          <Layout style={{ minHeight: "100vh" }}>
+            <ASider elder={this.props.auth.user} />
+            <Layout>
+              <AHeader />
+              <Switch>
+                <Route path="/dashboard" component={DashboardContent} />
+                <Route path="/medicines" component={MedicinePage} />
+                <Route path="/notes" component={NotePage} />
+                {this.props.auth.user.permission === "Main" ? (
+                  <Route path="/relatives" component={ListRelative} />
+                ) : null}
+              </Switch>
+              <AFooter />
+            </Layout>
+          </Layout>
+        )}
+      </React.Fragment>
     )
   }
 }

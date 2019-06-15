@@ -1,0 +1,36 @@
+.site {
+  width: 100vw;
+  height: 100vh;
+  background-color: #04a9eb;
+  display: flex;
+  flex-direction: column;
+}
+
+.site .img-error {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.site .goback-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.site .goback-button button {
+    border: 2px solid #fff;
+    padding: 8px 20px;
+    font-size: 18px;
+    background-color: #04a9eb;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 5px;
+}
+
+
+.site .goback-button button:hover {
+    color: #04a9eb;
+    background-color: #fff;
+}

@@ -48,12 +48,14 @@ class ASider extends Component {
               <span>Quản lý ghi chú</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="relatives">
-            <NavLink to={"/relatives"}>
-              <Icon type="user" />
-              <span>Quản lý người thân</span>
-            </NavLink>
-          </Menu.Item>
+          {this.props.elder.permission === "Main" ? (
+            <Menu.Item key="relatives">
+              <NavLink to={"/relatives"}>
+                <Icon type="user" />
+                <span>Quản lý người thân</span>
+              </NavLink>
+            </Menu.Item>
+          ) : null}
         </Menu>
       </Sider>
     )
