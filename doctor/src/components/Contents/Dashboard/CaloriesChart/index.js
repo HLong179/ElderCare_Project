@@ -59,9 +59,9 @@ class CaloriesChart extends Component {
         {
           label: "Calories",
           data: this.state.calories,
-          backgroundColor: "rgba(255,206,86, 0.5)",
+          backgroundColor: "rgba(255,206,86, 0.7)",
           borderColor: "rgba(255,206,86, 0.1)",
-          hoverBorderColor: "rgba(255,206,86, 1)",
+          hoverBorderColor: "orange",
           borderWidth: 2
         }
       ]

@@ -94,27 +94,43 @@ class Relatives extends Component {
     ]
     return (
       <Content style={{ margin: "16px 16px" }}>
-        <div style={{ padding: 24, minHeight: 460, backgroundColor: "#fff" }}>
-          <div className="top-content">
-            <Title level={3}>Danh sách người thân</Title>
-            {this.props.listRelatives.length <= 5 ? (
-              <AddRelative ICID={this.props.auth.user.elderId} />
-            ) : null}
-          </div>
-          {this.state.visible && (
-            <UpdateRelative
-              relativeData={this.state.dataUpdate}
-              modalVisible={true}
-              handleVisible={this.handleVisible}
-            />
+        <div style={{ padding: 24, minHeight: 500, backgroundColor: "#fff" }}>
+          {this.props.auth.user.permission !== "Main" ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 500,
+                color: "gray",
+                fontSize: 24
+              }}
+            >
+              Không có quyền sử dụng chức năng này
+            </div>
+          ) : (
+            <React.Fragment>
+              <div className="top-content">
+                <Title level={3}>Danh sách người thân</Title>
+                {this.props.listRelatives.length <= 5 ? (
+                  <AddRelative ICID={this.props.auth.user.elderId} />
+                ) : null}
+              </div>
+              {this.state.visible && (
+                <UpdateRelative
+                  relativeData={this.state.dataUpdate}
+                  modalVisible={true}
+                  handleVisible={this.handleVisible}
+                />
+              )}
+              <Table
+                columns={columns}
+                dataSource={this.props.listRelatives}
+                pagination={false}
+                style={{ marginTop: 50, width: "100%" }}
+              />
+            </React.Fragment>
           )}
-
-          <Table
-            columns={columns}
-            dataSource={this.props.listRelatives}
-            pagination={false}
-            style={{ marginTop: 50, width: "100%" }}
-          />
         </div>
       </Content>
     )

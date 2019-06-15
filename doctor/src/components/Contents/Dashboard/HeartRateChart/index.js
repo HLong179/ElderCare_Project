@@ -41,9 +41,9 @@ class HeartRate extends Component {
   render() {
     const chartData = {
       labels:
-        this.state.labels.length >= 15
+        this.state.labels.length >= 20
           ? this.state.labels.slice(
-              this.state.labels.length - 15,
+              this.state.labels.length - 20,
               this.state.labels.length
             )
           : this.state.labels,
@@ -51,9 +51,9 @@ class HeartRate extends Component {
         {
           label: "Nhịp tim",
           data:
-            this.state.heartRates.length > 15
+            this.state.heartRates.length > 20
               ? this.state.heartRates.slice(
-                  this.state.heartRates.length - 15,
+                  this.state.heartRates.length - 20,
                   this.state.heartRates.length
                 )
               : this.state.heartRates,
