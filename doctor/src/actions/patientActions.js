@@ -90,3 +90,14 @@ export const updateNote = data => dispatch => {
     })
     .catch()
 }
+
+export const removeNote = data => dispatch => {
+  axios
+    .post(`http://${SETTING}:6900/account/removeNote`, {
+      noteId: data.noteId
+    })
+    .then(res => {
+      dispatch(fetchNotes({ elderId: data.elderId }))
+    })
+    .catch()
+}

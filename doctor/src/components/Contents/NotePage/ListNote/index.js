@@ -1,7 +1,7 @@
 import React, { Component } from "react"
-import { List, Icon, Popconfirm } from "antd"
+import { List, Icon, Popconfirm, message } from "antd"
 import { connect } from "react-redux"
-import { fetchNotes } from "../../../../actions/patientActions"
+import { fetchNotes, removeNote } from "../../../../actions/patientActions"
 import "../style.css"
 import UpdateNote from "../UpdateNote"
 
@@ -26,7 +26,15 @@ class ListNote extends Component {
       visible: visible
     })
   }
-
+  deleteNote = id => {
+    const elderId = this.props.auth.user.elderId
+    let deleteNote = {
+      noteId: id,
+      elderId: elderId
+    }
+    this.props.removeNote(deleteNote)
+    message.success("Xóa ghi chú thành công", 3)
+  }
   render() {
     const listData = []
     if (this.props.listNotes[0]) {
@@ -67,7 +75,7 @@ class ListNote extends Component {
                 </span>,
                 <Popconfirm
                   title="Bạn chắc chắn xóa mục này ?"
-                  onConfirm={() => this.deleteMedicine(item.idMedicineFB)}
+                  onConfirm={() => this.deleteNote(item.id)}
                   okText="Yes"
                   cancelText="No"
                 >
@@ -108,8 +116,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchNotes: elderId => dispatch(fetchNotes(elderId))
-    // removeSubUser: relativeId => dispatch(removeSubUser(relativeId))
+    fetchNotes: elderId => dispatch(fetchNotes(elderId)),
+    removeNote: data => dispatch(removeNote(data))
   }
 }
 
