@@ -27,8 +27,10 @@ class HeartRate extends Component {
         let timeLabel = moment(patients[patient]["time"]).format(
           "DD/MM/YYYY HH:mm:ss"
         )
-        labels.push(timeLabel)
-        heartRates.push(patients[patient]["value"])
+        if (!labels.includes(timeLabel)) {
+          labels.push(timeLabel)
+          heartRates.push(patients[patient]["value"])
+        }
       }
       this.setState({
         labels,
