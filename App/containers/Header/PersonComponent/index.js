@@ -87,7 +87,6 @@ class Bulb extends Component {
     }
     render() {
         const { permission } = this.state;
-        console.log('permission', permission);
 
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 20, maginBottom: 100 }}>

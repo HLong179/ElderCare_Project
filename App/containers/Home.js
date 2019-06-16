@@ -15,6 +15,8 @@ import WeightCard from "./WeightCard"
 import MedicineCard from "./MedicineCard"
 import HeartCard from "./HeartCard"
 import SetTimeCard from "./SetTimeCard";
+import CalorCard from "./CalorCard";
+import WeightChartCard from "./Weight";
 class Home extends Component {
   constructor(props) {
     super(props)
@@ -64,6 +66,11 @@ class Home extends Component {
                   <HeartCard  />
                 </Col>
               </Row>
+              <Row>
+                <Col>
+                  <CalorCard />
+                </Col>
+              </Row>
 
               <Row>
                 <Col>
@@ -84,6 +91,11 @@ class Home extends Component {
               <Row>
                 <Col>
                   <SetTimeCard />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <WeightChartCard />
                 </Col>
               </Row>
             </Grid>

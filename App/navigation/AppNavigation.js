@@ -15,10 +15,12 @@ import MedicinePage from "../containers/MedicinePage"
 import SignUp from "../containers/AuthPage/FormSignUp/Elder"
 import MainRelativeSignUp from "../containers/AuthPage/FormSignUp/MainRelative"
 import NotePage from "../containers/NotePage"
+import CalorDetail from "../containers/CaloDetail";
 
 import { View, StyleSheet, Button } from "react-native"
 import { Text, Icon, Container, Header, Content } from "native-base"
 import WeightDetail from '../containers/WeightCard/WeightDetail';
+import WeightChartDetail from '../containers/Weight/WeightDetail'
 
 const HomeNav = createStackNavigator(
   {
@@ -70,6 +72,12 @@ const HomeNav = createStackNavigator(
         title: `Nhịp tim`
       })
     },
+    CalorDetail: {
+      screen: CalorDetail,
+      navigationOptions: () => ({
+        title: `Calor`
+      })
+    },
     SleepScreen: {
       screen: SleepScreen,
       navigationOptions: () => ({
@@ -97,6 +105,12 @@ const HomeNav = createStackNavigator(
       screen: WeightDetail,
       navigationOptions: () => ({
         title: `Cân nặng`,
+      })
+    },
+    WeightChartDetail: {
+      screen: WeightChartDetail,
+      navigationOptions: () => ({
+        title: `Biểu đồ cân nặng`,
       })
     }
   },

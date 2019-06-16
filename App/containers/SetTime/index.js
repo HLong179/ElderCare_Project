@@ -7,7 +7,7 @@ import moment from 'moment'
 import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
 import { getUserData } from '../../services/authServices';
-import timeConvert from '../../utils/timeConvert.util';
+import { timeConvert } from '../../utils/timeConvert.util';
 
 import { withSocketContext } from '../../../socketContext';
 

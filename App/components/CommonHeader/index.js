@@ -11,7 +11,6 @@ class CommonHeader extends Component {
         this.props.navigation.navigate('Home');
     }
     render() {
-        console.log(this.props);
         return (
             <Container>
                 <Header>

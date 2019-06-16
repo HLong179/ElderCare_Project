@@ -6,28 +6,26 @@ import {filterByTime} from '../../utils/timeConvert.util';
 
 import AsyncStorage from "@react-native-community/async-storage"
 import SETTINGS from "../../settings"
-import call from "react-native-phone-call"
+import call from "react-native-phone-call";
 import { compare } from '../../utils/sort';
+import { formatData,  } from '../../utils/formatData';
 import { averageDateByWeek, averageDateByMonth } from '../../utils/timeConvert.util';
-import Chart from './Chart'
+import Chart from './Chart';
 
 
-// const Chart = React.lazy(() => import ('./Chart'));
-
-
-
-class HeartRate extends React.Component {
+class CalorDetail extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       drPhoneNo: "",
-      heartData: [],
-      displayHeartData: null,
+      calorData: [],
+      displayCalorData: null,
       isLoading: false,
       selected: null,
       currentPage: 0,
     }
   }
+
   componentDidMount = async () => {
     let dataCur = await AsyncStorage.getItem("curUser")
     let jsonData = JSON.parse(dataCur)
@@ -48,82 +46,62 @@ class HeartRate extends React.Component {
       this.setState({ drPhoneNo: response.doctorPhoneNum })
     })
 
-    let rawData = [];
 
      firebase
       .database()
       .ref("Patients")
-      .child(jsonData.elderId).child("HeartRate")
+      .child(jsonData.elderId).child("Calories")
       .once("value",  snapshot => {
-            console.log('snapshot heart rate value', snapshot.val());
-            rawData = [...Object.values(snapshot.val())];
-            console.log('raw Data', rawData);
-            rawData.sort(compare);
+            let calorData = formatData(snapshot.val());
 
+            calorData.sort(compare);
+            
             this.setState({
               isLoading: false,
-              heartData: rawData,
+              calorData,
             }, () => this.pressDayBtn())
       })
   }
 
-  
+  // Display data of 7d nearest  
   pressDayBtn = () => {
-    const { heartData } = this.state
-    
-    //currentTime
+    const { calorData } = this.state
     const endTime = new Date().getTime();
     const startTime = new Date(endTime - 86400*7*1000).setHours(0, 0, 0, 0);
-    let data = filterByTime(heartData, startTime, endTime);
+    let data = filterByTime(calorData, startTime, endTime);
 
     this.setState({
-      displayHeartData: data,
+      displayCalorData: data,
     });
-
-
   }
 
+  // Display data of 7 weeks nearest  
   pressWeekBtn = () => {
-   
-    const { heartData } = this.state
+    const { calorData } = this.state
     const endTime = new Date().getTime();
     const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
-    console.log('startTime', startTime);
-    
-    console.log('endTime', endTime);
-    
 
-    let data = filterByTime(heartData, startTime, endTime);
+
+    let data = filterByTime(calorData, startTime, endTime);
+    console.log('calor weekData', data);
     let weekData = averageDateByWeek(data);
-
-    console.log('heart week data', data);
     this.setState({
-      displayHeartData: weekData
+      displayCalorData: weekData
     })
   }
 
-
+  // Display data of 2 months  nearest  
   pressMonthBtn = () => {
-    const { heartData } = this.state
-    const endTime = new Date().getTime();
-    const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
-    console.log('startTime', startTime);
+    const { calorData } = this.state
     
+    const endTime = new Date().getTime();
+    const startTime = new Date(endTime - 86400*7*1000*2).setHours(0, 0, 0, 0);
+    let data = filterByTime(calorData, startTime, endTime);
+    let monthData = averageDateByMonth(data)
 
-    let data = filterByTime(heartData, startTime, endTime);
-    let monthData = averageDateByMonth(data);
-
-    console.log('heart week data', data);
     this.setState({
-      displayHeartData: monthData
+      displayCalorData: monthData,
     })
-  }
-  callDoctor = () => {
-    const args = {
-      number: this.state.drPhoneNo, // String value with the number to call
-      prompt: true // Optional boolean property. Determines if the user should be prompt prior to the call
-    }
-    call(args).catch(console.error)
   }
 
   onChangeTab = ({i}) => {
@@ -139,7 +117,7 @@ class HeartRate extends React.Component {
   }
 
   render() {
-    const { displayHeartData } = this.state;
+    const { displayCalorData } = this.state;
     if (this.state.isLoading) {
       return (
         <View style={styles.textStyle}>
@@ -150,47 +128,31 @@ class HeartRate extends React.Component {
     return (
       <Container>
         <Tabs initialPage={this.state.currentPage} onChangeTab={this.onChangeTab}>
-          <Tab heading={ <TabHeading><Text>Ngày</Text></TabHeading>} onPress={() => alert('press')}>
-            {/* <React.Suspense fallback={<Text>Loading</Text>}> */}
-            <Chart data={displayHeartData} type="day"/>
-            {/* </React.Suspense> */}
+          <Tab heading={ <TabHeading><Text>Ngày</Text></TabHeading>}>
+            <Chart data={displayCalorData} type="day"/>
           </Tab>
           <Tab heading={ <TabHeading><Text>Tuần</Text></TabHeading>}>
-            <Chart data={displayHeartData} type="week"/>
+            <Chart data={displayCalorData} type="week"/>
           </Tab>
           <Tab heading={ <TabHeading><Text>Tháng</Text></TabHeading>}>
-            <Chart data={displayHeartData} type="month"/>
+            <Chart data={displayCalorData} type="month"/>
           </Tab>
         </Tabs>
-
-            <TouchableHighlight style={styles.btn} underlayColor="#fefefe">
-          <Button iconLeft block warning onPress={this.callDoctor}>
-            <Icon name="call" />
-            <Text>Gọi bác sĩ</Text>
-          </Button>
-        </TouchableHighlight>
     </Container>
     );
       
   }
 }
-export default HeartRate; 
+
+
+export default CalorDetail; 
+
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center"
-  },
-  btn: {
-    borderRadius: 5,
-    padding: 10
-  },
-  btnActive: {
-    backgroundColor: "#f0ad4e"
-  },
-  text: {
-    marginTop: 20
   },
   textStyle: {
     minHeight: 100,
@@ -199,11 +161,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     color: "gray"
   },
-  picker: {
-    display: "flex",
-    flexDirection: "row",
-    marginTop: 30,
-    alignItems: "center",
-    justifyContent: "center"
-  }
+
 })

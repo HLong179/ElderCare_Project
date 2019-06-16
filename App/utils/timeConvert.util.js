@@ -1,5 +1,6 @@
+import moment from 'moment';
 
-export default function timeConvert(m){
+export function timeConvert(m){
     let temp = m;
     let hours = temp / 60;
     let fHours = Math.floor(hours);
@@ -12,5 +13,212 @@ export default function timeConvert(m){
         rMinute,
     }
 
+
+}
+
+// export const formatDate = (date) => {
+//     return moment(date).format('L');
+// }
+
+
+// export const getHourAndMinute = (data) => {
+//     let hour = new Date(data).getHours();
+//     let minute = new Date(data).getMinutes();
+//     return `${hour}:${minute}`;
+// }
+
+
+// export const findPreviousDate = (data) => {
+//     // const ToDate = new Date(Date.now()).setHours(0,0,0,0);
+//     const ToDate = new Date('06/13/2019').setHours(0,0,0,0);
+
+//     const formatData = new Date(data).setHours(0, 0, 0, 0);
+//     if((ToDate - formatData) === 0) {
+//         return true;
+//     } 
+//     return false;
+// }
+
+
+
+
+// export const averageHeartRateByWeek = (data) => {
+//   let result = [];
+//   let sum = 0;
+//   let length = data.length;
+
+//   for (let i = 0; i < length; i++) {
+//     sum = data[i].value;
+//     count = 1;
+
+//     if(i === length - 1) {
+//         // result.push({x: data[i].x, y: sum});
+//         result.push({value: sum, time: data[i].time});
+//       }
+
+//     for (let j = i + 1; j < length; j++) {
+//       if (compareTwoDate(data[i].x, data[j].x)) {
+//         sum += data[j].y;
+//         count++;
+//         if (j === length - 1) {
+//         //   result.push({ x: data[i].x, y: sum /count });
+//         result.push({ x: formatDate(data[i].x), y: sum /count });
+
+//           i = j;
+//           break;
+//         }
+//       } else {
+//         if(count === 1) {
+//             // result.push({ x: data[i].x, y: sum });
+//             result.push({ x: formatDate(data[i].x), y: sum });
+//             break;
+//           }
+//         // result.push({ x: data[i].x, y: sum / count });
+//         result.push({ x: formatDate(data[i].x), y: sum / count });
+//         i = j - 1;
+//         break;
+//       }
+//     }
+//   }
+//   return result;
+// };
+
+
+//function filter data by ( day, week, month);
+export const filterByTime = (arrData, start, end ) => {
+  console.log('fitler Data', arrData);
+  let filterData = [];
+
+   arrData.filter((data) => {
+    if(data.time >= start && data.time <= end) {
+      time = moment(new Date(data.time)).format("YYYY-MM-DD")
+      filterData.push({ value: data.value, time})
+    }
+  })
+
+  let result = averageDataByDate(filterData);
+  console.log('final computed Data', result);
+
+  return result;
+}
+
+// Calculate average date by date.
+export const averageDataByDate = (data) => {
+  let result = [];
+  let sum = 0;
+  let length = data.length;
+
+  for (let i = 0; i < length; i++) {
+    sum = data[i].value;
+    count = 1;
+
+    if(i === length - 1) {
+        result.push({ x: data[i].time, y: sum});
+      }
+
+    for (let j = i + 1; j < length; j++) {
+        if(moment(data[i].time).isSame(data[j].time)) {
+        sum += data[j].value;
+        count++;
+        if (j === length - 1) {
+        result.push({x: data[i].time, y: Math.round(sum / count)});
+          i = j;
+          break;
+        }
+      } else {
+        if(count === 1) {
+            // result.push({ x: data[i].x, y: sum });
+            result.push({x: data[i].time, y: sum});
+            break;
+          }
+        // result.push({ x: data[i].x, y: sum / count });
+        result.push({x: data[i].time, y: Math.round(sum / count)});
+        i = j - 1;
+        break;
+      }
+    }
+  }
+  console.log('convert Restul', result);
+  return result;
+};
+
+
+// Generate date from start date to current date.
+export const generateDateInterval = (start, type) => {
+  let result = [];
+  let numOfDays = 7;
+  if(type === 'week') {
+    numOfDays = 21;
+  } else if(type === 'month') {
+    numOfDays = 60;
+  }
+
+  for(let i = numOfDays; i >= 0; i--) {
+    result.push(moment(start).subtract(i, 'day').format('MM-DD'));
+  }
+  console.log('lable Array', result);
+  return result;
+}
+
+// Caculate average data by week( use average date data).
+
+export const averageDateByWeek = (data)  => {
+  let startDate = '';
+  let endDate = '';
+  let result = [];
+  
+  for( let i = 7; i >0; i--) {
+    startDate = moment(data[data.length - 1].x).subtract(i, 'weeks').format('YYYY-MM-DD');
+    console.log('object start date', startDate);
+    endDate = moment(startDate).add(1, 'weeks').format('YYYY-MM-DD');
+    console.log('object edn date', endDate);
+
+    let sum = 0;
+
+    for(let j = 0; j < data.length; j ++) {
+      if(data[j].x && moment(data[j].x).isBetween(startDate, endDate)) {
+        sum += data[j].y;
+      }
+      
+    }
+    console.log('sumsdfsdf', sum);
+      result.push({
+        x: moment(startDate).format('YYYY-MM-DD'),
+        y: Math.round(sum/7),
+      })
+  }
+  console.log('endDate', result);
+  return result;
+
+}
+
+export const averageDateByMonth = (data)  => {
+  let startDate = '';
+  let endDate = '';
+  let result = [];
+  
+  for( let i = 3; i >0; i--) {
+    startDate = moment(data[data.length - 1].x).subtract(i, 'months').format('YYYY-MM-DD');
+    console.log('object start date', startDate);
+    endDate = moment(startDate).add(1, 'months').format('YYYY-MM-DD');
+    console.log('object edn date', endDate);
+
+    let sum = 0;
+
+    for(let j = 0; j < data.length; j ++) {
+      if(data[j].x && moment(data[j].x).isBetween(startDate, endDate)) {
+        sum += data[j].y;
+      }
+      
+    }
+    console.log('sumsdfsdf', sum);
+      result.push({
+        x: moment(startDate).format('YYYY-MM-DD'),
+        y: Math.round(sum/30),
+      })
+  }
+  
+  console.log('endDate', result);
+  return result;
 
 }

@@ -28,25 +28,22 @@ class HeartCard extends Component {
       this.props.navigation.navigate("FormHeartRate");
   }
 
-  toHeartRate = () => {
+  toCaloDetail = () => {
     const { socket } = this.props;
-    console.log('toHeartRate', socket);
-    this.props.navigation.navigate("HeartRate", { socket: JSON.stringify(socket) } );
+    this.props.navigation.navigate("CalorDetail", { socket: JSON.stringify(socket) } );
   }
 
   render () {
-    console.log("ssssssssssssss:  ",this.props.socket);
-
     return (
-      <TouchableOpacity onPress={this.toHeartRate}>
+      <TouchableOpacity onPress={this.toCaloDetail}>
         <CommonCard >
           <CardItem cardBody>
             <Left>
-              <IconWithText icon="heart" text="Nhịp tim" color="tomato"></IconWithText>
+              <IconWithText icon="heart" text="Calo" color="tomato"></IconWithText>
             </Left>
           </CardItem>
           <TextWrapper>
-          <CommonText text="BPM"></CommonText>
+          <CommonText text="Calo"></CommonText>
           </TextWrapper>
         </CommonCard>
       </TouchableOpacity>
