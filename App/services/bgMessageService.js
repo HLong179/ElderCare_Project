@@ -10,11 +10,14 @@ export default async (message: RemoteMessage) => {
 
 
          let mTitle, mMessage;
+         let isNotHearRate = false;
         if (message.data.type === "ServiceOff") {
+            isNotHearRate = true;
             mTitle = "Thông báo";
             mMessage = "Dịch vụ truy cập dữ liệu sức khỏe đã dừng, điều này sẽ ảnh hưởng tới việc nhận thông báo nhịp tim của bệnh nhân!"
         } else {
             if (message.data.type === "IntervalChanged") {
+                isNotHearRate = true;
                 mTitle = "Thông báo";
                 mMessage = `Dữ liệu nhịp tim sẽ được gửi tới trong vòng ${message.data.value} phút nữa!`;
             } else {
@@ -39,14 +42,16 @@ export default async (message: RemoteMessage) => {
                                     mMessage = JSON.parse(previousData).message;
         
                                 } else {
-                                    return;
+                                    isNotHearRate = true;
+                                    mTitle = "Thông báo";
+                                    mMessage= "Dữ liệu có thể bị trùng hoặc không xác định"
                                 }
                                 
                                 console.log("data previous: ",previousData)
                             }
                         }
                     }
-                    if (mTitle && mMessage) {
+                    if (mTitle && mMessage && !isNotHeartRate) {
                         console.log("we save this data to storage ", mTitle, mMessage);
                         const wait = await AsyncStorage.setItem("previousData", JSON.stringify({
                             title: mTitle,
