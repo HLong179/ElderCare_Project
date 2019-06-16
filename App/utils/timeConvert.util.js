@@ -86,7 +86,6 @@ export function timeConvert(m){
 
 //function filter data by ( day, week, month);
 export const filterByTime = (arrData, start, end ) => {
-  console.log('fitler Data', arrData);
   let filterData = [];
 
    arrData.filter((data) => {
@@ -97,7 +96,6 @@ export const filterByTime = (arrData, start, end ) => {
   })
 
   let result = averageDataByDate(filterData);
-  console.log('final computed Data', result);
 
   return result;
 }
@@ -138,7 +136,7 @@ export const averageDataByDate = (data) => {
       }
     }
   }
-  console.log('convert Restul', result);
+  
   return result;
 };
 
@@ -147,6 +145,7 @@ export const averageDataByDate = (data) => {
 export const generateDateInterval = (start, type) => {
   let result = [];
   let numOfDays = 7;
+
   if(type === 'week') {
     numOfDays = 21;
   } else if(type === 'month') {
@@ -156,7 +155,7 @@ export const generateDateInterval = (start, type) => {
   for(let i = numOfDays; i >= 0; i--) {
     result.push(moment(start).subtract(i, 'day').format('MM-DD'));
   }
-  console.log('lable Array', result);
+
   return result;
 }
 
@@ -169,25 +168,25 @@ export const averageDateByWeek = (data)  => {
   
   for( let i = 7; i >0; i--) {
     startDate = moment(data[data.length - 1].x).subtract(i, 'weeks').format('YYYY-MM-DD');
-    console.log('object start date', startDate);
     endDate = moment(startDate).add(1, 'weeks').format('YYYY-MM-DD');
-    console.log('object edn date', endDate);
 
     let sum = 0;
+    let count = 0;
 
     for(let j = 0; j < data.length; j ++) {
-      if(data[j].x && moment(data[j].x).isBetween(startDate, endDate)) {
+      if(data[j].y && moment(data[j].x).isBetween(startDate, endDate)) {
         sum += data[j].y;
+        count++;
       }
       
     }
-    console.log('sumsdfsdf', sum);
+
       result.push({
         x: moment(startDate).format('YYYY-MM-DD'),
-        y: Math.round(sum/7),
+        y: sum !== 0 ? Math.round(sum/count) : 0,
       })
   }
-  console.log('endDate', result);
+
   return result;
 
 }
@@ -199,26 +198,25 @@ export const averageDateByMonth = (data)  => {
   
   for( let i = 3; i >0; i--) {
     startDate = moment(data[data.length - 1].x).subtract(i, 'months').format('YYYY-MM-DD');
-    console.log('object start date', startDate);
     endDate = moment(startDate).add(1, 'months').format('YYYY-MM-DD');
-    console.log('object edn date', endDate);
 
     let sum = 0;
+    let count = 0
 
     for(let j = 0; j < data.length; j ++) {
-      if(data[j].x && moment(data[j].x).isBetween(startDate, endDate)) {
+      if(data[j].y && moment(data[j].x).isBetween(startDate, endDate)) {
         sum += data[j].y;
+        count++;
       }
       
     }
-    console.log('sumsdfsdf', sum);
+
       result.push({
         x: moment(startDate).format('YYYY-MM-DD'),
-        y: Math.round(sum/30),
+        y: sum !== 0 ? Math.round(sum/count): 0,
       })
   }
   
-  console.log('endDate', result);
   return result;
 
 }
