@@ -2,6 +2,8 @@ const accountRepo = require("./repos/accountRepo")
 const async = require("async")
 const nodeMailer = require("nodemailer")
 const smtpTransport = require("nodemailer-smtp-transport")
+const moment = require("moment")
+const firebase = require("firebase")
 
 exports.sendEmail = async () => {
   let listData = []
@@ -41,6 +43,38 @@ exports.sendEmail = async () => {
   async.each(
     listData,
     async function(data, callback) {
+      const getAvg = grades => grades.reduce((p, c) => p + c) / grades.length
+
+      let heartRate = [],
+        stepCounts = [],
+        calories = []
+      let startOfWeek = moment()
+        .startOf("isoweek")
+        .toDate()
+        .valueOf()
+      const patientsRef = firebase.database().ref("Patients")
+      const snapshot = await patientsRef.once("value")
+
+      const caloriesFB = snapshot.val()[data.elderId]["Calories"]
+      const stepCountFB = snapshot.val()[data.elderId]["StepCounts"]
+      const heartRateFB = snapshot.val()[data.elderId]["HeartRate"]
+
+      for (let patient in caloriesFB) {
+        if (parseInt(patient, 10) >= startOfWeek) {
+          calories.push(caloriesFB[patient])
+        }
+      }
+      for (let patient in stepCountFB) {
+        if (parseInt(patient, 10) >= startOfWeek) {
+          stepCounts.push(stepCountFB[patient])
+        }
+      }
+      for (let patient in heartRateFB) {
+        if (parseInt(heartRateFB[patient]["time"], 10) >= startOfWeek) {
+          heartRate.push(heartRateFB[patient]["value"])
+        }
+      }
+
       let elderDetail = await accountRepo.elderDetail(data.elderId)
       elderDetail = elderDetail[0]
 
@@ -63,6 +97,27 @@ exports.sendEmail = async () => {
               `<p><span>${note.time}</span>  -  <span>${note.title}
               </span>  -  <span>${note.script}</span></p>`
           )}
+        </div>
+        <h3>Thống kê dữ liệu sức khỏe:<h3>
+        <div style="font-weight: 300; font-size: 13px">
+        <h4>Nhịp tim</h4>
+        <ul>
+          <li>Nhỏ nhất : ${Math.min(...heartRate)} bpm</li>
+          <li>Lớn nhất : ${Math.max(...heartRate)} bpm</li>
+          <li>Trung bình : ${getAvg(heartRate).toFixed(2)} bpm</li>
+        </ul>
+        <h4>Calories</h4>
+        <ul>
+          <li>Nhỏ nhất : ${Math.min(...calories)}</li>
+          <li>Lớn nhất : ${Math.max(...calories)}</li>
+          <li>Trung bình : ${getAvg(calories).toFixed(2)}</li>
+        </ul>
+        <h4>Bước đi</h4>
+        <ul>
+          <li>Nhỏ nhất : ${Math.min(...stepCounts)}</li>
+          <li>Lớn nhất : ${Math.max(...stepCounts)}</li>
+          <li>Trung bình : ${getAvg(stepCounts).toFixed(2)}</li>
+        </ul>
         </div>
         `
       mailOptions.html = htmlCode
