@@ -1,0 +1,18 @@
+.chartButton {
+  display: flex;
+  justify-content: center;
+}
+
+.chartButton span.chartButton {
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 2px 10px;
+  margin: 0 20px;
+}
+
+.chartButton span.active {
+  border-bottom: 2px solid #108ee9;
+}
