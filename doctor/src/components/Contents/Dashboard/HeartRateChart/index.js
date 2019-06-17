@@ -14,12 +14,27 @@ class HeartRate extends Component {
     this.state = {
       labels: [],
       heartRates: [],
-      loading: true
+      loading: true,
+      clicked: "month",
+      dataChart: {
+        labels: [],
+        heartRates: []
+      }
     }
   }
 
   componentDidMount = async () => {
     let { labels, heartRates } = this.state
+    let data = {
+      labels: [],
+      heartRates: []
+    }
+
+    let date = new Date(),
+      y = date.getFullYear(),
+      m = date.getMonth()
+    let firstDayOfMonth = new Date(y, m, 1)
+    firstDayOfMonth = firstDayOfMonth.getTime(firstDayOfMonth)
     const patientsRef = firebase.database().ref("Patients")
     patientsRef.on("value", async snapshot => {
       let patients = snapshot.val()[this.props.elder.ICID]["HeartRate"]
@@ -27,38 +42,113 @@ class HeartRate extends Component {
         let timeLabel = moment(patients[patient]["time"]).format(
           "DD/MM/YYYY HH:mm:ss"
         )
-        if (!labels.includes(timeLabel)) {
-          labels.push(timeLabel)
-          heartRates.push(patients[patient]["value"])
+        if (parseInt(patients[patient]["time"], 10) >= firstDayOfMonth) {
+          if (!labels.includes(patients[patient]["time"])) {
+            labels.push(patients[patient]["time"])
+            heartRates.push(patients[patient]["value"])
+            data.labels.push(timeLabel)
+            data.heartRates.push(patients[patient]["value"])
+          }
         }
       }
       this.setState({
         labels,
         heartRates,
-        loading: false
+        loading: false,
+        dataChart: data
       })
     })
   }
 
+  chartFilterDay = () => {
+    this.setState(
+      {
+        clicked: "day"
+      },
+      () => {
+        let startOfDay = moment()
+
+        const data = {
+          labels: [],
+          heartRates: []
+        }
+        for (let i = 0; i < this.state.labels.length; i++) {
+          if (parseInt(this.state.labels[i], 10) >= startOfDay) {
+            let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
+              "DD/MM/YYYY"
+            )
+            data.labels.push(timeLabel)
+            data.heartRates.push(this.state.heartRates[i])
+          }
+        }
+        this.setState({
+          dataChart: data
+        })
+      }
+    )
+  }
+
+  chartFilterWeek = () => {
+    this.setState(
+      {
+        clicked: "week"
+      },
+      () => {
+        let startOfWeek = moment()
+          .startOf("isoweek")
+          .toDate()
+          .valueOf()
+        const data = {
+          labels: [],
+          heartRates: []
+        }
+        for (let i = 0; i < this.state.labels.length; i++) {
+          if (parseInt(this.state.labels[i], 10) >= startOfWeek) {
+            let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
+              "DD/MM/YYYY"
+            )
+            data.labels.push(timeLabel)
+            data.heartRates.push(this.state.heartRates[i])
+          }
+        }
+        this.setState({
+          dataChart: data
+        })
+      }
+    )
+  }
+
+  chartFilterMonth = () => {
+    this.setState(
+      {
+        clicked: "month"
+      },
+      () => {
+        const data = {
+          labels: [],
+          heartRates: []
+        }
+        for (let i = 0; i < this.state.labels.length; i++) {
+          let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
+            "DD/MM/YYYY"
+          )
+          data.labels.push(timeLabel)
+        }
+        data.heartRates = [...this.state.heartRates]
+        this.setState({
+          dataChart: data
+        })
+      }
+    )
+  }
+
   render() {
     const chartData = {
-      labels:
-        this.state.labels.length >= 20
-          ? this.state.labels.slice(
-              this.state.labels.length - 20,
-              this.state.labels.length
-            )
-          : this.state.labels,
+      labels: this.state.dataChart.labels,
       datasets: [
         {
           label: "Nhịp tim",
-          data:
-            this.state.heartRates.length > 20
-              ? this.state.heartRates.slice(
-                  this.state.heartRates.length - 20,
-                  this.state.heartRates.length
-                )
-              : this.state.heartRates,
+          data: this.state.dataChart.heartRates,
           backgroundColor: "rgba(255, 99, 132, 0.3)",
           borderColor: "rgba(255, 99, 132, 1)",
           borderWidth: 5
@@ -116,7 +206,41 @@ class HeartRate extends Component {
             <Loader type="ThreeDots" color="#00BFFF" height="50" width="50" />
           </div>
         ) : (
-          <Line data={chartData} options={chartOption} />
+          <React.Fragment>
+            <div className="chartButton">
+              <span
+                className={
+                  this.state.clicked === "day"
+                    ? "chartButton active"
+                    : "chartButton"
+                }
+                onClick={this.chartFilterDay}
+              >
+                Ngày
+              </span>
+              <span
+                className={
+                  this.state.clicked === "week"
+                    ? "chartButton active"
+                    : "chartButton"
+                }
+                onClick={this.chartFilterWeek}
+              >
+                Tuần
+              </span>
+              <span
+                className={
+                  this.state.clicked === "month"
+                    ? "chartButton active"
+                    : "chartButton"
+                }
+                onClick={this.chartFilterMonth}
+              >
+                Tháng
+              </span>
+            </div>
+            <Line data={chartData} options={chartOption} />
+          </React.Fragment>
         )}
       </div>
     )
