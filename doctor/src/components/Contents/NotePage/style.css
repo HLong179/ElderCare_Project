@@ -3,7 +3,7 @@
 }
 
 .list-notes .ant-list-item-meta-description {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .list-notes ul.ant-list-item-action {
@@ -13,4 +13,5 @@
 
 .list-notes .meta-data-content {
   margin-bottom: 50px;
+  font-size: 15px;
 }

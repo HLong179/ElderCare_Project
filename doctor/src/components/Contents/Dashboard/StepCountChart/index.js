@@ -15,12 +15,21 @@ class StepCount extends Component {
       labels: [],
       stepCounts: [],
       loading: true,
-      maxCount: 5000
+      maxCount: 5000,
+      dataChart: {
+        labels: [],
+        stepCounts: []
+      },
+      clicked: "month"
     }
   }
 
   componentDidMount = async () => {
     let { labels, stepCounts } = this.state
+    let data = {
+      labels: [],
+      stepCounts: []
+    }
     const patientsRef = firebase.database().ref("Patients")
     patientsRef.on("value", async snapshot => {
       let patients = snapshot.val()[this.props.elder.ICID]["StepCounts"]
@@ -32,15 +41,18 @@ class StepCount extends Component {
       for (let patient in patients) {
         if (parseInt(patient, 10) >= firstDayOfMonth) {
           let timeLabel = moment(parseInt(patient, 10)).format("DD/MM/YYYY")
-          labels.push(timeLabel)
+          labels.push(patient)
           stepCounts.push(patients[patient])
+          data.labels.push(timeLabel)
+          data.stepCounts.push(patients[patient])
         }
       }
       this.setState(
         {
           labels,
           stepCounts,
-          loading: false
+          loading: false,
+          dataChart: data
         },
         () => {
           let maxCount = Math.max(...stepCounts)
@@ -52,13 +64,67 @@ class StepCount extends Component {
     })
   }
 
+  chartFilterWeek = () => {
+    this.setState(
+      {
+        clicked: "week"
+      },
+      () => {
+        let startOfWeek = moment()
+          .startOf("isoweek")
+          .toDate()
+          .valueOf()
+        const data = {
+          labels: [],
+          stepCounts: []
+        }
+        for (let i = 0; i < this.state.labels.length; i++) {
+          if (parseInt(this.state.labels[i], 10) >= startOfWeek) {
+            let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
+              "DD/MM/YYYY"
+            )
+            data.labels.push(timeLabel)
+            data.calories.push(this.state.stepCounts[i])
+          }
+        }
+        this.setState({
+          dataChart: data
+        })
+      }
+    )
+  }
+
+  chartFilterMonth = () => {
+    this.setState(
+      {
+        clicked: "month"
+      },
+      () => {
+        const data = {
+          labels: [],
+          stepCounts: []
+        }
+        for (let i = 0; i < this.state.labels.length; i++) {
+          let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
+            "DD/MM/YYYY"
+          )
+          data.labels.push(timeLabel)
+        }
+        data.stepCounts = [...this.state.stepCounts]
+        this.setState({
+          dataChart: data
+        })
+      }
+    )
+  }
+
   render() {
     const chartData = {
-      labels: this.state.labels,
+      labels: this.state.dataChart.labels,
       datasets: [
         {
           label: "Bước đi",
-          data: this.state.stepCounts,
+          data: this.state.dataChart.stepCounts,
           backgroundColor: "rgba(54, 162, 235, 0.7)",
           borderColor: "rgba(0,0,255, 0.2)",
           hoverBorderColor: "rgba(0,0,255, 1)",
@@ -114,7 +180,31 @@ class StepCount extends Component {
             <Loader type="ThreeDots" color="#00BFFF" height="50" width="50" />
           </div>
         ) : (
-          <Bar data={chartData} options={chartOption} />
+          <React.Fragment>
+            <div className="chartButton">
+              <span
+                className={
+                  this.state.clicked === "week"
+                    ? "chartButton active"
+                    : "chartButton"
+                }
+                onClick={this.chartFilterWeek}
+              >
+                Tuần
+              </span>
+              <span
+                className={
+                  this.state.clicked === "month"
+                    ? "chartButton active"
+                    : "chartButton"
+                }
+                onClick={this.chartFilterMonth}
+              >
+                Tháng
+              </span>
+            </div>
+            <Bar data={chartData} options={chartOption} />
+          </React.Fragment>
         )}
       </div>
     )
