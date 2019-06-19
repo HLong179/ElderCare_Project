@@ -3,6 +3,10 @@ package com.eldercare;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.imagepicker.ImagePickerPackage;
+
+// import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.horcrux.svg.SvgPackage;
@@ -33,12 +37,18 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
+            new MainReactPackage(),
+            new ReactNativePushNotificationPackage(),
+            new ImagePickerPackage(),
+            // new ImagePickerPackage(),
+            // new ReactNativePushNotificationPackage(),
             new SplashScreenReactPackage(),
             new RNGestureHandlerPackage(),
             new SvgPackage(),
             new ReanimatedPackage(),
             new AsyncStoragePackage(),
+            // new ReactNativePushNotificationPackage(),
+            // new ImagePickerPackage(),
             new RNFirebasePackage(),
             //recently add
             new RNFirebaseDatabasePackage(),

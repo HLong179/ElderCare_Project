@@ -71,18 +71,29 @@ class Login extends Component {
                 
                 if (!firebase.apps.length) {
                   console.log('connect to firebase', response.curUser[0].elderId)
-                    const Side = firebase.initializeApp(config.opt, 'test');
-                    
+                  
+                    let Side = firebase.initializeApp(config.opt);
+                  console.log("we init firebase???");
                     Side.onReady().then(app => {
-                   
+                   console.log("and we in here", app);
                       app.messaging().subscribeToTopic(response.curUser[0].elderId);
 
                         this.props.navigation.navigate('Home');
                     })
                     
                 } else {
-                    firebase.messaging().subscribeToTopic(response.curUser[0].elderId);
-                    this.props.navigation.navigate('Home');
+                    // console.log("wtf :", firebase.apps);
+                    
+                    firebase.messaging().subscribeToTopic(response.curUser[0].elderId)
+                    .then(
+                      res => {
+                         this.props.navigation.navigate('Home');
+                      }
+                    )
+                    .catch(e => {
+                      console.log("something wrong here: ", e);
+                    })
+                   
                 }
             } else {
               Toast.show({

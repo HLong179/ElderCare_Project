@@ -51,7 +51,7 @@ export default async (message: RemoteMessage) => {
                             }
                         }
                     }
-                    if (mTitle && mMessage && !isNotHeartRate) {
+                    if (mTitle && mMessage && !isNotHearRate) {
                         console.log("we save this data to storage ", mTitle, mMessage);
                         const wait = await AsyncStorage.setItem("previousData", JSON.stringify({
                             title: mTitle,
@@ -61,6 +61,7 @@ export default async (message: RemoteMessage) => {
                 }
             }
         }
+        console.log("fuck??????")
             PushNotification.localNotification({
                 title : mTitle, // (optional)
                 message: mMessage, // (required)
