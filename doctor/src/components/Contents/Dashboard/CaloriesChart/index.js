@@ -34,19 +34,12 @@ class CaloriesChart extends Component {
     const patientsRef = firebase.database().ref("Patients")
     patientsRef.on("value", async snapshot => {
       let patients = snapshot.val()[this.props.elder.ICID]["Calories"]
-      let date = new Date(),
-        y = date.getFullYear(),
-        m = date.getMonth()
-      let firstDayOfMonth = new Date(y, m, 1)
-      firstDayOfMonth = firstDayOfMonth.getTime(firstDayOfMonth)
       for (let patient in patients) {
-        if (parseInt(patient, 10) >= firstDayOfMonth) {
-          let timeLabel = moment(parseInt(patient, 10)).format("DD/MM/YYYY")
-          labels.push(patient)
-          calories.push(patients[patient])
-          data.labels.push(timeLabel)
-          data.calories.push(patients[patient])
-        }
+        let timeLabel = moment(parseInt(patient, 10)).format("DD/MM/YYYY")
+        labels.push(patient)
+        calories.push(patients[patient])
+        data.labels.push(timeLabel)
+        data.calories.push(patients[patient])
       }
       this.setState(
         {
@@ -57,9 +50,12 @@ class CaloriesChart extends Component {
         },
         () => {
           let maxCount = Math.max(...calories)
-          this.setState({
-            maxCount
-          })
+          this.setState(
+            {
+              maxCount
+            },
+            () => this.chartFilterWeek()
+          )
         }
       )
     })
@@ -71,23 +67,81 @@ class CaloriesChart extends Component {
         clicked: "week"
       },
       () => {
-        let startOfWeek = moment()
-          .startOf("isoweek")
-          .toDate()
-          .valueOf()
         const data = {
           labels: [],
           calories: []
         }
+        let rate = {}
         for (let i = 0; i < this.state.labels.length; i++) {
-          if (parseInt(this.state.labels[i], 10) >= startOfWeek) {
-            let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
-              "DD/MM/YYYY"
-            )
-            data.labels.push(timeLabel)
-            data.calories.push(this.state.calories[i])
+          let timeLabel = parseInt(this.state.labels[i], 10)
+          console.log(moment(timeLabel).date())
+          if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
+            if (rate[timeLabel]) {
+              rate[`1/${moment(timeLabel).month() + 1}`].push(
+                this.state.calories[i]
+              )
+            } else {
+              rate[`1/${moment(timeLabel).month() + 1}`] = [
+                this.state.calories[i]
+              ]
+            }
+          } else if (
+            moment(timeLabel).date() >= 8 &&
+            moment(timeLabel).date() <= 14
+          ) {
+            if (rate[timeLabel]) {
+              rate[`8/${moment(timeLabel).month() + 1}`].push(
+                this.state.calories[i]
+              )
+            } else {
+              rate[`8/${moment(timeLabel).month() + 1}`] = [
+                this.state.calories[i]
+              ]
+            }
+          } else if (
+            moment(timeLabel).date() >= 15 &&
+            moment(timeLabel).date() <= 21
+          ) {
+            if (rate[timeLabel]) {
+              rate[`15/${moment(timeLabel).month() + 1}`].push(
+                this.state.calories[i]
+              )
+            } else {
+              rate[`15/${moment(timeLabel).month() + 1}`] = [
+                this.state.calories[i]
+              ]
+            }
+          } else if (
+            moment(timeLabel).date() >= 22 &&
+            moment(timeLabel).date() <= 28
+          ) {
+            if (rate[timeLabel]) {
+              rate[`22/${moment(timeLabel).month() + 1}`].push(
+                this.state.calories[i]
+              )
+            } else {
+              rate[`22/${moment(timeLabel).month() + 1}`] = [
+                this.state.calories[i]
+              ]
+            }
+          } else {
+            if (rate[timeLabel]) {
+              rate[`29/${moment(timeLabel).month() + 1}`].push(
+                this.state.calories[i]
+              )
+            } else {
+              rate[`29/${moment(timeLabel).month() + 1}`] = [
+                this.state.calories[i]
+              ]
+            }
           }
         }
+        console.log(rate)
+        for (let y in rate) {
+          data.labels.push(y)
+          data.calories.push(this.averageOfArray(rate[y]))
+        }
+
         this.setState({
           dataChart: data
         })
@@ -105,13 +159,22 @@ class CaloriesChart extends Component {
           labels: [],
           calories: []
         }
+        let rate = {}
         for (let i = 0; i < this.state.labels.length; i++) {
           let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
-            "DD/MM/YYYY"
+            "MM/YYYY"
           )
-          data.labels.push(timeLabel)
+          console.log(timeLabel)
+          if (rate[timeLabel]) {
+            rate[timeLabel].push(this.state.calories[i])
+          } else {
+            rate[timeLabel] = [this.state.calories[i]]
+          }
         }
-        data.calories = [...this.state.calories]
+        for (let y in rate) {
+          data.labels.push(y)
+          data.calories.push(this.averageOfArray(rate[y]))
+        }
         this.setState({
           dataChart: data
         })
@@ -119,13 +182,33 @@ class CaloriesChart extends Component {
     )
   }
 
+  averageOfArray = arr => {
+    let result = 0
+    for (let i = 0; i < arr.length; i++) {
+      result += arr[i]
+    }
+    return (result / arr.length).toFixed(1)
+  }
+
   render() {
     const chartData = {
-      labels: this.state.dataChart.labels,
+      labels:
+        this.state.dataChart.labels.length >= 12
+          ? this.state.dataChart.labels.slice(
+              this.state.dataChart.labels.length - 12,
+              this.state.dataChart.labels.length
+            )
+          : this.state.dataChart.labels,
       datasets: [
         {
           label: "Calories",
-          data: this.state.dataChart.calories,
+          data:
+            this.state.dataChart.calories.length >= 12
+              ? this.state.dataChart.calories.slice(
+                  this.state.dataChart.calories.length - 12,
+                  this.state.dataChart.calories.length
+                )
+              : this.state.dataChart.calories,
           backgroundColor: "rgba(255,206,86, 0.7)",
           borderColor: "rgba(255,206,86, 0.1)",
           hoverBorderColor: "orange",
@@ -145,13 +228,6 @@ class CaloriesChart extends Component {
         display: false
       },
       scales: {
-        xAxes: [
-          {
-            ticks: {
-              display: false
-            }
-          }
-        ],
         yAxes: [
           {
             ticks: {

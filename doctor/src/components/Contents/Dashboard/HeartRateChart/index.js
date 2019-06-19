@@ -29,12 +29,6 @@ class HeartRate extends Component {
       labels: [],
       heartRates: []
     }
-
-    let date = new Date(),
-      y = date.getFullYear(),
-      m = date.getMonth()
-    let firstDayOfMonth = new Date(y, m, 1)
-    firstDayOfMonth = firstDayOfMonth.getTime(firstDayOfMonth)
     const patientsRef = firebase.database().ref("Patients")
     patientsRef.on("value", async snapshot => {
       let patients = snapshot.val()[this.props.elder.ICID]["HeartRate"]
@@ -42,13 +36,12 @@ class HeartRate extends Component {
         let timeLabel = moment(patients[patient]["time"]).format(
           "DD/MM/YYYY HH:mm:ss"
         )
-        if (parseInt(patients[patient]["time"], 10) >= firstDayOfMonth) {
-          if (!labels.includes(patients[patient]["time"])) {
-            labels.push(patients[patient]["time"])
-            heartRates.push(patients[patient]["value"])
-            data.labels.push(timeLabel)
-            data.heartRates.push(patients[patient]["value"])
-          }
+
+        if (!labels.includes(patients[patient]["time"])) {
+          labels.push(patients[patient]["time"])
+          heartRates.push(patients[patient]["value"])
+          data.labels.push(timeLabel)
+          data.heartRates.push(patients[patient]["value"])
         }
       }
       this.setState(
@@ -120,7 +113,7 @@ class HeartRate extends Component {
           let timeLabel = this.state.labels[i]
           if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
             if (rate[timeLabel]) {
-              rate[`1/{moment(timeLabel).month() + 1}`].push(
+              rate[`1/${moment(timeLabel).month() + 1}`].push(
                 this.state.heartRates[i]
               )
             } else {
@@ -180,7 +173,6 @@ class HeartRate extends Component {
           }
         }
 
-        console.log(rate)
         for (let y in rate) {
           data.labels.push(y)
           data.heartRates.push(this.averageOfArray(rate[y]))
