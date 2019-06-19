@@ -1,3 +1,3 @@
 module.exports = Object({
-  LOCAL_IP: "172.16.3.22"
+  LOCAL_IP: "https://elderlycare-backend.herokuapp.com"
 })

@@ -35,7 +35,6 @@ class HeartCard extends Component {
   }
 
   render () {
-    console.log("ssssssssssssss:  ",this.props.socket);
 
     return (
       <TouchableOpacity onPress={this.toHeartRate}>

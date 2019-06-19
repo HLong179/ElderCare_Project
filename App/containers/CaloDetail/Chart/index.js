@@ -33,7 +33,6 @@ const Chart = (props) => {
 
   if(rawData) {
     let { data, labelArray } = processChartData(rawData, type);
-    console.log('calordata', data);
 
     return (
       <Svg

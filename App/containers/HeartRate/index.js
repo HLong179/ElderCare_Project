@@ -55,9 +55,7 @@ class HeartRate extends React.Component {
       .ref("Patients")
       .child(jsonData.elderId).child("HeartRate")
       .once("value",  snapshot => {
-            console.log('snapshot heart rate value', snapshot.val());
             rawData = [...Object.values(snapshot.val())];
-            console.log('raw Data', rawData);
             rawData.sort(compare);
 
             this.setState({
@@ -88,15 +86,10 @@ class HeartRate extends React.Component {
     const { heartData } = this.state
     const endTime = new Date().getTime();
     const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
-    console.log('startTime', startTime);
     
-    console.log('endTime', endTime);
-    
-
     let data = filterByTime(heartData, startTime, endTime);
     let weekData = averageDateByWeek(data);
 
-    console.log('heart week data', data);
     this.setState({
       displayHeartData: weekData
     })
@@ -107,13 +100,11 @@ class HeartRate extends React.Component {
     const { heartData } = this.state
     const endTime = new Date().getTime();
     const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
-    console.log('startTime', startTime);
     
 
     let data = filterByTime(heartData, startTime, endTime);
     let monthData = averageDateByMonth(data);
 
-    console.log('heart week data', data);
     this.setState({
       displayHeartData: monthData
     })

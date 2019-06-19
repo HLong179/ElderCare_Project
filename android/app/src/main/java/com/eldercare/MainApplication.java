@@ -1,22 +1,23 @@
-package com.newtestreactapp;
+package com.eldercare;
 
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.horcrux.svg.SvgPackage;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.horcrux.svg.SvgPackage;
+import com.swmansion.reanimated.ReanimatedPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import io.invertase.firebase.RNFirebasePackage;
-import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+
+//recently add
+import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,14 +34,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new ReactNativePushNotificationPackage(),
-            new ImagePickerPackage(),
-            new SvgPackage(),
-            new AsyncStoragePackage(),
             new SplashScreenReactPackage(),
-            new RNI18nPackage(),
             new RNGestureHandlerPackage(),
+            new SvgPackage(),
+            new ReanimatedPackage(),
+            new AsyncStoragePackage(),
             new RNFirebasePackage(),
+            //recently add
             new RNFirebaseDatabasePackage(),
             new RNFirebaseMessagingPackage()
       );

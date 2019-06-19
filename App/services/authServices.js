@@ -1,4 +1,3 @@
-import axios from 'axios';
 // const requestURL = 'http://192.168.1.9:6900'
 import SETTINGS from "../settings"
 import firebase from 'react-native-firebase';

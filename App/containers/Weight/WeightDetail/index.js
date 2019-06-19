@@ -52,7 +52,6 @@ class CalorDetail extends React.Component {
       .ref("Patients")
       .child(jsonData.elderId).child("StepCounts")
       .once("value",  snapshot => {
-          console.log('StepCount', snapshot.val());
             let stepData = formatData(snapshot.val());
 
             stepData.sort(compare);
@@ -82,10 +81,9 @@ class CalorDetail extends React.Component {
     const endTime = new Date().getTime();
     const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
 
-
     let data = filterByTime(stepData, startTime, endTime);
-    console.log('calor weekData', data);
     let weekData = averageDateByWeek(data);
+
     this.setState({
         displayStepData: weekData
     })

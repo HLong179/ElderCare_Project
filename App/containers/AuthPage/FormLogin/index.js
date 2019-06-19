@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Text} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import translate from '../../../utils/language.utils';
 import styled from "styled-components";
 import {Content, Form, Label, Icon, Input, Toast} from "native-base";
 import Item from "../../../components/CommonItemInput";
@@ -37,7 +36,7 @@ class Login extends Component {
         this.state = {
             username: '',
             password: '',
-            isLogged: '',
+            isLogged: ''
         }
             
     }
@@ -48,8 +47,10 @@ class Login extends Component {
             username: username.trim(),
             password: password.trim(),
         }
+        
+        console.log('path',`${SETTINGS.LOCAL_IP}/account/login`);
 
-        fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/login`, {
+        fetch(`${SETTINGS.LOCAL_IP}/account/login`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -123,11 +124,11 @@ class Login extends Component {
                 {props => (
                   <Form>
                     <StyleHeader>
-                      {translate("LOGIN_header")}
+                      {'Login In'}
                     </StyleHeader>
                     <Item>
                       <Input
-                        placeholder={translate("LOGIN_email")}
+                        placeholder={'Username'}
                         name={"username"}
                         onChangeText={props.handleChange("username")}
                         ref={input => (this._email = input)}
@@ -151,7 +152,7 @@ class Login extends Component {
 
                     <Item>
                       <Input
-                        placeholder={translate("LOGIN_password")}
+                        placeholder={'Password'}
                         name={"password"}
                         onChangeText={props.handleChange("password")}
                         ref={input => (this._password = input)}
@@ -170,12 +171,12 @@ class Login extends Component {
 
                     <Button style={{marginTop: 10}}
                       onPress={props.handleSubmit}
-                      title={translate("LOGIN_loginButton")}
+                      title={'LOGIN'}
                     />
                     <Button
                       transparent
                       color="gray"
-                      title={translate("LOGIN_forgotPassword")}
+                      title={'Forgot password'}
                       onPress={this.handleForgotPassword}
                     />
                     <Button transparent color={'blue'} primary title={"Đăng kí tài khoản mới"} onPress={this.onClickSignUp} />
