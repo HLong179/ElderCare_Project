@@ -33,19 +33,13 @@ class StepCount extends Component {
     const patientsRef = firebase.database().ref("Patients")
     patientsRef.on("value", async snapshot => {
       let patients = snapshot.val()[this.props.elder.ICID]["StepCounts"]
-      let date = new Date(),
-        y = date.getFullYear(),
-        m = date.getMonth()
-      let firstDayOfMonth = new Date(y, m, 1)
-      firstDayOfMonth = firstDayOfMonth.getTime(firstDayOfMonth)
+
       for (let patient in patients) {
-        if (parseInt(patient, 10) >= firstDayOfMonth) {
-          let timeLabel = moment(parseInt(patient, 10)).format("DD/MM/YYYY")
-          labels.push(patient)
-          stepCounts.push(patients[patient])
-          data.labels.push(timeLabel)
-          data.stepCounts.push(patients[patient])
-        }
+        let timeLabel = moment(parseInt(patient, 10)).format("DD/MM/YYYY")
+        labels.push(patient)
+        stepCounts.push(patients[patient])
+        data.labels.push(timeLabel)
+        data.stepCounts.push(patients[patient])
       }
       this.setState(
         {
@@ -56,9 +50,12 @@ class StepCount extends Component {
         },
         () => {
           let maxCount = Math.max(...stepCounts)
-          this.setState({
-            maxCount
-          })
+          this.setState(
+            {
+              maxCount
+            },
+            () => this.chartFilterWeek()
+          )
         }
       )
     })
@@ -70,23 +67,79 @@ class StepCount extends Component {
         clicked: "week"
       },
       () => {
-        let startOfWeek = moment()
-          .startOf("isoweek")
-          .toDate()
-          .valueOf()
         const data = {
           labels: [],
           stepCounts: []
         }
+        let rate = {}
         for (let i = 0; i < this.state.labels.length; i++) {
-          if (parseInt(this.state.labels[i], 10) >= startOfWeek) {
-            let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
-              "DD/MM/YYYY"
-            )
-            data.labels.push(timeLabel)
-            data.calories.push(this.state.stepCounts[i])
+          let timeLabel = parseInt(this.state.labels[i], 10)
+          if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
+            if (rate[timeLabel]) {
+              rate[`1/${moment(timeLabel).month() + 1}`].push(
+                this.state.stepCounts[i]
+              )
+            } else {
+              rate[`1/${moment(timeLabel).month() + 1}`] = [
+                this.state.stepCounts[i]
+              ]
+            }
+          } else if (
+            moment(timeLabel).date() >= 8 &&
+            moment(timeLabel).date() <= 14
+          ) {
+            if (rate[timeLabel]) {
+              rate[`8/${moment(timeLabel).month() + 1}`].push(
+                this.state.stepCounts[i]
+              )
+            } else {
+              rate[`8/${moment(timeLabel).month() + 1}`] = [
+                this.state.stepCounts[i]
+              ]
+            }
+          } else if (
+            moment(timeLabel).date() >= 15 &&
+            moment(timeLabel).date() <= 21
+          ) {
+            if (rate[timeLabel]) {
+              rate[`15/${moment(timeLabel).month() + 1}`].push(
+                this.state.stepCounts[i]
+              )
+            } else {
+              rate[`15/${moment(timeLabel).month() + 1}`] = [
+                this.state.stepCounts[i]
+              ]
+            }
+          } else if (
+            moment(timeLabel).date() >= 22 &&
+            moment(timeLabel).date() <= 28
+          ) {
+            if (rate[timeLabel]) {
+              rate[`22/${moment(timeLabel).month() + 1}`].push(
+                this.state.stepCounts[i]
+              )
+            } else {
+              rate[`22/${moment(timeLabel).month() + 1}`] = [
+                this.state.stepCounts[i]
+              ]
+            }
+          } else {
+            if (rate[timeLabel]) {
+              rate[`29/${moment(timeLabel).month() + 1}`].push(
+                this.state.stepCounts[i]
+              )
+            } else {
+              rate[`29/${moment(timeLabel).month() + 1}`] = [
+                this.state.stepCounts[i]
+              ]
+            }
           }
         }
+        for (let y in rate) {
+          data.labels.push(y)
+          data.stepCounts.push(this.averageOfArray(rate[y]))
+        }
+
         this.setState({
           dataChart: data
         })
@@ -104,13 +157,21 @@ class StepCount extends Component {
           labels: [],
           stepCounts: []
         }
+        let rate = {}
         for (let i = 0; i < this.state.labels.length; i++) {
           let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
-            "DD/MM/YYYY"
+            "MM/YYYY"
           )
-          data.labels.push(timeLabel)
+          if (rate[timeLabel]) {
+            rate[timeLabel].push(this.state.stepCounts[i])
+          } else {
+            rate[timeLabel] = [this.state.stepCounts[i]]
+          }
         }
-        data.stepCounts = [...this.state.stepCounts]
+        for (let y in rate) {
+          data.labels.push(y)
+          data.stepCounts.push(this.averageOfArray(rate[y]))
+        }
         this.setState({
           dataChart: data
         })
@@ -118,13 +179,33 @@ class StepCount extends Component {
     )
   }
 
+  averageOfArray = arr => {
+    let result = 0
+    for (let i = 0; i < arr.length; i++) {
+      result += arr[i]
+    }
+    return (result / arr.length).toFixed(1)
+  }
+
   render() {
     const chartData = {
-      labels: this.state.dataChart.labels,
+      labels:
+        this.state.dataChart.labels.length >= 12
+          ? this.state.dataChart.labels.slice(
+              this.state.dataChart.labels.length - 12,
+              this.state.dataChart.labels.length
+            )
+          : this.state.dataChart.labels,
       datasets: [
         {
           label: "Bước đi",
-          data: this.state.dataChart.stepCounts,
+          data:
+            this.state.dataChart.stepCounts.length >= 12
+              ? this.state.dataChart.stepCounts.slice(
+                  this.state.dataChart.stepCounts.length - 12,
+                  this.state.dataChart.stepCounts.length
+                )
+              : this.state.dataChart.stepCounts,
           backgroundColor: "rgba(54, 162, 235, 0.7)",
           borderColor: "rgba(0,0,255, 0.2)",
           hoverBorderColor: "rgba(0,0,255, 1)",
@@ -144,13 +225,6 @@ class StepCount extends Component {
         display: false
       },
       scales: {
-        xAxes: [
-          {
-            ticks: {
-              display: false
-            }
-          }
-        ],
         yAxes: [
           {
             ticks: {

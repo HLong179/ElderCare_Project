@@ -74,7 +74,6 @@ class CaloriesChart extends Component {
         let rate = {}
         for (let i = 0; i < this.state.labels.length; i++) {
           let timeLabel = parseInt(this.state.labels[i], 10)
-          console.log(moment(timeLabel).date())
           if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
             if (rate[timeLabel]) {
               rate[`1/${moment(timeLabel).month() + 1}`].push(
@@ -136,7 +135,6 @@ class CaloriesChart extends Component {
             }
           }
         }
-        console.log(rate)
         for (let y in rate) {
           data.labels.push(y)
           data.calories.push(this.averageOfArray(rate[y]))
@@ -164,7 +162,6 @@ class CaloriesChart extends Component {
           let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
             "MM/YYYY"
           )
-          console.log(timeLabel)
           if (rate[timeLabel]) {
             rate[timeLabel].push(this.state.calories[i])
           } else {
