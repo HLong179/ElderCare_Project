@@ -258,9 +258,4 @@ var endDate = schedule.scheduleJob('getTotalInTheEnd', '00 23 * * *', () => {
             getStepCounts(elderId);
         });
     })
-  })
-
-
- 
-
- 
+  });
