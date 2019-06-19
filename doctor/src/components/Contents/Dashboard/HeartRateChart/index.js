@@ -113,11 +113,11 @@ class HeartRate extends Component {
           let timeLabel = this.state.labels[i]
           if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
             if (rate[timeLabel]) {
-              rate[`1/${moment(timeLabel).month() + 1}`].push(
+              rate[`1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`].push(
                 this.state.heartRates[i]
               )
             } else {
-              rate[`1/${moment(timeLabel).month() + 1}`] = [
+              rate[`1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`] = [
                 this.state.heartRates[i]
               ]
             }
@@ -126,11 +126,11 @@ class HeartRate extends Component {
             moment(timeLabel).date() <= 14
           ) {
             if (rate[timeLabel]) {
-              rate[`8/${moment(timeLabel).month() + 1}`].push(
+              rate[`8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`].push(
                 this.state.heartRates[i]
               )
             } else {
-              rate[`8/${moment(timeLabel).month() + 1}`] = [
+              rate[`8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`] = [
                 this.state.heartRates[i]
               ]
             }
@@ -139,11 +139,11 @@ class HeartRate extends Component {
             moment(timeLabel).date() <= 21
           ) {
             if (rate[timeLabel]) {
-              rate[`15/${moment(timeLabel).month() + 1}`].push(
+              rate[`15/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`].push(
                 this.state.heartRates[i]
               )
             } else {
-              rate[`15/${moment(timeLabel).month() + 1}`] = [
+              rate[`15/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`] = [
                 this.state.heartRates[i]
               ]
             }
@@ -152,21 +152,21 @@ class HeartRate extends Component {
             moment(timeLabel).date() <= 28
           ) {
             if (rate[timeLabel]) {
-              rate[`22/${moment(timeLabel).month() + 1}`].push(
+              rate[`22/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`].push(
                 this.state.heartRates[i]
               )
             } else {
-              rate[`22/${moment(timeLabel).month() + 1}`] = [
+              rate[`22/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`] = [
                 this.state.heartRates[i]
               ]
             }
           } else {
             if (rate[timeLabel]) {
-              rate[`29/${moment(timeLabel).month() + 1}`].push(
+              rate[`29/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`].push(
                 this.state.heartRates[i]
               )
             } else {
-              rate[`29/${moment(timeLabel).month() + 1}`] = [
+              rate[`29/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`] = [
                 this.state.heartRates[i]
               ]
             }

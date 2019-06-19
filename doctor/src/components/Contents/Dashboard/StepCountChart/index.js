@@ -20,7 +20,7 @@ class StepCount extends Component {
         labels: [],
         stepCounts: []
       },
-      clicked: "month"
+      clicked: "day"
     }
   }
 
@@ -54,11 +54,45 @@ class StepCount extends Component {
             {
               maxCount
             },
-            () => this.chartFilterWeek()
+            () => this.chartFilterDay()
           )
         }
       )
     })
+  }
+
+  chartFilterDay = () => {
+    this.setState(
+      {
+        clicked: "day"
+      },
+      () => {
+        const rate = {}
+        const data = {
+          labels: [],
+          stepCounts: []
+        }
+        for (let i = 0; i < this.state.labels.length; i++) {
+          let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
+            "DD/MM/YYYY"
+          )
+          if (rate[timeLabel]) {
+            rate[timeLabel].push(this.state.stepCounts[i])
+          } else {
+            rate[timeLabel] = [this.state.stepCounts[i]]
+          }
+        }
+
+        for (let y in rate) {
+          data.labels.push(y)
+          data.stepCounts.push(this.averageOfArray(rate[y]))
+        }
+
+        this.setState({
+          dataChart: data
+        })
+      }
+    )
   }
 
   chartFilterWeek = () => {
@@ -76,62 +110,74 @@ class StepCount extends Component {
           let timeLabel = parseInt(this.state.labels[i], 10)
           if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
             if (rate[timeLabel]) {
-              rate[`1/${moment(timeLabel).month() + 1}`].push(
-                this.state.stepCounts[i]
-              )
+              rate[
+                `1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+              ].push(this.state.stepCounts[i])
             } else {
-              rate[`1/${moment(timeLabel).month() + 1}`] = [
-                this.state.stepCounts[i]
-              ]
+              rate[
+                `1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+              ] = [this.state.stepCounts[i]]
             }
           } else if (
             moment(timeLabel).date() >= 8 &&
             moment(timeLabel).date() <= 14
           ) {
             if (rate[timeLabel]) {
-              rate[`8/${moment(timeLabel).month() + 1}`].push(
-                this.state.stepCounts[i]
-              )
+              rate[
+                `8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+              ].push(this.state.stepCounts[i])
             } else {
-              rate[`8/${moment(timeLabel).month() + 1}`] = [
-                this.state.stepCounts[i]
-              ]
+              rate[
+                `8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+              ] = [this.state.stepCounts[i]]
             }
           } else if (
             moment(timeLabel).date() >= 15 &&
             moment(timeLabel).date() <= 21
           ) {
             if (rate[timeLabel]) {
-              rate[`15/${moment(timeLabel).month() + 1}`].push(
-                this.state.stepCounts[i]
-              )
+              rate[
+                `15/${moment(timeLabel).month() + 1}/${moment(
+                  timeLabel
+                ).year()}`
+              ].push(this.state.stepCounts[i])
             } else {
-              rate[`15/${moment(timeLabel).month() + 1}`] = [
-                this.state.stepCounts[i]
-              ]
+              rate[
+                `15/${moment(timeLabel).month() + 1}/${moment(
+                  timeLabel
+                ).year()}`
+              ] = [this.state.stepCounts[i]]
             }
           } else if (
             moment(timeLabel).date() >= 22 &&
             moment(timeLabel).date() <= 28
           ) {
             if (rate[timeLabel]) {
-              rate[`22/${moment(timeLabel).month() + 1}`].push(
-                this.state.stepCounts[i]
-              )
+              rate[
+                `22/${moment(timeLabel).month() + 1}/${moment(
+                  timeLabel
+                ).year()}`
+              ].push(this.state.stepCounts[i])
             } else {
-              rate[`22/${moment(timeLabel).month() + 1}`] = [
-                this.state.stepCounts[i]
-              ]
+              rate[
+                `22/${moment(timeLabel).month() + 1}/${moment(
+                  timeLabel
+                ).year()}`
+              ] = [this.state.stepCounts[i]]
             }
           } else {
             if (rate[timeLabel]) {
-              rate[`29/${moment(timeLabel).month() + 1}`].push(
-                this.state.stepCounts[i]
-              )
+              rate[
+                `29/${moment(timeLabel).month() + 1}/${moment(
+                  timeLabel
+                ).year()}`
+              ].push(this.state.stepCounts[i])
             } else {
-              rate[`29/${moment(timeLabel).month() + 1}`] = [
-                this.state.stepCounts[i]
-              ]
+              rate[
+                `29/${moment(timeLabel).month() + 1}/${moment(
+                  timeLabel
+                ).year()}`
+              ] = [this.state.stepCounts[i]]
             }
           }
         }
@@ -256,6 +302,16 @@ class StepCount extends Component {
         ) : (
           <React.Fragment>
             <div className="chartButton">
+              <span
+                className={
+                  this.state.clicked === "day"
+                    ? "chartButton active"
+                    : "chartButton"
+                }
+                onClick={this.chartFilterDay}
+              >
+                Ngày
+              </span>
               <span
                 className={
                   this.state.clicked === "week"
