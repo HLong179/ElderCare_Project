@@ -4,7 +4,7 @@ import SETTING from "../setting"
 export const registerUser = (userData, history) => dispatch => {}
 
 export const login = (data, history) => async dispatch => {
-  const response = await fetch(`http://${SETTING}:6900/account/login`, {
+  const response = await fetch(`http://${SETTING}/account/login`, {
     method: "POST",
     headers: {
       Accept: "application/json",

@@ -1,1 +1,1 @@
-export default "localhost"
+export default "elderlycare-backend.herokuapp.com"
