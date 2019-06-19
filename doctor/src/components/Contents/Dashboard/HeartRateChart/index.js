@@ -51,12 +51,15 @@ class HeartRate extends Component {
           }
         }
       }
-      this.setState({
-        labels,
-        heartRates,
-        loading: false,
-        dataChart: data
-      })
+      this.setState(
+        {
+          labels,
+          heartRates,
+          loading: false,
+          dataChart: data
+        },
+        () => this.chartFilterDay()
+      )
     })
   }
 
@@ -66,26 +69,40 @@ class HeartRate extends Component {
         clicked: "day"
       },
       () => {
-        let startOfDay = moment()
-
+        const rate = {}
         const data = {
           labels: [],
           heartRates: []
         }
         for (let i = 0; i < this.state.labels.length; i++) {
-          if (parseInt(this.state.labels[i], 10) >= startOfDay) {
-            let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
-              "DD/MM/YYYY"
-            )
-            data.labels.push(timeLabel)
-            data.heartRates.push(this.state.heartRates[i])
+          let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
+            "DD/MM/YYYY"
+          )
+          if (rate[timeLabel]) {
+            rate[timeLabel].push(this.state.heartRates[i])
+          } else {
+            rate[timeLabel] = [this.state.heartRates[i]]
           }
         }
+
+        for (let y in rate) {
+          data.labels.push(y)
+          data.heartRates.push(this.averageOfArray(rate[y]))
+        }
+
         this.setState({
           dataChart: data
         })
       }
     )
+  }
+
+  averageOfArray = arr => {
+    let result = 0
+    for (let i = 0; i < arr.length; i++) {
+      result += arr[i]
+    }
+    return (result / arr.length).toFixed(1)
   }
 
   chartFilterWeek = () => {
@@ -94,23 +111,81 @@ class HeartRate extends Component {
         clicked: "week"
       },
       () => {
-        let startOfWeek = moment()
-          .startOf("isoweek")
-          .toDate()
-          .valueOf()
         const data = {
           labels: [],
           heartRates: []
         }
+        let rate = {}
         for (let i = 0; i < this.state.labels.length; i++) {
-          if (parseInt(this.state.labels[i], 10) >= startOfWeek) {
-            let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
-              "DD/MM/YYYY"
-            )
-            data.labels.push(timeLabel)
-            data.heartRates.push(this.state.heartRates[i])
+          let timeLabel = this.state.labels[i]
+          if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
+            if (rate[timeLabel]) {
+              rate[`1/{moment(timeLabel).month() + 1}`].push(
+                this.state.heartRates[i]
+              )
+            } else {
+              rate[`1/${moment(timeLabel).month() + 1}`] = [
+                this.state.heartRates[i]
+              ]
+            }
+          } else if (
+            moment(timeLabel).date() >= 8 &&
+            moment(timeLabel).date() <= 14
+          ) {
+            if (rate[timeLabel]) {
+              rate[`8/${moment(timeLabel).month() + 1}`].push(
+                this.state.heartRates[i]
+              )
+            } else {
+              rate[`8/${moment(timeLabel).month() + 1}`] = [
+                this.state.heartRates[i]
+              ]
+            }
+          } else if (
+            moment(timeLabel).date() >= 15 &&
+            moment(timeLabel).date() <= 21
+          ) {
+            if (rate[timeLabel]) {
+              rate[`15/${moment(timeLabel).month() + 1}`].push(
+                this.state.heartRates[i]
+              )
+            } else {
+              rate[`15/${moment(timeLabel).month() + 1}`] = [
+                this.state.heartRates[i]
+              ]
+            }
+          } else if (
+            moment(timeLabel).date() >= 22 &&
+            moment(timeLabel).date() <= 28
+          ) {
+            if (rate[timeLabel]) {
+              rate[`22/${moment(timeLabel).month() + 1}`].push(
+                this.state.heartRates[i]
+              )
+            } else {
+              rate[`22/${moment(timeLabel).month() + 1}`] = [
+                this.state.heartRates[i]
+              ]
+            }
+          } else {
+            if (rate[timeLabel]) {
+              rate[`29/${moment(timeLabel).month() + 1}`].push(
+                this.state.heartRates[i]
+              )
+            } else {
+              rate[`29/${moment(timeLabel).month() + 1}`] = [
+                this.state.heartRates[i]
+              ]
+            }
           }
         }
+
+        console.log(rate)
+        for (let y in rate) {
+          data.labels.push(y)
+          data.heartRates.push(this.averageOfArray(rate[y]))
+        }
+
         this.setState({
           dataChart: data
         })
@@ -128,13 +203,21 @@ class HeartRate extends Component {
           labels: [],
           heartRates: []
         }
+        let rate = {}
         for (let i = 0; i < this.state.labels.length; i++) {
           let timeLabel = moment(parseInt(this.state.labels[i], 10)).format(
-            "DD/MM/YYYY"
+            "MM/YYYY"
           )
-          data.labels.push(timeLabel)
+          if (rate[timeLabel]) {
+            rate[timeLabel].push(this.state.heartRates[i])
+          } else {
+            rate[timeLabel] = [this.state.heartRates[i]]
+          }
         }
-        data.heartRates = [...this.state.heartRates]
+        for (let y in rate) {
+          data.labels.push(y)
+          data.heartRates.push(this.averageOfArray(rate[y]))
+        }
         this.setState({
           dataChart: data
         })
@@ -144,11 +227,23 @@ class HeartRate extends Component {
 
   render() {
     const chartData = {
-      labels: this.state.dataChart.labels,
+      labels:
+        this.state.dataChart.labels.length >= 12
+          ? this.state.dataChart.labels.slice(
+              this.state.dataChart.labels.length - 12,
+              this.state.dataChart.labels.length
+            )
+          : this.state.dataChart.labels,
       datasets: [
         {
           label: "Nhịp tim",
-          data: this.state.dataChart.heartRates,
+          data:
+            this.state.dataChart.heartRates.length >= 12
+              ? this.state.dataChart.heartRates.slice(
+                  this.state.dataChart.heartRates.length - 12,
+                  this.state.dataChart.heartRates.length
+                )
+              : this.state.dataChart.heartRates,
           backgroundColor: "rgba(255, 99, 132, 0.3)",
           borderColor: "rgba(255, 99, 132, 1)",
           borderWidth: 5
@@ -170,13 +265,13 @@ class HeartRate extends Component {
         position: "right"
       },
       scales: {
-        xAxes: [
-          {
-            ticks: {
-              display: false
-            }
-          }
-        ],
+        // xAxes: [
+        //   {
+        //     ticks: {
+        //       display: false
+        //     }
+        //   }
+        // ],
         yAxes: [
           {
             ticks: {
@@ -188,6 +283,7 @@ class HeartRate extends Component {
         ]
       }
     }
+
     return (
       <div>
         <Title level={3} style={{ marginTop: 40 }}>

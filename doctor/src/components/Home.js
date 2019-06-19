@@ -24,26 +24,30 @@ class Home extends Component {
     if (this.props.location.pathname === "/") {
       this.props.history.push("/dashboard")
     }
-    let data = localStorage.getItem("userData")
-    data = JSON.parse(data)
-    let timeNow = new Date().getTime()
-    if (timeNow - data.lastLogin >= 60 * 60 * 1000) {
-      this.props.logout(this.props.history)
-      message.warn("Phiên đăng nhập đã hết hạn. Mời bạn đăng nhập lại", 3)
-    }
-    if (!firebase.apps.length) {
-      console.log("we connect firebase")
-      var firebaseConfig = {
-        apiKey: "AIzaSyBhkXtTybamYMmxnZU2aYdoHf2Hy2uH1DQ",
-        authDomain: "eldercare-5e4c8.firebaseapp.com",
-        databaseURL: "https://eldercare-5e4c8.firebaseio.com",
-        projectId: "eldercare-5e4c8",
-        storageBucket: "eldercare-5e4c8.appspot.com",
-        messagingSenderId: "49718683704",
-        appId: "1:49718683704:web:1f894eef1258ff88"
+    if (localStorage.getItem("userData")) {
+      let data = localStorage.getItem("userData")
+      data = JSON.parse(data)
+      let timeNow = new Date().getTime()
+      if (timeNow - data.lastLogin >= 60 * 60 * 1000) {
+        this.props.logout(this.props.history)
+        message.warn("Phiên đăng nhập đã hết hạn. Mời bạn đăng nhập lại", 3)
       }
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig)
+      if (!firebase.apps.length) {
+        console.log("we connect firebase")
+        var firebaseConfig = {
+          apiKey: "AIzaSyBhkXtTybamYMmxnZU2aYdoHf2Hy2uH1DQ",
+          authDomain: "eldercare-5e4c8.firebaseapp.com",
+          databaseURL: "https://eldercare-5e4c8.firebaseio.com",
+          projectId: "eldercare-5e4c8",
+          storageBucket: "eldercare-5e4c8.appspot.com",
+          messagingSenderId: "49718683704",
+          appId: "1:49718683704:web:1f894eef1258ff88"
+        }
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig)
+      }
+    } else {
+      this.props.history.push("/login")
     }
   }
   componentDidMount() {
@@ -81,8 +85,10 @@ class Home extends Component {
                 <Route path="/dashboard" component={DashboardContent} />
                 <Route path="/medicines" component={MedicinePage} />
                 <Route path="/notes" component={NotePage} />
-                {this.props.auth.user.permission === "Main" ? (
-                  <Route path="/relatives" component={ListRelative} />
+                {this.props.auth.user ? (
+                  this.props.auth.user.permission === "Main" ? (
+                    <Route path="/relatives" component={ListRelative} />
+                  ) : null
                 ) : null}
               </Switch>
               <AFooter />

@@ -9,7 +9,7 @@ import SETTING from "../setting"
 
 export const addSubRelative = userData => dispatch => {
   axios
-    .post(`http://${SETTING}/account/addSubUser`, userData)
+    .post(`${SETTING}/account/addSubUser`, userData)
     .then(res => {
       dispatch(fetchRelatives({ elderId: userData.elder_id }))
     })
@@ -18,7 +18,7 @@ export const addSubRelative = userData => dispatch => {
 
 export const fetchRelatives = elderId => async dispatch => {
   await axios
-    .post(`http://${SETTING}/account/listRelatives`, elderId)
+    .post(`${SETTING}/account/listRelatives`, elderId)
     .then(res => {
       dispatch({
         type: FETCH_RELATIVES,
@@ -30,7 +30,7 @@ export const fetchRelatives = elderId => async dispatch => {
 
 export const fetchPatient = elderId => dispatch => {
   axios
-    .post(`http://${SETTING}/account/elderDetail`, { elderId: elderId })
+    .post(`${SETTING}/account/elderDetail`, { elderId: elderId })
     .then(res => {
       dispatch({
         type: FETCH_PATIENT,
@@ -41,7 +41,7 @@ export const fetchPatient = elderId => dispatch => {
 }
 export const removeSubUser = relativeId => dispatch => {
   axios
-    .post(`http://${SETTING}/account/removeSubUser`, {
+    .post(`${SETTING}/account/removeSubUser`, {
       relativeId: relativeId
     })
     .then(res => {
@@ -54,7 +54,7 @@ export const removeSubUser = relativeId => dispatch => {
 }
 export const updateRelative = data => dispatch => {
   axios
-    .post(`http://${SETTING}/account/updateSubUser`, data)
+    .post(`${SETTING}/account/updateSubUser`, data)
     .then(res => {
       console.log(res)
       dispatch(fetchRelatives({ elderId: data.elderId }))
@@ -64,7 +64,7 @@ export const updateRelative = data => dispatch => {
 
 export const fetchNotes = elderId => async dispatch => {
   await axios
-    .post(`http://${SETTING}/account/getNotes`, elderId)
+    .post(`${SETTING}/account/getNotes`, elderId)
     .then(res => {
       dispatch({
         type: FETCH_NOTES,
@@ -76,7 +76,7 @@ export const fetchNotes = elderId => async dispatch => {
 
 export const addNote = userData => dispatch => {
   axios
-    .post(`http://${SETTING}/account/addNote`, userData)
+    .post(`${SETTING}/account/addNote`, userData)
     .then(res => {
       dispatch(fetchNotes({ elderId: userData.elderId }))
     })
@@ -85,7 +85,7 @@ export const addNote = userData => dispatch => {
 
 export const updateNote = data => dispatch => {
   axios
-    .post(`http://${SETTING}/account/updateNote`, data)
+    .post(`${SETTING}/account/updateNote`, data)
     .then(res => {
       dispatch(fetchNotes({ elderId: data.elderId }))
     })
@@ -94,7 +94,7 @@ export const updateNote = data => dispatch => {
 
 export const removeNote = data => dispatch => {
   axios
-    .post(`http://${SETTING}/account/removeNote`, {
+    .post(`${SETTING}/account/removeNote`, {
       noteId: data.noteId
     })
     .then(res => {
