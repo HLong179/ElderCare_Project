@@ -5,7 +5,6 @@ import {Platform, View} from 'react-native';
 import PrimaryNav from "../navigation/AppNavigation";
 
 
-// const socket = SocketIOClient(`http://${SETTINGS.LOCAL_IP}:6900`, {transports: ['websocket']});
 const AppContainer = createAppContainer(PrimaryNav)
 
 

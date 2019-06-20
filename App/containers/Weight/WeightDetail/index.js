@@ -32,7 +32,7 @@ class CalorDetail extends React.Component {
     this.setState({
       isLoading: true
     })
-    fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/getDoctorPhoneNum`, {
+    fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -66,7 +66,9 @@ class CalorDetail extends React.Component {
   // Display data of 7d nearest  
   pressDayBtn = () => {
     const { stepData } = this.state
-    const endTime = new Date().getTime();
+    // const endTime = new Date().getTime();
+    const endTime = new Date(stepData[stepData.length -1].time).getTime();
+
     const startTime = new Date(endTime - 86400*7*1000).setHours(0, 0, 0, 0);
     let data = filterByTime(stepData, startTime, endTime);
 
@@ -78,7 +80,8 @@ class CalorDetail extends React.Component {
   // Display data of 7 weeks nearest  
   pressWeekBtn = () => {
     const { stepData } = this.state
-    const endTime = new Date().getTime();
+    // const endTime = new Date().getTime();
+    const endTime = new Date(stepData[stepData.length -1].time).getTime();
     const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
 
     let data = filterByTime(stepData, startTime, endTime);
@@ -93,7 +96,8 @@ class CalorDetail extends React.Component {
   pressMonthBtn = () => {
     const { stepData } = this.state
     
-    const endTime = new Date().getTime();
+    // const endTime = new Date().getTime();
+    const endTime = new Date(stepData[stepData.length -1].time).getTime();
     const startTime = new Date(endTime - 86400*7*1000*2).setHours(0, 0, 0, 0);
     let data = filterByTime(stepData, startTime, endTime);
     let monthData = averageDateByMonth(data)

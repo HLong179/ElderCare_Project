@@ -57,7 +57,7 @@ class UpdateNote extends React.Component {
         spinner: true
       })
 
-      fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/updateNote`, {
+      fetch(`${SETTINGS.LOCAL_IP}/account/updateNote`, {
         method: "POST",
         headers: {
           Accept: "application/json",

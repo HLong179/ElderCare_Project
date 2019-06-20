@@ -39,7 +39,7 @@ class ListNotes extends Component {
     const storage = await AsyncStorage.getItem("curUser")
     const objStorage = JSON.parse(storage)
     const elderId = objStorage.elderId
-    fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/getNotes`, {
+    fetch(`${SETTINGS.LOCAL_IP}/account/getNotes`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -60,7 +60,7 @@ class ListNotes extends Component {
 
   deleteRow = (data, secId, rowId, rowMap) => {
     rowMap[`${secId}${rowId}`].props.closeRow()
-    fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/removeNote`, {
+    fetch(`${SETTINGS.LOCAL_IP}/account/removeNote`, {
       method: "POST",
       headers: {
         Accept: "application/json",

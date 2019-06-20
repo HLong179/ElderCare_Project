@@ -53,7 +53,7 @@ class SleepScreen extends React.Component {
     let dataCur = await AsyncStorage.getItem('curUser');
     let jsonData = JSON.parse(dataCur);
     console.log(">>>>>>>>>>", jsonData)
-    fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/getDoctorPhoneNum`, {
+    fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

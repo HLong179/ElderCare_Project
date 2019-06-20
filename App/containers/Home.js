@@ -71,12 +71,16 @@ class Home extends Component {
                   <CalorCard />
                 </Col>
               </Row>
-
               <Row>
+                <Col>
+                  <WeightChartCard />
+                </Col>
+              </Row>
+              {/* <Row>
                 <Col>
                   <SleepCard />
                 </Col>
-              </Row>
+              </Row> */}
               <Row>
                 <Col>
                   <WeightCard />
@@ -93,11 +97,7 @@ class Home extends Component {
                   <SetTimeCard />
                 </Col>
               </Row>
-              <Row>
-                <Col>
-                  <WeightChartCard />
-                </Col>
-              </Row>
+             
             </Grid>
           </Content>
           <FooterTabs />

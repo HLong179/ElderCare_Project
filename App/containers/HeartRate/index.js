@@ -34,7 +34,7 @@ class HeartRate extends React.Component {
     this.setState({
       isLoading: true
     })
-    fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/getDoctorPhoneNum`, {
+    fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -49,14 +49,21 @@ class HeartRate extends React.Component {
     })
 
     let rawData = [];
-
+    console.log("jasbdsbadsabdjsandjsandjsandjsandjsa: ",firebase.apps)
+    console.log("elder jkasndjsajidIDIDIDIDIDIDIDIID: ", jsonData.elderId);
      firebase
       .database()
       .ref("Patients")
       .child(jsonData.elderId).child("HeartRate")
       .once("value",  snapshot => {
+          console.log("snapshot value: ", Object.values(snapshot.val()))
+          console.log('103 positon', Object.values(snapshot.val())[103]);
             rawData = [...Object.values(snapshot.val())];
+            console.log("rawdata value: ", rawData)
             rawData.sort(compare);
+            console.log('length asdfasdf', rawData.length);
+
+            console.log('length', rawData[rawData.length -1]);
 
             this.setState({
               isLoading: false,
@@ -68,9 +75,9 @@ class HeartRate extends React.Component {
   
   pressDayBtn = () => {
     const { heartData } = this.state
-    
+    console.log('heartData', heartData);
     //currentTime
-    const endTime = new Date().getTime();
+    const endTime = new Date(heartData[heartData.length -1].time).getTime();
     const startTime = new Date(endTime - 86400*7*1000).setHours(0, 0, 0, 0);
     let data = filterByTime(heartData, startTime, endTime);
 
@@ -84,7 +91,8 @@ class HeartRate extends React.Component {
   pressWeekBtn = () => {
    
     const { heartData } = this.state
-    const endTime = new Date().getTime();
+    // const endTime = new Date().getTime();
+    const endTime = new Date(heartData[heartData.length -1].time).getTime();
     const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
     
     let data = filterByTime(heartData, startTime, endTime);
@@ -98,8 +106,11 @@ class HeartRate extends React.Component {
 
   pressMonthBtn = () => {
     const { heartData } = this.state
-    const endTime = new Date().getTime();
+    // const endTime = new Date().getTime();
+    const endTime = new Date(heartData[heartData.length -1].time).getTime();
     const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
+    console.log('start Time', startTime);
+    console.log('endTime', endTime);
     
 
     let data = filterByTime(heartData, startTime, endTime);

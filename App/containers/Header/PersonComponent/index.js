@@ -62,7 +62,13 @@ class Bulb extends Component {
         try {
             let tempValue = await AsyncStorage.getItem('curUser');
             idElder = JSON.parse(tempValue).elderId;
-            // firebase.app().messaging().unsubscribeFromTopic(idElder);
+            console.log("firebase fuck fuck: ", firebase.apps)
+            if (firebase.apps.length !== 0) {
+                firebase.messaging().unsubscribeFromTopic(idElder);
+            }
+            
+            console.log("ae in here......")
+            // firebase.messaging().unsubscribeFromTopic(idElder)
             await AsyncStorage.removeItem('curUser');
             await AsyncStorage.setItem('isLogin', 'false');
             const { navigate } = this.props.navigation;

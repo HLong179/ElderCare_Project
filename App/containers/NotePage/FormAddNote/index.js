@@ -59,7 +59,7 @@ class AddNote extends React.Component {
       const objStorage = JSON.parse(storage)
       const elderId = objStorage.elderId
 
-      fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addNote`, {
+      fetch(`${SETTINGS.LOCAL_IP}/account/addNote`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -73,7 +73,7 @@ class AddNote extends React.Component {
         })
       })
         .then(async response => {
-          fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/getNotes`, {
+          fetch(`${SETTINGS.LOCAL_IP}/account/getNotes`, {
             method: "POST",
             headers: {
               Accept: "application/json",

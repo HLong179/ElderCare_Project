@@ -90,10 +90,14 @@ export const filterByTime = (arrData, start, end ) => {
 
    arrData.filter((data) => {
     if(data.time >= start && data.time <= end) {
+      console.log('true')
       time = moment(new Date(data.time)).format("YYYY-MM-DD")
       filterData.push({ value: data.value, time})
+    } else {
+      console.log('false');
     }
   })
+  console.log('filterByTime', filterData)
 
   let result = averageDataByDate(filterData);
 
@@ -105,6 +109,7 @@ export const averageDataByDate = (data) => {
   let result = [];
   let sum = 0;
   let length = data.length;
+  console.log('data', data);
 
   for (let i = 0; i < length; i++) {
     sum = data[i].value;
@@ -136,6 +141,7 @@ export const averageDataByDate = (data) => {
       }
     }
   }
+  console.log('averageDataByDate', result);
   
   return result;
 };
@@ -196,13 +202,30 @@ export const averageDateByMonth = (data)  => {
   let endDate = '';
   let result = [];
   
-  for( let i = 3; i >0; i--) {
-    startDate = moment(data[data.length - 1].x).subtract(i, 'months').format('YYYY-MM-DD');
-    endDate = moment(startDate).add(1, 'months').format('YYYY-MM-DD');
+  // for( let i = 3; i >0; i--) {
+    // startDate = moment(data[data.length - 1].x).subtract(i, 'months').format('YYYY-MM-DD');
+    // endDate = moment(startDate).add(1, 'months').format('YYYY-MM-DD');
+    // let startDate, endDate;
+    let month;
+console.log('motn rate', data[data.length - 1]);
+    for(let i = 0; i < 3; i++) {
+      if(i === 0) {
+        endDate = moment(data[data.length - 1].x).format('YYYY-MM-DD');
+         month = new Date(data[data.length - 1].x).getMonth() + 1;
+        let year =  new Date(data[data.length - 1].x).getFullYear();
+        startDate = moment(new Date(year, month -1, 1)).format('YYYY-MM-DD');
+        console.log("startDate", startDate);
+
+      } else {
+
+        endDate = moment(startDate).subtract(1).format('YYYY-MM-DD');
+        startDate = moment(startDate).subtract(1 , 'months').format('YYYY-MM-DD');
+        month = new Date(startDate).getMonth() + 1;
+      }
 
     let sum = 0;
-    let count = 0
-
+    let count = 0;
+    
     for(let j = 0; j < data.length; j ++) {
       if(data[j].y && moment(data[j].x).isBetween(startDate, endDate)) {
         sum += data[j].y;
@@ -216,7 +239,10 @@ export const averageDateByMonth = (data)  => {
         y: sum !== 0 ? Math.round(sum/count): 0,
       })
   }
+  console.log('month result', result);
+  let finalResult = result.reverse();
   
-  return result;
+  
+  return finalResult;
 
 }

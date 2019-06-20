@@ -15,13 +15,12 @@ class SetTime extends React.Component {
     constructor(props) {
         super(props);
        
-        console.log("fuck props: ",this.props.socket)
         this.state = {
             isDateTimePickerVisible: false,
             time: '',
             isEmergencyChecked: false,
             hasHeartRate: false,
-            options: [{ id: 1, key: 'Khẩn cấp' }],
+            options: [{ id: 1, key: 'Theo dõi khẩn cấp' }],
             selectedOption: [],
             dialogVisible: false,
             hour: '0',
@@ -214,7 +213,7 @@ class SetTime extends React.Component {
                     </Item>
                     <Item>
                         <Text style={{fontWeight: 'bold', fontStyle: 'italic', color: 'red', marginLeft:'4%'}}>
-                            *Tích chọn khẩn cấp, bạn sẽ nhận thông báo nhịp tim bất cứ khi nào có dữ liệu đo được. Ngược lại, thông báo chỉ xuất hiện khi nhịp tim của bệnh nhân có dấu hiệu nguy hiểm!*
+                            *Tích chọn theo dõi khẩn cấp, bạn sẽ nhận thông báo nhịp tim bất cứ khi nào có dữ liệu đo được. Ngược lại, thông báo chỉ xuất hiện khi nhịp tim của bệnh nhân có dấu hiệu nguy hiểm!*
                         </Text>
                     </Item>
 

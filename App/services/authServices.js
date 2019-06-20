@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 export async function Login(data) {
-    const response = await  fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/login`, {
+    const response = await  fetch(`${SETTINGS.LOCAL_IP}/account/login`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -24,7 +24,7 @@ export async function Login(data) {
 }
 
 export async function AddRelative(data) {
-    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addSubUser`, {
+    const response = await fetch(`${SETTINGS.LOCAL_IP}/account/addSubUser`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -47,7 +47,7 @@ export async function AddRelative(data) {
 }
 
 export async function getUserData(data) {
-    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/getData`, {
+    const response = await fetch(`${SETTINGS.LOCAL_IP}/account/getData`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -65,7 +65,7 @@ export async function getUserData(data) {
 
 export async function addElder(data) {
 
-    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addElder`, {
+    const response = await fetch(`${SETTINGS.LOCAL_IP}/account/addElder`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -86,7 +86,7 @@ export async function addElder(data) {
 }
 
 export async function addMainRelative(data) {
-    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/addMainUser`, {
+    const response = await fetch(`${SETTINGS.LOCAL_IP}/account/addMainUser`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -107,7 +107,7 @@ export async function addMainRelative(data) {
 }
 
 export async function updateElderWeight(data) {
-    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/updateWeight`, {
+    const response = await fetch(`${SETTINGS.LOCAL_IP}/account/updateWeight`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -125,7 +125,7 @@ export async function updateElderWeight(data) {
 
 export async function getElderDetail(id) {
     console.log(id);
-    const response = await fetch(`http://${SETTINGS.LOCAL_IP}:6900/account/elderDetail`, {
+    const response = await fetch(`${SETTINGS.LOCAL_IP}/account/elderDetail`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',

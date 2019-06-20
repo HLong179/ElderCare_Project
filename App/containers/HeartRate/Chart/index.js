@@ -35,6 +35,9 @@ const Chart = (props) => {
   if(rawData) {
     let { data, labelArray } = processChartData(rawData, type);
 
+    console.log('data heart', data);
+    console.log('labelArray', labelArray);
+
 
     return (
       <Svg width={400} height={400} viewBox="0 0 400 400"
@@ -99,7 +102,7 @@ const Chart = (props) => {
           tickLabels: { padding: 5, angle: 0 },
           grid: { fill: "none", stroke: "none" },
         }}
-        tickCount={8}
+        tickCount={7}
         fixLabelOverlap 
         // standalone={false}
         tickValues={labelArray}

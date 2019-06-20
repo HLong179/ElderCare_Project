@@ -68,7 +68,7 @@ class RNRedux extends React.Component {
     try{
         console.log("connexion au serveur socket");
         this.setState({
-            socket: SocketIOClient(`http://${SETTINGS.LOCAL_IP}:6900`, {transports: ['websocket']})
+            socket: SocketIOClient(`${SETTINGS.LOCAL_IP}`, {transports: ['websocket']})
         });
     }catch(err){
         console.log("something wrong: ",err);
