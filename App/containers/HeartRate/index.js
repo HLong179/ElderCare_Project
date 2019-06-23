@@ -1,20 +1,31 @@
 import React from "React"
 import { View, StyleSheet, TouchableHighlight } from "react-native"
 import firebase from "react-native-firebase"
-import { Icon, Button, Text, Spinner, Tab, Tabs, TabHeading, Container, Header, } from "native-base"
-import {filterByTime} from '../../utils/timeConvert.util';
+import {
+  Icon,
+  Button,
+  Text,
+  Spinner,
+  Tab,
+  Tabs,
+  TabHeading,
+  Container,
+  Header
+} from "native-base"
+import { filterByTime } from "../../utils/timeConvert.util"
 
 import AsyncStorage from "@react-native-community/async-storage"
 import SETTINGS from "../../settings"
 import call from "react-native-phone-call"
-import { compare } from '../../utils/sort';
-import { averageDateByWeek, averageDateByMonth } from '../../utils/timeConvert.util';
-import Chart from './Chart'
-
+import { compare } from "../../utils/sort"
+import {
+  averageDateByWeek,
+  averageDateByMonth
+} from "../../utils/timeConvert.util"
+import Chart from "./Chart"
+import moment from "moment"
 
 // const Chart = React.lazy(() => import ('./Chart'));
-
-
 
 class HeartRate extends React.Component {
   constructor(props) {
@@ -25,7 +36,7 @@ class HeartRate extends React.Component {
       displayHeartData: null,
       isLoading: false,
       selected: null,
-      currentPage: 0,
+      currentPage: 0
     }
   }
   componentDidMount = async () => {
@@ -48,76 +59,187 @@ class HeartRate extends React.Component {
       this.setState({ drPhoneNo: response.doctorPhoneNum })
     })
 
-    let rawData = [];
-    console.log("jasbdsbadsabdjsandjsandjsandjsandjsa: ",firebase.apps)
-    console.log("elder jkasndjsajidIDIDIDIDIDIDIDIID: ", jsonData.elderId);
-     firebase
+    firebase
       .database()
       .ref("Patients")
-      .child(jsonData.elderId).child("HeartRate")
-      .once("value",  snapshot => {
-          console.log("snapshot value: ", Object.values(snapshot.val()))
-          console.log('103 positon', Object.values(snapshot.val())[103]);
-            rawData = [...Object.values(snapshot.val())];
-            console.log("rawdata value: ", rawData)
-            rawData.sort(compare);
-            console.log('length asdfasdf', rawData.length);
+      .child(jsonData.elderId)
+      .child("HeartRate")
+      .once("value", snapshot => {
+        let rawData = [...Object.values(snapshot.val())]
+        rawData.sort(compare)
+        let data = {
+          labels: [],
+          heartRates: []
+        }
+        let dataDisplay = {
+          labels: [],
+          heartRates: []
+        }
+        for (let patient in rawData) {
+          let timeLabel = moment(rawData[patient]["time"]).format(
+            "DD/MM/YYYY HH:mm:ss"
+          )
+          if (!data.labels.includes(rawData[patient]["time"])) {
+            data.labels.push(rawData[patient]["time"])
+            data.heartRates.push(rawData[patient]["value"])
+            dataDisplay.labels.push(timeLabel)
+            dataDisplay.heartRates.push(rawData[patient]["value"])
+          }
+        }
 
-            console.log('length', rawData[rawData.length -1]);
-
-            this.setState({
-              isLoading: false,
-              heartData: rawData,
-            }, () => this.pressDayBtn())
+        this.setState(
+          {
+            isLoading: false,
+            heartData: data,
+            displayHeartData: dataDisplay
+          },
+          () => this.pressDayBtn()
+        )
       })
   }
-
-  
+  averageOfArray = arr => {
+    let result = 0
+    for (let i = 0; i < arr.length; i++) {
+      result += arr[i]
+    }
+    return (result / arr.length).toFixed(1)
+  }
   pressDayBtn = () => {
     const { heartData } = this.state
-    console.log('heartData', heartData);
     //currentTime
-    const endTime = new Date(heartData[heartData.length -1].time).getTime();
-    const startTime = new Date(endTime - 86400*7*1000).setHours(0, 0, 0, 0);
-    let data = filterByTime(heartData, startTime, endTime);
+    const rate = {}
+    const data = {
+      labels: [],
+      heartRates: []
+    }
+    for (let i = 0; i < heartData.labels.length; i++) {
+      let timeLabel = moment(parseInt(heartData.labels[i], 10)).format("DD/MM")
+      if (rate[timeLabel]) {
+        rate[timeLabel].push(heartData.heartRates[i])
+      } else {
+        rate[timeLabel] = [heartData.heartRates[i]]
+      }
+    }
+
+    for (let y in rate) {
+      data.labels.push(y)
+      data.heartRates.push(this.averageOfArray(rate[y]))
+    }
+    // const endTime = new Date(heartData[heartData.length -1].time).getTime();
+    // const startTime = new Date(endTime - 86400*7*1000).setHours(0, 0, 0, 0);
+    // let data = filterByTime(heartData, startTime, endTime);
 
     this.setState({
-      displayHeartData: data,
-    });
-
-
-  }
-
-  pressWeekBtn = () => {
-   
-    const { heartData } = this.state
-    // const endTime = new Date().getTime();
-    const endTime = new Date(heartData[heartData.length -1].time).getTime();
-    const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
-    
-    let data = filterByTime(heartData, startTime, endTime);
-    let weekData = averageDateByWeek(data);
-
-    this.setState({
-      displayHeartData: weekData
+      displayHeartData: data
     })
   }
 
+  pressWeekBtn = () => {
+    const { heartData } = this.state
+    const data = {
+      labels: [],
+      heartRates: []
+    }
+    let rate = {}
+    for (let i = 0; i < heartData.labels.length; i++) {
+      let timeLabel = heartData.labels[i]
+      if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
+        if (rate[timeLabel]) {
+          rate[
+            `1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+          ].push(heartData.heartRates[i])
+        } else {
+          rate[
+            `1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+          ] = [heartData.heartRates[i]]
+        }
+      } else if (
+        moment(timeLabel).date() >= 8 &&
+        moment(timeLabel).date() <= 14
+      ) {
+        if (rate[timeLabel]) {
+          rate[
+            `8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+          ].push(heartData.heartRates[i])
+        } else {
+          rate[
+            `8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+          ] = [heartData.heartRates[i]]
+        }
+      } else if (
+        moment(timeLabel).date() >= 15 &&
+        moment(timeLabel).date() <= 21
+      ) {
+        if (rate[timeLabel]) {
+          rate[
+            `15/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+          ].push(heartData.heartRates[i])
+        } else {
+          rate[
+            `15/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+          ] = [heartData.heartRates[i]]
+        }
+      } else if (
+        moment(timeLabel).date() >= 22 &&
+        moment(timeLabel).date() <= 28
+      ) {
+        if (rate[timeLabel]) {
+          rate[
+            `22/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+          ].push(heartData.heartRates[i])
+        } else {
+          rate[
+            `22/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+          ] = [heartData.heartRates[i]]
+        }
+      } else {
+        if (rate[timeLabel]) {
+          rate[
+            `29/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+          ].push(heartData.heartRates[i])
+        } else {
+          rate[
+            `29/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
+          ] = [heartData.heartRates[i]]
+        }
+      }
+    }
+
+    for (let y in rate) {
+      data.labels.push(y)
+      data.heartRates.push(this.averageOfArray(rate[y]))
+    }
+
+    this.setState({
+      displayHeartData: data
+    })
+  }
 
   pressMonthBtn = () => {
     const { heartData } = this.state
     // const endTime = new Date().getTime();
-    const endTime = new Date(heartData[heartData.length -1].time).getTime();
-    const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
-    console.log('start Time', startTime);
-    console.log('endTime', endTime);
-    
-
-    let data = filterByTime(heartData, startTime, endTime);
-    let monthData = averageDateByMonth(data);
+    const data = {
+      labels: [],
+      heartRates: []
+    }
+    let rate = {}
+    for (let i = 0; i < heartData.labels.length; i++) {
+      let timeLabel = moment(parseInt(heartData.labels[i], 10)).format(
+        "MM/YYYY"
+      )
+      if (rate[timeLabel]) {
+        rate[timeLabel].push(heartData.heartRates[i])
+      } else {
+        rate[timeLabel] = [heartData.heartRates[i]]
+      }
+    }
+    for (let y in rate) {
+      data.labels.push(y)
+      data.heartRates.push(this.averageOfArray(rate[y]))
+    }
 
     this.setState({
-      displayHeartData: monthData
+      displayHeartData: data
     })
   }
   callDoctor = () => {
@@ -128,20 +250,21 @@ class HeartRate extends React.Component {
     call(args).catch(console.error)
   }
 
-  onChangeTab = ({i}) => {
-    this.setState({ currentPage: i}, () => {
-      if(i === 0 ) {
-        this.pressDayBtn();
-      } else if(i === 1) {
-        this.pressWeekBtn();
-      } else  {
-        this.pressMonthBtn();
+  onChangeTab = ({ i }) => {
+    this.setState({ currentPage: i }, () => {
+      if (i === 0) {
+        this.pressDayBtn()
+      } else if (i === 1) {
+        this.pressWeekBtn()
+      } else {
+        this.pressMonthBtn()
       }
-    });
+    })
   }
 
   render() {
-    const { displayHeartData } = this.state;
+    const { displayHeartData } = this.state
+
     if (this.state.isLoading) {
       return (
         <View style={styles.textStyle}>
@@ -151,32 +274,51 @@ class HeartRate extends React.Component {
     }
     return (
       <Container>
-        <Tabs initialPage={this.state.currentPage} onChangeTab={this.onChangeTab}>
-          <Tab heading={ <TabHeading><Text>Ngày</Text></TabHeading>} onPress={() => alert('press')}>
-            {/* <React.Suspense fallback={<Text>Loading</Text>}> */}
-            <Chart data={displayHeartData} type="day"/>
-            {/* </React.Suspense> */}
+        <Tabs
+          initialPage={this.state.currentPage}
+          onChangeTab={this.onChangeTab}
+        >
+          <Tab
+            heading={
+              <TabHeading>
+                <Text>Ngày</Text>
+              </TabHeading>
+            }
+            onPress={() => alert("press")}
+          >
+            <Chart data={displayHeartData} type="ngày" />
           </Tab>
-          <Tab heading={ <TabHeading><Text>Tuần</Text></TabHeading>}>
-            <Chart data={displayHeartData} type="week"/>
+          <Tab
+            heading={
+              <TabHeading>
+                <Text>Tuần</Text>
+              </TabHeading>
+            }
+          >
+            <Chart data={displayHeartData} type="tuần" />
           </Tab>
-          <Tab heading={ <TabHeading><Text>Tháng</Text></TabHeading>}>
-            <Chart data={displayHeartData} type="month"/>
+          <Tab
+            heading={
+              <TabHeading>
+                <Text>Tháng</Text>
+              </TabHeading>
+            }
+          >
+            <Chart data={displayHeartData} type="tháng" />
           </Tab>
         </Tabs>
 
-            <TouchableHighlight style={styles.btn} underlayColor="#fefefe">
+        <TouchableHighlight style={styles.btn} underlayColor="#fefefe">
           <Button iconLeft block warning onPress={this.callDoctor}>
             <Icon name="call" />
             <Text>Gọi bác sĩ</Text>
           </Button>
         </TouchableHighlight>
-    </Container>
-    );
-      
+      </Container>
+    )
   }
 }
-export default HeartRate; 
+export default HeartRate
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,

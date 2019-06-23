@@ -48,7 +48,6 @@ const HomeNav = createStackNavigator(
     Login: {
       screen: Login
     },
-
     AddRelative: {
       screen: AddRelative,
       navigationOptions: () => ({
