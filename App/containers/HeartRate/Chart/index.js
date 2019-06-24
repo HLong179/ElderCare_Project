@@ -37,11 +37,11 @@ const Chart = props => {
           y: parseFloat(rawData.heartRates[i])
         })
       }
-      console.log(data)
+      // console.log(props.type, data)
       return (
         <Svg
           width={400}
-          height={400}
+          height={450}
           viewBox="0 0 400 400"
           style={{ width: "100%", height: "auto" }}
         >
@@ -64,7 +64,7 @@ const Chart = props => {
 
             <VictoryLine
               style={{
-                data: { stroke: "#085cdb", strokeWidth: 5 },
+                data: { stroke: "#085cdb", strokeWidth: 5 }
               }}
               interpolation={"monotoneX"}
               data={data}
@@ -103,8 +103,8 @@ const Chart = props => {
             <VictoryAxis
               label="Thời gian"
               style={{
-                axisLabel: { padding: 20 },
-                tickLabels: { padding: 5, angle: 0 },
+                axisLabel: { padding: 30 },
+                tickLabels: { padding: 5, angle: 0 }
               }}
               // tickCount={7}
               fixLabelOverlap

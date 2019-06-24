@@ -120,7 +120,6 @@ class HeartRate extends React.Component {
         rate[timeLabel] = [heartData.heartRates[i]]
       }
     }
-
     for (let y in rate) {
       data.labels.push(y)
       data.heartRates.push(this.averageOfArray(rate[y]))
@@ -143,68 +142,63 @@ class HeartRate extends React.Component {
     let rate = {}
     for (let i = 0; i < heartData.labels.length; i++) {
       let timeLabel = heartData.labels[i]
+
       if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
-        if (rate[timeLabel]) {
-          rate[
-            `1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-          ].push(heartData.heartRates[i])
+        let weekTime = `1/${moment(timeLabel).month() + 1}/${moment(
+          timeLabel
+        ).year()}`
+        if (rate[weekTime]) {
+          rate[weekTime].push(heartData.heartRates[i])
         } else {
-          rate[
-            `1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-          ] = [heartData.heartRates[i]]
+          rate[weekTime] = [heartData.heartRates[i]]
         }
       } else if (
         moment(timeLabel).date() >= 8 &&
         moment(timeLabel).date() <= 14
       ) {
-        if (rate[timeLabel]) {
-          rate[
-            `8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-          ].push(heartData.heartRates[i])
+        let weekTime = `8/${moment(timeLabel).month() + 1}/${moment(
+          timeLabel
+        ).year()}`
+        if (rate[weekTime]) {
+          rate[weekTime].push(heartData.heartRates[i])
         } else {
-          rate[
-            `8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-          ] = [heartData.heartRates[i]]
+          rate[weekTime] = [heartData.heartRates[i]]
         }
       } else if (
         moment(timeLabel).date() >= 15 &&
         moment(timeLabel).date() <= 21
       ) {
-        if (rate[timeLabel]) {
-          rate[
-            `15/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-          ].push(heartData.heartRates[i])
+        let weekTime = `15/${moment(timeLabel).month() + 1}/${moment(
+          timeLabel
+        ).year()}`
+        if (rate[weekTime]) {
+          rate[weekTime].push(heartData.heartRates[i])
         } else {
-          rate[
-            `15/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-          ] = [heartData.heartRates[i]]
+          rate[weekTime] = [heartData.heartRates[i]]
         }
       } else if (
         moment(timeLabel).date() >= 22 &&
         moment(timeLabel).date() <= 28
       ) {
-        if (rate[timeLabel]) {
-          rate[
-            `22/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-          ].push(heartData.heartRates[i])
+        let weekTime = `22/${moment(timeLabel).month() + 1}/${moment(
+          timeLabel
+        ).year()}`
+        if (rate[weekTime]) {
+          rate[weekTime].push(heartData.heartRates[i])
         } else {
-          rate[
-            `22/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-          ] = [heartData.heartRates[i]]
+          rate[weekTime] = [heartData.heartRates[i]]
         }
       } else {
-        if (rate[timeLabel]) {
-          rate[
-            `29/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-          ].push(heartData.heartRates[i])
+        let weekTime = `29/${moment(timeLabel).month() + 1}/${moment(
+          timeLabel
+        ).year()}`
+        if (rate[weekTime]) {
+          rate[weekTime].push(heartData.heartRates[i])
         } else {
-          rate[
-            `29/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-          ] = [heartData.heartRates[i]]
+          rate[weekTime] = [heartData.heartRates[i]]
         }
       }
     }
-
     for (let y in rate) {
       data.labels.push(y)
       data.heartRates.push(this.averageOfArray(rate[y]))
