@@ -109,75 +109,58 @@ class StepCount extends Component {
         for (let i = 0; i < this.state.labels.length; i++) {
           let timeLabel = parseInt(this.state.labels[i], 10)
           if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
-            if (rate[timeLabel]) {
-              rate[
-                `1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-              ].push(this.state.stepCounts[i])
+            let weekTime = `1/${moment(timeLabel).month() + 1}/${moment(
+              timeLabel
+            ).year()}`
+            if (rate[weekTime]) {
+              rate[weekTime].push(this.state.stepCounts[i])
             } else {
-              rate[
-                `1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-              ] = [this.state.stepCounts[i]]
+              rate[weekTime] = [this.state.stepCounts[i]]
             }
           } else if (
             moment(timeLabel).date() >= 8 &&
             moment(timeLabel).date() <= 14
           ) {
-            if (rate[timeLabel]) {
-              rate[
-                `8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-              ].push(this.state.stepCounts[i])
+            let weekTime = `8/${moment(timeLabel).month() + 1}/${moment(
+              timeLabel
+            ).year()}`
+            if (rate[weekTime]) {
+              rate[weekTime].push(this.state.stepCounts[i])
             } else {
-              rate[
-                `8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`
-              ] = [this.state.stepCounts[i]]
+              rate[weekTime] = [this.state.stepCounts[i]]
             }
           } else if (
             moment(timeLabel).date() >= 15 &&
             moment(timeLabel).date() <= 21
           ) {
-            if (rate[timeLabel]) {
-              rate[
-                `15/${moment(timeLabel).month() + 1}/${moment(
-                  timeLabel
-                ).year()}`
-              ].push(this.state.stepCounts[i])
+            let weekTime = `15/${moment(timeLabel).month() + 1}/${moment(
+              timeLabel
+            ).year()}`
+            if (rate[weekTime]) {
+              rate[weekTime].push(this.state.stepCounts[i])
             } else {
-              rate[
-                `15/${moment(timeLabel).month() + 1}/${moment(
-                  timeLabel
-                ).year()}`
-              ] = [this.state.stepCounts[i]]
+              rate[weekTime] = [this.state.stepCounts[i]]
             }
           } else if (
             moment(timeLabel).date() >= 22 &&
             moment(timeLabel).date() <= 28
           ) {
-            if (rate[timeLabel]) {
-              rate[
-                `22/${moment(timeLabel).month() + 1}/${moment(
-                  timeLabel
-                ).year()}`
-              ].push(this.state.stepCounts[i])
+            let weekTime = `22/${moment(timeLabel).month() + 1}/${moment(
+              timeLabel
+            ).year()}`
+            if (rate[weekTime]) {
+              rate[weekTime].push(this.state.stepCounts[i])
             } else {
-              rate[
-                `22/${moment(timeLabel).month() + 1}/${moment(
-                  timeLabel
-                ).year()}`
-              ] = [this.state.stepCounts[i]]
+              rate[weekTime] = [this.state.stepCounts[i]]
             }
           } else {
-            if (rate[timeLabel]) {
-              rate[
-                `29/${moment(timeLabel).month() + 1}/${moment(
-                  timeLabel
-                ).year()}`
-              ].push(this.state.stepCounts[i])
+            let weekTime = `29/${moment(timeLabel).month() + 1}/${moment(
+              timeLabel
+            ).year()}`
+            if (rate[weekTime]) {
+              rate[weekTime].push(this.state.stepCounts[i])
             } else {
-              rate[
-                `29/${moment(timeLabel).month() + 1}/${moment(
-                  timeLabel
-                ).year()}`
-              ] = [this.state.stepCounts[i]]
+              rate[weekTime] = [this.state.stepCounts[i]]
             }
           }
         }
