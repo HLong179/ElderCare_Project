@@ -67,6 +67,7 @@ class HeartRate extends React.Component {
       .once("value", snapshot => {
         let rawData = [...Object.values(snapshot.val())]
         rawData.sort(compare)
+        console.log("length", rawData.length)
         let data = {
           labels: [],
           heartRates: []
