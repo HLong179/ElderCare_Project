@@ -1,28 +1,26 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React from "react"
+import { Text, View } from "react-native"
 import {
   VictoryChart,
   VictoryTheme,
   VictoryBar,
   VictoryAxis,
-  VictoryZoomContainer,
+  VictoryZoomContainer
+} from "victory-native"
+import Svg from "react-native-svg"
+import { processChartData } from "../../../utils/formatData"
 
-} from 'victory-native';
-import Svg from 'react-native-svg';
-import { processChartData } from '../../../utils/formatData';
+const Chart = props => {
+  const rawData = props.data
+  const type = props.type
 
-
-const Chart = (props) => { 
-  const rawData = props.data;
-  const type = props.type;
-
-  if(rawData) {
-    let { data, labelArray } = processChartData(rawData, type);
+  if (rawData) {
+    let { data, labelArray } = processChartData(rawData, type)
 
     return (
       <Svg
         width={400}
-        height={400}
+        height={450}
         viewBox="0 0 400 400"
         style={{ width: "100%", height: "auto" }}
       >
@@ -42,13 +40,13 @@ const Chart = (props) => {
             // animate={{ duration: 1000, easing: "bounce" }}
             style={{ data: { fill: "#085cdb" }, padding: { right: 50 } }}
             data={data}
+            alignment="start"
           />
           <VictoryAxis
             dependentAxis
             label="Bước đi (bước)"
             style={{
-              axisLabel: { padding: -20 },
-              grid: { fill: "none", stroke: "none" }
+              axisLabel: { padding: -20 }
             }}
             tickValues={[100, 200, 300, 500, 600, 800, 1000]}
           />
@@ -56,9 +54,8 @@ const Chart = (props) => {
           <VictoryAxis
             label="Thời gian"
             style={{
-              axisLabel: { padding: 55 },
-              tickLabels: { padding: 5, angle: 0 },
-              grid: { fill: "none", stroke: "none" }
+              axisLabel: { padding: 30 },
+              tickLabels: { padding: 5, angle: 0 }
             }}
             tickCount={7}
             fixLabelOverlap
@@ -66,13 +63,10 @@ const Chart = (props) => {
           />
         </VictoryChart>
       </Svg>
-    );
-      }
-      else {
-        return (
-          <Text>No data</Text>
-        )
-      }
+    )
+  } else {
+    return <Text>No data</Text>
   }
+}
 
-export default Chart;
+export default Chart

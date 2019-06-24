@@ -74,7 +74,7 @@ const HomeNav = createStackNavigator(
     CalorDetail: {
       screen: CalorDetail,
       navigationOptions: () => ({
-        title: `Calor`
+        title: `Biểu đồ Calories`
       })
     },
     SleepScreen: {
@@ -109,7 +109,7 @@ const HomeNav = createStackNavigator(
     WeightChartDetail: {
       screen: WeightChartDetail,
       navigationOptions: () => ({
-        title: `Biểu đồ cân nặng`,
+        title: `Biểu đồ bước đi`,
       })
     }
   },

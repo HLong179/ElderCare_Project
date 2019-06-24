@@ -85,7 +85,6 @@ class CalorDetail extends React.Component {
 
 
     let data = filterByTime(calorData, startTime, endTime);
-    console.log('calor weekData', data);
     let weekData = averageDateByWeek(data);
     this.setState({
       displayCalorData: weekData
