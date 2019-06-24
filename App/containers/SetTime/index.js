@@ -44,10 +44,8 @@ class SetTime extends React.Component {
         let emergency;
         let tempValue = await AsyncStorage.getItem('curUser');
         idElder = JSON.parse(tempValue).elderId;
-        console.log("clgt???")
         this.setState({elderId: idElder});
        await firebase.database().ref(`Patients/${idElder}/Config/Emergency`).once("value", (snapshot) => {
-           console.log("can we get in there?")
             if (snapshot.val()) {
                 emergency = snapshot.val();
             } else emergency = false;
@@ -113,14 +111,12 @@ class SetTime extends React.Component {
     handleChangeHour = (h) => {
         // let intH = parseInt(h);
         this.setState({hour: h});
-        // console.log("Hour:", this.state.hour);
         // console.log(typeof this.state.hour);
     }
     
     handleChangeMinute = (m) => {
         // let intM = parseInt(m);
         this.setState({minute: m});
-        // console.log("Minute:", this.state.minute);
         // console.log(typeof this.state.minute);
     }
 
@@ -138,15 +134,20 @@ class SetTime extends React.Component {
     handleOK = () => {
         const { hour, minute } = this.state;
         const {socket } = this.props;
-
+        
         // let newItv = (this.state.hour)*60 + (this.state.minute);
-        let newItv = parseInt(hour) * 60 + parseInt(minute);
+        if ((!hour || hour === '0') && minute === '0' ) {
+            alert("Cannot set")
+            return;
+        }
+        let newItv = !hour? 0: parseInt(hour) * 60 + !minute? 0 : parseInt(minute);
 
         // alert(newItv);
        
         
         // elderId = JSON.parse(user).elderId;
         // console.log(elderId)
+        console.log("what the fuck? ", newItv, hour, minute);
         firebase.database().ref(`Patients/${this.state.elderId}/Config/Interval`).set(+newItv);
    
 

@@ -222,7 +222,7 @@ class MainRelative extends React.Component {
                     <Button
                       style={{ marginTop: 10 }}
                       onPress={props.handleSubmit}
-                      title={"Thêm bệnh nhân"}
+                      title={"Thêm người thân"}
                     />
                   </Form>
                 )}
