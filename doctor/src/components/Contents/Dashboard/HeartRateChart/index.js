@@ -23,14 +23,14 @@ class HeartRate extends Component {
     }
   }
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
     let { labels, heartRates } = this.state
     let data = {
       labels: [],
       heartRates: []
     }
     const patientsRef = firebase.database().ref("Patients")
-    patientsRef.on("value", async snapshot => {
+    patientsRef.on("value", snapshot => {
       let patients = snapshot.val()[this.props.elder.ICID]["HeartRate"]
       for (let patient in patients) {
         let timeLabel = moment(patients[patient]["time"]).format(
@@ -112,63 +112,58 @@ class HeartRate extends Component {
         for (let i = 0; i < this.state.labels.length; i++) {
           let timeLabel = this.state.labels[i]
           if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
-            if (rate[timeLabel]) {
-              rate[`1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`].push(
-                this.state.heartRates[i]
-              )
+            let weekTime = `1/${moment(timeLabel).month() + 1}/${moment(
+              timeLabel
+            ).year()}`
+            if (rate[weekTime]) {
+              rate[weekTime].push(this.state.heartRates[i])
             } else {
-              rate[`1/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`] = [
-                this.state.heartRates[i]
-              ]
+              rate[weekTime] = [this.state.heartRates[i]]
             }
           } else if (
             moment(timeLabel).date() >= 8 &&
             moment(timeLabel).date() <= 14
           ) {
-            if (rate[timeLabel]) {
-              rate[`8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`].push(
-                this.state.heartRates[i]
-              )
+            let weekTime = `8/${moment(timeLabel).month() + 1}/${moment(
+              timeLabel
+            ).year()}`
+            if (rate[weekTime]) {
+              rate[weekTime].push(this.state.heartRates[i])
             } else {
-              rate[`8/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`] = [
-                this.state.heartRates[i]
-              ]
+              rate[weekTime] = [this.state.heartRates[i]]
             }
           } else if (
             moment(timeLabel).date() >= 15 &&
             moment(timeLabel).date() <= 21
           ) {
-            if (rate[timeLabel]) {
-              rate[`15/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`].push(
-                this.state.heartRates[i]
-              )
+            let weekTime = `15/${moment(timeLabel).month() + 1}/${moment(
+              timeLabel
+            ).year()}`
+            if (rate[weekTime]) {
+              rate[weekTime].push(this.state.heartRates[i])
             } else {
-              rate[`15/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`] = [
-                this.state.heartRates[i]
-              ]
+              rate[weekTime] = [this.state.heartRates[i]]
             }
           } else if (
             moment(timeLabel).date() >= 22 &&
             moment(timeLabel).date() <= 28
           ) {
-            if (rate[timeLabel]) {
-              rate[`22/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`].push(
-                this.state.heartRates[i]
-              )
+            let weekTime = `22/${moment(timeLabel).month() + 1}/${moment(
+              timeLabel
+            ).year()}`
+            if (rate[weekTime]) {
+              rate[weekTime].push(this.state.heartRates[i])
             } else {
-              rate[`22/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`] = [
-                this.state.heartRates[i]
-              ]
+              rate[weekTime] = [this.state.heartRates[i]]
             }
           } else {
-            if (rate[timeLabel]) {
-              rate[`29/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`].push(
-                this.state.heartRates[i]
-              )
+            let weekTime = `29/${moment(timeLabel).month() + 1}/${moment(
+              timeLabel
+            ).year()}`
+            if (rate[weekTime]) {
+              rate[weekTime].push(this.state.heartRates[i])
             } else {
-              rate[`29/${moment(timeLabel).month() + 1}/${moment(timeLabel).year()}`] = [
-                this.state.heartRates[i]
-              ]
+              rate[weekTime] = [this.state.heartRates[i]]
             }
           }
         }
