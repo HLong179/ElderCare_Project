@@ -1,17 +1,12 @@
 import React from "React"
-import { View, StyleSheet, TouchableHighlight } from "react-native"
+import { View, StyleSheet } from "react-native"
 import firebase from "react-native-firebase"
 import { Text, Spinner, Tab, Tabs, TabHeading, Container } from "native-base"
-import { filterByTime } from "../../utils/timeConvert.util"
 
 import AsyncStorage from "@react-native-community/async-storage"
 import SETTINGS from "../../settings"
 import { compare } from "../../utils/sort"
 import { formatData } from "../../utils/formatData"
-import {
-  averageDateByWeek,
-  averageDateByMonth
-} from "../../utils/timeConvert.util"
 import Chart from "./Chart"
 import { pressDay, pressWeek, pressMonth } from "../../utils/chartData"
 

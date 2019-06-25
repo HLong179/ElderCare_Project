@@ -74,7 +74,7 @@ const Chart = props => {
         return (
           <View>
             <Text style={styles.textChart}>
-              Nhịp tim trung bình trong {props.type} {rawData.labels[0]}:{" "}
+              Calories trung bình trong {props.type} {rawData.labels[0]}:{" "}
             </Text>
             <Text style={styles.bpm}>{rawData.dataSet[0]} BPM</Text>
           </View>
