@@ -1,5 +1,5 @@
 import React from "React"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, BackHandler } from "react-native"
 import firebase from "react-native-firebase"
 import { Text, Spinner, Tab, Tabs, TabHeading, Container } from "native-base"
 
@@ -9,6 +9,7 @@ import { compare } from "../../../utils/sort"
 import { formatData } from "../../../utils/formatData"
 import Chart from "../Chart"
 import { pressDay, pressWeek, pressMonth } from "../../../utils/chartData"
+import { withNavigation } from "react-navigation"
 
 class CalorDetail extends React.Component {
   constructor(props) {
@@ -21,6 +22,19 @@ class CalorDetail extends React.Component {
       selected: null,
       currentPage: 0
     }
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+  }
+
+  onBackPress = () => {
+    const { navigate } = this.props.navigation
+    navigate("Home")
   }
 
   componentDidMount = async () => {
@@ -166,7 +180,7 @@ class CalorDetail extends React.Component {
   }
 }
 
-export default CalorDetail
+export default withNavigation(CalorDetail)
 
 const styles = StyleSheet.create({
   container: {

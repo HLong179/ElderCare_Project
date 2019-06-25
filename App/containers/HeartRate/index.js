@@ -1,5 +1,5 @@
 import React from "React"
-import { View, StyleSheet, TouchableHighlight } from "react-native"
+import { View, StyleSheet, TouchableHighlight, BackHandler } from "react-native"
 import firebase from "react-native-firebase"
 import {
   Icon,
@@ -18,6 +18,7 @@ import { compare } from "../../utils/sort"
 import Chart from "./Chart"
 import moment from "moment"
 import { pressDay, pressWeek, pressMonth } from "../../utils/chartData"
+import { withNavigation } from "react-navigation"
 
 class HeartRate extends React.Component {
   constructor(props) {
@@ -31,6 +32,20 @@ class HeartRate extends React.Component {
       currentPage: 0
     }
   }
+
+  componentWillMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+  }
+
+  onBackPress = () => {
+    const { navigate } = this.props.navigation
+    navigate("Home")
+  }
+
   componentDidMount = async () => {
     let dataCur = await AsyncStorage.getItem("curUser")
     let jsonData = JSON.parse(dataCur)
@@ -189,7 +204,7 @@ class HeartRate extends React.Component {
     )
   }
 }
-export default HeartRate
+export default withNavigation(HeartRate)
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
