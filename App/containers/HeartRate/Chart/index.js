@@ -36,6 +36,9 @@ const Chart = props => {
           y: parseFloat(rawData.dataSet[i])
         })
       }
+      if (data.length >= 9) {
+        data = data.slice(data.length - 8, data.length)
+      }
       return (
         <Svg
           width={400}
