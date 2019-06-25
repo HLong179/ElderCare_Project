@@ -34,10 +34,9 @@ const Chart = props => {
       for (let i = 0; i < rawData.labels.length; i++) {
         data.push({
           x: rawData.labels[i],
-          y: parseFloat(rawData.heartRates[i])
+          y: parseFloat(rawData.dataSet[i])
         })
       }
-      // console.log(props.type, data)
       return (
         <Svg
           width={400}
@@ -147,7 +146,7 @@ const Chart = props => {
             <Text style={styles.textChart}>
               Nhịp tim trung bình trong {props.type} {rawData.labels[0]}:{" "}
             </Text>
-            <Text style={styles.bpm}>{rawData.heartRates[0]} BPM</Text>
+            <Text style={styles.bpm}>{rawData.dataSet[0]} BPM</Text>
           </View>
         )
       }
