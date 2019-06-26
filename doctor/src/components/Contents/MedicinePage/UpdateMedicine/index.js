@@ -12,6 +12,7 @@ class UpdateMedicineWithForm extends Component {
     this.state = {
       visible: this.props.modalVisible,
       loading: false,
+      lastImg: this.props.medicineData.imageUrl,
       imageUrl: this.props.medicineData.imageUrl,
       morning: this.props.medicineData.morning,
       afternoon: this.props.medicineData.afternoon,
@@ -50,8 +51,8 @@ class UpdateMedicineWithForm extends Component {
   }
   handleSubmit = e => {
     e.preventDefault()
-    const { imageUrl, morning, afternoon, evening, photo } = this.state
-    this.props.form.validateFields((err, values) => {
+    const { imageUrl, morning, afternoon, evening, photo, lastImg } = this.state
+    this.props.form.validateFields(async (err, values) => {
       if (!err) {
         if (values.imgName.length < 2) {
           message.error("Chưa nhập tên thuốc", 3)
@@ -61,55 +62,54 @@ class UpdateMedicineWithForm extends Component {
           const elderId = this.props.auth.user.elderId
           if (firebase) {
             if (photo) {
-              let storageRef = firebase
-                .storage()
-                .ref()
-                .child(`${elderId}/${values.imgName}.jpg`)
-              storageRef
-                .putString(imageUrl, "data_url", {
+              try {
+                let desertRef = firebase.storage().refFromURL(lastImg)
+                // Delete the file
+                await desertRef.delete()
+                let storageRef = firebase
+                  .storage()
+                  .ref()
+                  .child(`${elderId}/${values.imgName}.jpg`)
+                await storageRef.putString(imageUrl, "data_url", {
                   contentType: "image/jpeg"
                 })
-                .then(snapshot => {
-                  storageRef.getDownloadURL().then(url => {
-                    firebase
-                      .database()
-                      .ref(
-                        `Patients/${elderId}/Medicines/${
-                          this.props.medicineData.idMedicineFB
-                        }`
-                      )
-                      .update({
-                        elderId: elderId,
-                        imageUrl: url,
-                        name: values.imgName,
-                        script: values.text,
-                        morning: ~~this.state.morning,
-                        afternoon: ~~this.state.afternoon,
-                        evening: ~~this.state.evening
-                      })
-                      .then(data => {
-                        //success callback
-                        this.setState({
-                          visible: false,
-                          loading: false,
-                          imageUrl: null,
-                          morning: false,
-                          afternoon: false,
-                          evening: false,
-                          text: "",
-                          imgName: "",
-                          done: false
-                        })
-                        message.success("Sửa đơn thuốc thành công", 3)
-                        this.props.form.resetFields()
-                        this.setModalVisible(false)
-                      })
-                      .catch(error => {
-                        //error callback
-                        console.log("error ", error)
-                      })
+
+                let url = await storageRef.getDownloadURL()
+
+                await firebase
+                  .database()
+                  .ref(
+                    `Patients/${elderId}/Medicines/${
+                      this.props.medicineData.idMedicineFB
+                    }`
+                  )
+                  .update({
+                    elderId: elderId,
+                    imageUrl: url,
+                    name: values.imgName,
+                    script: values.text,
+                    morning: ~~this.state.morning,
+                    afternoon: ~~this.state.afternoon,
+                    evening: ~~this.state.evening
                   })
+
+                this.setState({
+                  visible: false,
+                  loading: false,
+                  imageUrl: null,
+                  morning: false,
+                  afternoon: false,
+                  evening: false,
+                  text: "",
+                  imgName: "",
+                  done: false
                 })
+                message.success("Sửa đơn thuốc thành công", 3)
+                this.props.form.resetFields()
+                this.setModalVisible(false)
+              } catch (err) {
+                throw err
+              }
             } else {
               let body = {
                 imageUrl: this.state.imageUrl,
@@ -120,33 +120,32 @@ class UpdateMedicineWithForm extends Component {
                 evening: ~~this.state.evening
               }
               if (firebase) {
-                firebase
-                  .database()
-                  .ref(
-                    `Patients/${elderId}/Medicines/${
-                      this.props.medicineData.idMedicineFB
-                    }`
-                  )
-                  .update(body)
-                  .then(async data => {
-                    //success callback
-                    this.setState({
-                      visible: false,
-                      loading: false,
-                      imageUrl: null,
-                      morning: false,
-                      afternoon: false,
-                      evening: false,
-                      text: "",
-                      imgName: "",
-                      done: false
-                    })
-                    this.setModalVisible(false)
+                try {
+                  await firebase
+                    .database()
+                    .ref(
+                      `Patients/${elderId}/Medicines/${
+                        this.props.medicineData.idMedicineFB
+                      }`
+                    )
+                    .update(body)
+
+                  //success callback
+                  this.setState({
+                    loading: false,
+                    imageUrl: null,
+                    morning: false,
+                    afternoon: false,
+                    evening: false,
+                    text: "",
+                    imgName: "",
+                    done: false
                   })
-                  .catch(error => {
-                    //error callback
-                    console.log("error ", error)
-                  })
+                  this.setModalVisible(false)
+                } catch (err) {
+                  //error callback
+                  throw err
+                }
               }
             }
           }

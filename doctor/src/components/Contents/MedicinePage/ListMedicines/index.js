@@ -3,6 +3,7 @@ import { List, Icon, Popconfirm } from "antd"
 import * as firebase from "firebase/app"
 import "../style.css"
 import UpdateMedicine from "../UpdateMedicine"
+import "firebase/storage"
 
 class ListMedicines extends Component {
   constructor(props) {
@@ -53,8 +54,18 @@ class ListMedicines extends Component {
     const elderId = this.props.elder.ICID
     firebase
       .database()
-      .ref(`Patients/${elderId}/Medicines/${data}`)
+      .ref(`Patients/${elderId}/Medicines/${data.idMedicineFB}`)
       .remove()
+    let desertRef = firebase.storage().refFromURL(data.imageUrl)
+    // Delete the file
+    desertRef
+      .delete()
+      .then(function() {
+        // File deleted successfully
+      })
+      .catch(function(error) {
+        // Uh-oh, an error occurred!
+      })
   }
 
   handleVisible = visible => {
@@ -109,7 +120,7 @@ class ListMedicines extends Component {
                 </span>,
                 <Popconfirm
                   title="Bạn chắc chắn xóa mục này ?"
-                  onConfirm={() => this.deleteMedicine(item.idMedicineFB)}
+                  onConfirm={() => this.deleteMedicine(item)}
                   okText="Yes"
                   cancelText="No"
                 >
