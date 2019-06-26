@@ -1,6 +1,7 @@
 import React from "React"
 import { View, StyleSheet, TouchableHighlight } from "react-native"
-import firebase from "react-native-firebase"
+import firebase from "react-native-firebase";
+import {elderCare} from '../../Constant'
 import {
   Icon,
   Button,
@@ -58,45 +59,47 @@ class HeartRate extends React.Component {
       response = await response.json()
       this.setState({ drPhoneNo: response.doctorPhoneNum })
     })
-
-    firebase
-      .database()
-      .ref("Patients")
-      .child(jsonData.elderId)
-      .child("HeartRate")
-      .once("value", snapshot => {
-        let rawData = [...Object.values(snapshot.val())]
-        rawData.sort(compare)
-        console.log("length", rawData.length)
-        let data = {
-          labels: [],
-          heartRates: []
-        }
-        let dataDisplay = {
-          labels: [],
-          heartRates: []
-        }
-        for (let patient in rawData) {
-          let timeLabel = moment(rawData[patient]["time"]).format(
-            "DD/MM/YYYY HH:mm:ss"
-          )
-          if (!data.labels.includes(rawData[patient]["time"])) {
-            data.labels.push(rawData[patient]["time"])
-            data.heartRates.push(rawData[patient]["value"])
-            dataDisplay.labels.push(timeLabel)
-            dataDisplay.heartRates.push(rawData[patient]["value"])
+    if (firebase.apps.length === 0 ) {
+       alert("Mất kết nối, vui lòng đăng xuất và thử lại");
+    } else {
+      // elderCare.onReady()
+      // .then(app => {
+       await firebase.app('elder_care_mobile').database().ref("Patients").child(jsonData.elderId).child("HeartRate").once("value", snapshot => {
+          let rawData = [...Object.values(snapshot.val())]
+          rawData.sort(compare)
+          console.log("length", rawData.length)
+          let data = {
+            labels: [],
+            heartRates: []
           }
-        }
+          let dataDisplay = {
+            labels: [],
+            heartRates: []
+          }
+          for (let patient in rawData) {
+            let timeLabel = moment(rawData[patient]["time"]).format(
+              "DD/MM/YYYY HH:mm:ss"
+            )
+            if (!data.labels.includes(rawData[patient]["time"])) {
+              data.labels.push(rawData[patient]["time"])
+              data.heartRates.push(rawData[patient]["value"])
+              dataDisplay.labels.push(timeLabel)
+              dataDisplay.heartRates.push(rawData[patient]["value"])
+            }
+          }
 
-        this.setState(
-          {
-            isLoading: false,
-            heartData: data,
-            displayHeartData: dataDisplay
-          },
-          () => this.pressDayBtn()
-        )
-      })
+          this.setState(
+            {
+              isLoading: false,
+              heartData: data,
+              displayHeartData: dataDisplay
+            },
+            () => this.pressDayBtn()
+          )
+        }) 
+      // })
+      // .catch(err => console.log(err))
+    }
   }
   averageOfArray = arr => {
     let result = 0

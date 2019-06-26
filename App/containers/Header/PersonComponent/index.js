@@ -5,7 +5,8 @@ import { Button, } from 'native-base';
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import { withNavigation } from 'react-navigation'
 import AsyncStorage from '@react-native-community/async-storage';
-import firebase from "react-native-firebase"
+import firebase from "react-native-firebase";
+import {elderCare} from '../../../Constant';
 import PushNotification from 'react-native-push-notification';
 import { getCurrentUser } from '../../../services/authServices';
 import { Divider } from 'react-native-elements';
@@ -62,10 +63,14 @@ class Bulb extends Component {
         try {
             let tempValue = await AsyncStorage.getItem('curUser');
             idElder = JSON.parse(tempValue).elderId;
-            console.log("firebase fuck fuck: ", firebase.apps)
-            if (firebase.apps.length !== 0) {
-                firebase.messaging().unsubscribeFromTopic(idElder);
-            }
+            elderCare.onReady()
+            .then(app => {
+                app.messaging().unsubscribeFromTopic(idElder);
+            })
+            .catch(err => console.log(err))
+            // if (firebase.apps.length !== 0) {
+            //     firebase.messaging().unsubscribeFromTopic(idElder);
+            // }
             
             console.log("ae in here......")
             // firebase.messaging().unsubscribeFromTopic(idElder)

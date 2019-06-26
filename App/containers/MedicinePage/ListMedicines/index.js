@@ -13,7 +13,7 @@ import {
   Spinner
 } from "native-base"
 import AsyncStorage from "@react-native-community/async-storage"
-import firebase from "firebase"
+import firebase from "react-native-firebase"
 import UpdateMedicine from "./UpdateMedicine"
 
 class ListMedicines extends Component {
@@ -38,7 +38,7 @@ class ListMedicines extends Component {
     const storage = await AsyncStorage.getItem("curUser")
     const objStorage = JSON.parse(storage)
     const elderId = objStorage.elderId
-    const patientsRef = firebase.database().ref("Patients")
+    const patientsRef = await firebase.app('elder_care_mobile').database().ref("Patients")
     patientsRef.on("value", snapshot => {
       let patients = snapshot.val()[elderId]
       if (patients) {
@@ -70,7 +70,7 @@ class ListMedicines extends Component {
 
   deleteRow = (data, secId, rowId, rowMap) => {
     rowMap[`${secId}${rowId}`].props.closeRow()
-    firebase
+    firebase.app('elder_care_mobile')
       .database()
       .ref(`Patients/${data.elderId}/Medicines/${data.idMedicineFB}`)
       .remove()

@@ -45,7 +45,7 @@ class SetTime extends React.Component {
         let tempValue = await AsyncStorage.getItem('curUser');
         idElder = JSON.parse(tempValue).elderId;
         this.setState({elderId: idElder});
-       await firebase.database().ref(`Patients/${idElder}/Config/Emergency`).once("value", (snapshot) => {
+       await firebase.app('elder_care_mobile').database().ref(`Patients/${idElder}/Config/Emergency`).once("value", (snapshot) => {
             if (snapshot.val()) {
                 emergency = snapshot.val();
             } else emergency = false;
@@ -56,7 +56,7 @@ class SetTime extends React.Component {
             }  
        });
 
-       await firebase.database().ref(`Patients/${idElder}/Config/Interval`).once("value", (snapshot) => {
+       await firebase.app('elder_care_mobile').database().ref(`Patients/${idElder}/Config/Interval`).once("value", (snapshot) => {
          if (snapshot.val()) {
              interval = snapshot.val();
              let { fHours, rMinute } = timeConvert(interval);
@@ -94,12 +94,12 @@ class SetTime extends React.Component {
         else {
             temp.push(id);
         }
-        this.setState({ selected: temp }, () => {
+        this.setState({ selected: temp }, async () => {
             console.log("we selected this options: ", temp);
             if (temp[0] === 1) {
                isEmergency = true;
             } else isEmergency = false;
-            firebase.database().ref(`Patients/${this.state.elderId}/Config/Emergency`).set(isEmergency)
+            await firebase.app('elder_care_mobile').database().ref(`Patients/${this.state.elderId}/Config/Emergency`).set(isEmergency)
             console.log("detail value selected: ", this.state.selected);
         });
 
@@ -131,7 +131,7 @@ class SetTime extends React.Component {
         this.setState({ dialogVisible: false });
     };
 
-    handleOK = () => {
+    handleOK = async () => {
         const { hour, minute } = this.state;
         const {socket } = this.props;
         
@@ -148,7 +148,7 @@ class SetTime extends React.Component {
         // elderId = JSON.parse(user).elderId;
         // console.log(elderId)
         console.log("what the fuck? ", newItv, hour, minute);
-        firebase.database().ref(`Patients/${this.state.elderId}/Config/Interval`).set(+newItv);
+        await firebase.app('elder_care_mobile').database().ref(`Patients/${this.state.elderId}/Config/Interval`).set(+newItv);
    
 
 

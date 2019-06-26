@@ -47,13 +47,13 @@ class CalorDetail extends React.Component {
     })
 
 
-     firebase
-      .database()
-      .ref("Patients")
-      .child(jsonData.elderId).child("StepCounts")
-      .once("value",  snapshot => {
+    await firebase.app('elder_care_mobile')
+          .database()
+          .ref("Patients")
+          .child(jsonData.elderId).child("StepCounts")
+          .once("value",  snapshot => {
             let stepData = formatData(snapshot.val());
-
+            console.log("setp data length: ", stepData.length);
             stepData.sort(compare);
             
             this.setState({

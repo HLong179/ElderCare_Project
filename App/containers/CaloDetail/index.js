@@ -47,19 +47,19 @@ class CalorDetail extends React.Component {
     })
 
 
-     firebase
-      .database()
-      .ref("Patients")
-      .child(jsonData.elderId).child("Calories")
-      .once("value",  snapshot => {
-            let calorData = formatData(snapshot.val());
-
-            calorData.sort(compare);
-            
-            this.setState({
-              isLoading: false,
-              calorData,
-            }, () => this.pressDayBtn())
+      await firebase.app('elder_care_mobile')
+            .database()
+            .ref("Patients")
+            .child(jsonData.elderId).child("Calories")
+            .once("value",  snapshot => {
+              let calorData = formatData(snapshot.val());
+              console.log("calo data length: ", calorData.length)
+              calorData.sort(compare);
+              
+              this.setState({
+                isLoading: false,
+                calorData,
+              }, () => this.pressDayBtn())
       })
   }
 
