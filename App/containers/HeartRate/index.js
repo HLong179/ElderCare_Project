@@ -1,5 +1,5 @@
 import React from "React"
-import { View, StyleSheet, TouchableHighlight } from "react-native"
+import { View, StyleSheet, TouchableHighlight, BackHandler } from "react-native"
 import firebase from "react-native-firebase";
 import {elderCare} from '../../Constant'
 import {
@@ -10,23 +10,16 @@ import {
   Tab,
   Tabs,
   TabHeading,
-  Container,
-  Header
+  Container
 } from "native-base"
-import { filterByTime } from "../../utils/timeConvert.util"
-
 import AsyncStorage from "@react-native-community/async-storage"
 import SETTINGS from "../../settings"
 import call from "react-native-phone-call"
 import { compare } from "../../utils/sort"
-import {
-  averageDateByWeek,
-  averageDateByMonth
-} from "../../utils/timeConvert.util"
 import Chart from "./Chart"
 import moment from "moment"
-
-// const Chart = React.lazy(() => import ('./Chart'));
+import { pressDay, pressWeek, pressMonth } from "../../utils/chartData"
+import { withNavigation } from "react-navigation"
 
 class HeartRate extends React.Component {
   constructor(props) {
@@ -40,13 +33,27 @@ class HeartRate extends React.Component {
       currentPage: 0
     }
   }
+
+  componentWillMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+  }
+
+  onBackPress = () => {
+    const { navigate } = this.props.navigation
+    navigate("Home")
+  }
+
   componentDidMount = async () => {
     let dataCur = await AsyncStorage.getItem("curUser")
     let jsonData = JSON.parse(dataCur)
     this.setState({
       isLoading: true
     })
-    fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
+    let dataDoctorNum = await fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -55,83 +62,54 @@ class HeartRate extends React.Component {
       body: JSON.stringify({
         elderId: jsonData.elderId
       })
-    }).then(async response => {
-      response = await response.json()
-      this.setState({ drPhoneNo: response.doctorPhoneNum })
-    })
-    if (firebase.apps.length === 0 ) {
-       alert("Mất kết nối, vui lòng đăng xuất và thử lại");
-    } else {
-      // elderCare.onReady()
-      // .then(app => {
-       await firebase.app('elder_care_mobile').database().ref("Patients").child(jsonData.elderId).child("HeartRate").once("value", snapshot => {
-          let rawData = [...Object.values(snapshot.val())]
-          rawData.sort(compare)
-          console.log("length", rawData.length)
-          let data = {
-            labels: [],
-            heartRates: []
-          }
-          let dataDisplay = {
-            labels: [],
-            heartRates: []
-          }
-          for (let patient in rawData) {
-            let timeLabel = moment(rawData[patient]["time"]).format(
-              "DD/MM/YYYY HH:mm:ss"
-            )
-            if (!data.labels.includes(rawData[patient]["time"])) {
-              data.labels.push(rawData[patient]["time"])
-              data.heartRates.push(rawData[patient]["value"])
-              dataDisplay.labels.push(timeLabel)
-              dataDisplay.heartRates.push(rawData[patient]["value"])
-            }
-          }
+    });
+    console.log("numPhone Doctor: ", dataDoctorNum.json().doctorPhoneNum );
+    this.setState({ drPhoneNo: dataDoctorNum.json().doctorPhoneNum })
 
-          this.setState(
-            {
-              isLoading: false,
-              heartData: data,
-              displayHeartData: dataDisplay
-            },
-            () => this.pressDayBtn()
-          )
-        }) 
+    let Observer = await firebase.app('elder_care_mobile')
+      .database()
+      .ref("Patients")
+      .child(jsonData.elderId)
+      .child("HeartRate")
+      .once("value");
+      let rawData = [...Object.values(Observer.val())]
+      rawData.sort(compare)
+      console.log("length", rawData.length)
+      let data = {
+        labels: [],
+        dataSet: []
+      }
+      let dataDisplay = {
+        labels: [],
+        dataSet: []
+      }
+      for (let patient in rawData) {
+        let timeLabel = moment(rawData[patient]["time"]).format(
+          "DD/MM/YYYY HH:mm:ss"
+        )
+        if (!data.labels.includes(rawData[patient]["time"])) {
+          data.labels.push(rawData[patient]["time"])
+          data.dataSet.push(rawData[patient]["value"])
+          dataDisplay.labels.push(timeLabel)
+          dataDisplay.dataSet.push(rawData[patient]["value"])
+        }
+
+        this.setState(
+          {
+            isLoading: false,
+            heartData: data,
+            displayHeartData: dataDisplay
+          },
+          () => this.pressDayBtn()
+        )
+      }
       // })
       // .catch(err => console.log(err))
-    }
   }
-  averageOfArray = arr => {
-    let result = 0
-    for (let i = 0; i < arr.length; i++) {
-      result += arr[i]
-    }
-    return (result / arr.length).toFixed(1)
-  }
+
   pressDayBtn = () => {
     const { heartData } = this.state
-    //currentTime
-    const rate = {}
-    const data = {
-      labels: [],
-      heartRates: []
-    }
-    for (let i = 0; i < heartData.labels.length; i++) {
-      let timeLabel = moment(parseInt(heartData.labels[i], 10)).format("DD/MM")
-      if (rate[timeLabel]) {
-        rate[timeLabel].push(heartData.heartRates[i])
-      } else {
-        rate[timeLabel] = [heartData.heartRates[i]]
-      }
-    }
-    for (let y in rate) {
-      data.labels.push(y)
-      data.heartRates.push(this.averageOfArray(rate[y]))
-    }
-    // const endTime = new Date(heartData[heartData.length -1].time).getTime();
-    // const startTime = new Date(endTime - 86400*7*1000).setHours(0, 0, 0, 0);
-    // let data = filterByTime(heartData, startTime, endTime);
-
+    let data = pressDay(heartData.labels, heartData.dataSet)
     this.setState({
       displayHeartData: data
     })
@@ -139,75 +117,7 @@ class HeartRate extends React.Component {
 
   pressWeekBtn = () => {
     const { heartData } = this.state
-    const data = {
-      labels: [],
-      heartRates: []
-    }
-    let rate = {}
-    for (let i = 0; i < heartData.labels.length; i++) {
-      let timeLabel = heartData.labels[i]
-
-      if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
-        let weekTime = `1/${moment(timeLabel).month() + 1}/${moment(
-          timeLabel
-        ).year()}`
-        if (rate[weekTime]) {
-          rate[weekTime].push(heartData.heartRates[i])
-        } else {
-          rate[weekTime] = [heartData.heartRates[i]]
-        }
-      } else if (
-        moment(timeLabel).date() >= 8 &&
-        moment(timeLabel).date() <= 14
-      ) {
-        let weekTime = `8/${moment(timeLabel).month() + 1}/${moment(
-          timeLabel
-        ).year()}`
-        if (rate[weekTime]) {
-          rate[weekTime].push(heartData.heartRates[i])
-        } else {
-          rate[weekTime] = [heartData.heartRates[i]]
-        }
-      } else if (
-        moment(timeLabel).date() >= 15 &&
-        moment(timeLabel).date() <= 21
-      ) {
-        let weekTime = `15/${moment(timeLabel).month() + 1}/${moment(
-          timeLabel
-        ).year()}`
-        if (rate[weekTime]) {
-          rate[weekTime].push(heartData.heartRates[i])
-        } else {
-          rate[weekTime] = [heartData.heartRates[i]]
-        }
-      } else if (
-        moment(timeLabel).date() >= 22 &&
-        moment(timeLabel).date() <= 28
-      ) {
-        let weekTime = `22/${moment(timeLabel).month() + 1}/${moment(
-          timeLabel
-        ).year()}`
-        if (rate[weekTime]) {
-          rate[weekTime].push(heartData.heartRates[i])
-        } else {
-          rate[weekTime] = [heartData.heartRates[i]]
-        }
-      } else {
-        let weekTime = `29/${moment(timeLabel).month() + 1}/${moment(
-          timeLabel
-        ).year()}`
-        if (rate[weekTime]) {
-          rate[weekTime].push(heartData.heartRates[i])
-        } else {
-          rate[weekTime] = [heartData.heartRates[i]]
-        }
-      }
-    }
-    for (let y in rate) {
-      data.labels.push(y)
-      data.heartRates.push(this.averageOfArray(rate[y]))
-    }
-
+    let data = pressWeek(heartData.labels, heartData.dataSet)
     this.setState({
       displayHeartData: data
     })
@@ -215,27 +125,7 @@ class HeartRate extends React.Component {
 
   pressMonthBtn = () => {
     const { heartData } = this.state
-    // const endTime = new Date().getTime();
-    const data = {
-      labels: [],
-      heartRates: []
-    }
-    let rate = {}
-    for (let i = 0; i < heartData.labels.length; i++) {
-      let timeLabel = moment(parseInt(heartData.labels[i], 10)).format(
-        "MM/YYYY"
-      )
-      if (rate[timeLabel]) {
-        rate[timeLabel].push(heartData.heartRates[i])
-      } else {
-        rate[timeLabel] = [heartData.heartRates[i]]
-      }
-    }
-    for (let y in rate) {
-      data.labels.push(y)
-      data.heartRates.push(this.averageOfArray(rate[y]))
-    }
-
+    let data = pressMonth(heartData.labels, heartData.dataSet)
     this.setState({
       displayHeartData: data
     })
@@ -245,7 +135,11 @@ class HeartRate extends React.Component {
       number: this.state.drPhoneNo, // String value with the number to call
       prompt: true // Optional boolean property. Determines if the user should be prompt prior to the call
     }
-    call(args).catch(console.error)
+    if (args.number)
+      call(args).catch(console.error)
+    else {
+      alert("No Doctor's PhoneNumber provided!")
+    }
   }
 
   onChangeTab = ({ i }) => {
@@ -262,7 +156,6 @@ class HeartRate extends React.Component {
 
   render() {
     const { displayHeartData } = this.state
-
     if (this.state.isLoading) {
       return (
         <View style={styles.textStyle}>
@@ -316,7 +209,7 @@ class HeartRate extends React.Component {
     )
   }
 }
-export default HeartRate
+export default withNavigation(HeartRate)
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,

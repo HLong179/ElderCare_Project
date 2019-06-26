@@ -41,7 +41,7 @@ class HeartCard extends Component {
         <CommonCard >
           <CardItem cardBody>
             <Left>
-              <IconWithText icon="heart" text="Nhịp tim" color="tomato"></IconWithText>
+              <IconWithText icon="heart" text="Nhịp tim" color="red"></IconWithText>
             </Left>
           </CardItem>
           <TextWrapper>

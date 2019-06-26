@@ -108,7 +108,7 @@ class HeaderMultipleIcon extends Component {
             <Header>
                 <Left />
                 <Body>
-                    <Title>Health App</Title>
+                    <Title>Trang Chủ</Title>
                 </Body>
                 <Right>
                     {/*<BulbComponent/>*/}

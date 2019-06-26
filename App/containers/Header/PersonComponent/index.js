@@ -62,14 +62,16 @@ class Bulb extends Component {
     onSelectLogout = async () => {
         try {
             let tempValue = await AsyncStorage.getItem('curUser');
-            idElder = JSON.parse(tempValue).elderId;
+            if (tempValue)
+                idElder = JSON.parse(tempValue).elderId;
             elderCare.onReady()
             .then(app => {
-                app.messaging().unsubscribeFromTopic(idElder);
+                if (app)
+                    app.messaging().unsubscribeFromTopic(idElder);
             })
             .catch(err => console.log(err))
-            // if (firebase.apps.length !== 0) {
-            //     firebase.messaging().unsubscribeFromTopic(idElder);
+            // if (firebase.apps.length > 0) {
+            //     firebase.app('elder_care_mobile').messaging().unsubscribeFromTopic(idElder);
             // }
             
             console.log("ae in here......")
@@ -85,7 +87,7 @@ class Bulb extends Component {
             navigate('Login');
         }
         catch (err) {
-            console.log("[LOG-OUT ERROR]");
+            console.log("[LOG-OUT ERROR]: ", err);
         }
     }
     onNotify = () => {
@@ -104,7 +106,7 @@ class Bulb extends Component {
                 <Button transparent>
                     <Menu
                         ref={this.setMenuRef}
-                        button={<Text onPress={this.showMenu}><CommonIcon name="person" /></Text>
+                        button={<Text onPress={this.showMenu}><CommonIcon name="settings" /></Text>
                         }
                     >
                         { permission === 'Main'? <MenuItem onPress={this.onSelectMenu}>Thêm người thân phụ</MenuItem> : null }

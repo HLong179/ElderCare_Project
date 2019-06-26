@@ -33,11 +33,11 @@ class WeightCard extends Component {
         <CommonCard>
           <CardItem cardBody>
             <Left>
-              <IconWithText icon="walk" text="Bước đi" color="black"></IconWithText>
+              <IconWithText icon="walk" text="Bước đi" color="green"></IconWithText>
             </Left>
           </CardItem>
           <TextWrapper>
-            <CommonText text="kg"></CommonText>
+            <CommonText text="Số bước đi"></CommonText>
           </TextWrapper>
           
         </CommonCard>

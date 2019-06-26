@@ -141,7 +141,10 @@ class SetTime extends React.Component {
             return;
         }
         let newItv = !hour? 0: parseInt(hour) * 60 + !minute? 0 : parseInt(minute);
-
+        this.setState({
+            minute: minute,
+            hour: hour
+        })
         // alert(newItv);
        
         

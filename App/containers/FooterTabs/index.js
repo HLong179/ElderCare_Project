@@ -24,10 +24,9 @@ class FooterTabs extends Component {
             <Icon android="md-chatboxes" ios="ios-people" />
             {/* <Text>Together</Text> */}
           </Button>
-          <Button vertical>
+          {/* <Button vertical>
             <Icon name="md-people" android="md-compass" ios="ios-compass" />
-            {/* <Text>Contact</Text> */}
-          </Button>
+          </Button> */}
         </FooterTab>
       </Footer>
     )

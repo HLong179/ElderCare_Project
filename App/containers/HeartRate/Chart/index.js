@@ -1,6 +1,5 @@
 import React from "react"
 import { Text, StyleSheet, View } from "react-native"
-import moment from "moment"
 import {
   VictoryChart,
   VictoryLine,
@@ -34,10 +33,12 @@ const Chart = props => {
       for (let i = 0; i < rawData.labels.length; i++) {
         data.push({
           x: rawData.labels[i],
-          y: parseFloat(rawData.heartRates[i])
+          y: parseFloat(rawData.dataSet[i])
         })
       }
-      // console.log(props.type, data)
+      if (data.length >= 9) {
+        data = data.slice(data.length - 8, data.length)
+      }
       return (
         <Svg
           width={400}
@@ -55,11 +56,12 @@ const Chart = props => {
           >
             <VictoryAxis
               dependentAxis
-              label="Nhịp tim (BPM)"
+              // label="Nhịp tim (BPM)"
               style={{
                 axisLabel: { padding: -20 }
               }}
               tickValues={[40, 60, 80, 100, 120, 140]}
+             
             />
 
             <VictoryLine
@@ -68,6 +70,10 @@ const Chart = props => {
               }}
               interpolation={"monotoneX"}
               data={data}
+              animate={{
+                duration: 2000,
+                onLoad: { duration: 1000 }
+              }}
               // events={[
               //   {
               //     target: "data",
@@ -147,7 +153,7 @@ const Chart = props => {
             <Text style={styles.textChart}>
               Nhịp tim trung bình trong {props.type} {rawData.labels[0]}:{" "}
             </Text>
-            <Text style={styles.bpm}>{rawData.heartRates[0]} BPM</Text>
+            <Text style={styles.bpm}>{rawData.dataSet[0]} Bpms</Text>
           </View>
         )
       }

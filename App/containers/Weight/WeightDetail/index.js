@@ -1,17 +1,15 @@
 import React from "React"
-import { View, StyleSheet, TouchableHighlight } from "react-native"
+import { View, StyleSheet, BackHandler } from "react-native"
 import firebase from "react-native-firebase"
-import { Icon, Button, Text, Spinner, Tab, Tabs, TabHeading, Container, Header, } from "native-base"
-import {filterByTime} from '../../../utils/timeConvert.util';
+import { Text, Spinner, Tab, Tabs, TabHeading, Container } from "native-base"
 
 import AsyncStorage from "@react-native-community/async-storage"
 import SETTINGS from "../../../settings"
-import call from "react-native-phone-call";
-import { compare } from '../../../utils/sort';
-import { formatData,  } from '../../../utils/formatData';
-import { averageDateByWeek, averageDateByMonth } from '../../../utils/timeConvert.util';
-import Chart from '../Chart';
-
+import { compare } from "../../../utils/sort"
+import { formatData } from "../../../utils/formatData"
+import Chart from "../Chart"
+import { pressDay, pressWeek, pressMonth } from "../../../utils/chartData"
+import { withNavigation } from "react-navigation"
 
 class CalorDetail extends React.Component {
   constructor(props) {
@@ -22,8 +20,21 @@ class CalorDetail extends React.Component {
       displayStepData: null,
       isLoading: false,
       selected: null,
-      currentPage: 0,
+      currentPage: 0
     }
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress)
+  }
+
+  onBackPress = () => {
+    const { navigate } = this.props.navigation
+    navigate("Home")
   }
 
   componentDidMount = async () => {
@@ -32,7 +43,7 @@ class CalorDetail extends React.Component {
     this.setState({
       isLoading: true
     })
-    fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
+    let dataDoctorNum = await fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -41,86 +52,90 @@ class CalorDetail extends React.Component {
       body: JSON.stringify({
         elderId: jsonData.elderId
       })
-    }).then(async response => {
-      response = await response.json()
-      this.setState({ drPhoneNo: response.doctorPhoneNum })
-    })
+    });
+    this.setState({ drPhoneNo: dataDoctorNum.json().doctorPhoneNum })
 
+    
+    
+   
 
-    await firebase.app('elder_care_mobile')
-          .database()
-          .ref("Patients")
-          .child(jsonData.elderId).child("StepCounts")
-          .once("value",  snapshot => {
-            let stepData = formatData(snapshot.val());
-            console.log("setp data length: ", stepData.length);
-            stepData.sort(compare);
-            
-            this.setState({
-              isLoading: false,
-              stepData,
-            },() => this.pressDayBtn())
-      })
+    let Observer = await firebase.app('elder_care_mobile')
+      .database()
+      .ref("Patients")
+      .child(jsonData.elderId)
+      .child("StepCounts")
+      .once("value");
+
+      let stepData = formatData(Observer.val())
+      stepData.sort(compare)
+      console.log("data stepcounts length: ", stepData.length);
+      let data = {
+        labels: [],
+        dataSet: []
+      }
+      let dataDisplay = {
+        labels: [],
+        dataSet: []
+      }
+      for (let step in stepData) {
+        if (!data.labels.includes(stepData[step]["time"])) {
+          data.labels.push(stepData[step]["time"])
+          data.dataSet.push(stepData[step]["value"])
+          dataDisplay.labels.push(stepData[step]["time"])
+          dataDisplay.dataSet.push(stepData[step]["value"])
+        }
+      }
+      this.setState(
+        {
+          isLoading: false,
+          stepData: data,
+          displayStepData: dataDisplay
+        },
+        () => this.pressDayBtn()
+      )
   }
 
-  // Display data of 7d nearest  
+  // Display data of 7d nearest
   pressDayBtn = () => {
     const { stepData } = this.state
-    // const endTime = new Date().getTime();
-    const endTime = new Date(stepData[stepData.length -1].time).getTime();
-
-    const startTime = new Date(endTime - 86400*7*1000).setHours(0, 0, 0, 0);
-    let data = filterByTime(stepData, startTime, endTime);
-
+    let data = pressDay(stepData.labels, stepData.dataSet)
     this.setState({
-        displayStepData: data,
-    });
+      displayStepData: data
+    })
   }
 
-  // Display data of 7 weeks nearest  
+  // Display data of 7 weeks nearest
   pressWeekBtn = () => {
     const { stepData } = this.state
-    // const endTime = new Date().getTime();
-    const endTime = new Date(stepData[stepData.length -1].time).getTime();
-    const startTime = new Date(endTime - 86400*7*1000*7).setHours(0, 0, 0, 0);
-
-    let data = filterByTime(stepData, startTime, endTime);
-    let weekData = averageDateByWeek(data);
-
+    let data = pressWeek(stepData.labels, stepData.dataSet)
     this.setState({
-        displayStepData: weekData
+      displayStepData: data
     })
   }
 
-  // Display data of 2 months  nearest  
+  // Display data of 2 months  nearest
   pressMonthBtn = () => {
     const { stepData } = this.state
-    
-    // const endTime = new Date().getTime();
-    const endTime = new Date(stepData[stepData.length -1].time).getTime();
-    const startTime = new Date(endTime - 86400*7*1000*2).setHours(0, 0, 0, 0);
-    let data = filterByTime(stepData, startTime, endTime);
-    let monthData = averageDateByMonth(data)
-
+    let data = pressMonth(stepData.labels, stepData.dataSet)
     this.setState({
-      displayStepData: monthData,
+      displayStepData: data
     })
   }
 
-  onChangeTab = ({i}) => {
-    this.setState({ currentPage: i}, () => {
-      if(i === 0 ) {
-        this.pressDayBtn();
-      } else if(i === 1) {
-        this.pressWeekBtn();
-      } else  {
-        this.pressMonthBtn();
+  onChangeTab = ({ i }) => {
+    this.setState({ currentPage: i }, () => {
+      if (i === 0) {
+        this.pressDayBtn()
+      } else if (i === 1) {
+        this.pressWeekBtn()
+      } else {
+        this.pressMonthBtn()
       }
-    });
+    })
   }
 
   render() {
-    const { displayStepData } = this.state;
+    const { displayStepData } = this.state
     if (this.state.isLoading) {
       return (
         <View style={styles.textStyle}>
@@ -130,25 +145,44 @@ class CalorDetail extends React.Component {
     }
     return (
       <Container>
-        <Tabs initialPage={this.state.currentPage} onChangeTab={this.onChangeTab}>
-          <Tab heading={ <TabHeading><Text>Ngày</Text></TabHeading>}>
-            <Chart data={displayStepData} type="day"/>
+        <Tabs
+          initialPage={this.state.currentPage}
+          onChangeTab={this.onChangeTab}
+        >
+          <Tab
+            heading={
+              <TabHeading>
+                <Text>Ngày</Text>
+              </TabHeading>
+            }
+          >
+            <Chart data={displayStepData} type="ngày" />
           </Tab>
-          <Tab heading={ <TabHeading><Text>Tuần</Text></TabHeading>}>
-            <Chart data={displayStepData} type="week"/>
+          <Tab
+            heading={
+              <TabHeading>
+                <Text>Tuần</Text>
+              </TabHeading>
+            }
+          >
+            <Chart data={displayStepData} type="tuần" />
           </Tab>
-          <Tab heading={ <TabHeading><Text>Tháng</Text></TabHeading>}>
-            <Chart data={displayStepData} type="month"/>
+          <Tab
+            heading={
+              <TabHeading>
+                <Text>Tháng</Text>
+              </TabHeading>
+            }
+          >
+            <Chart data={displayStepData} type="tháng" />
           </Tab>
         </Tabs>
-    </Container>
-    );
-      
+      </Container>
+    )
   }
 }
 
-
-export default CalorDetail; 
+export default withNavigation(CalorDetail)
 
 const styles = StyleSheet.create({
   container: {
@@ -163,6 +197,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     color: "gray"
-  },
-
+  }
 })

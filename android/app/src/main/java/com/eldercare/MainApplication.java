@@ -53,7 +53,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFirebasePackage(),
             //recently add
             new RNFirebaseDatabasePackage(),
-            new RNFirebaseMessagingPackage(),
+            new RNFirebaseMessagingPackage()
             // new RNFirebaseStoragePackage() 
       );
     }
