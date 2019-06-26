@@ -36,8 +36,8 @@ const Chart = props => {
           y: parseFloat(rawData.dataSet[i])
         })
       }
-      if (data.length >= 9) {
-        data = data.slice(data.length - 8, data.length)
+      if (data.length > 7) {
+        data = data.slice(data.length - 7, data.length)
       }
       return (
         <Svg
@@ -61,7 +61,6 @@ const Chart = props => {
                 axisLabel: { padding: -20 }
               }}
               tickValues={[40, 60, 80, 100, 120, 140]}
-             
             />
 
             <VictoryLine
@@ -70,10 +69,6 @@ const Chart = props => {
               }}
               interpolation={"monotoneX"}
               data={data}
-              animate={{
-                duration: 2000,
-                onLoad: { duration: 1000 }
-              }}
               // events={[
               //   {
               //     target: "data",

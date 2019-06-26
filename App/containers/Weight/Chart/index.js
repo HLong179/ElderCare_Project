@@ -35,8 +35,8 @@ const Chart = props => {
           y: parseFloat(rawData.dataSet[i])
         })
       }
-      if (data.length >= 9) {
-        data = data.slice(data.length - 8, data.length)
+      if (data.length > 7) {
+        data = data.slice(data.length - 7, data.length)
       }
       return (
         <Svg
@@ -55,18 +55,22 @@ const Chart = props => {
               style={{ data: { fill: "#085cdb" }, padding: { right: 50 } }}
               data={data}
               alignment="middle"
-              labels={(d) => `${d.y}`}
+              labels={d => `${d.y}`}
             />
             <VictoryAxis
               dependentAxis
               tickValues={[200, 400, 600, 800, 1000, 1200]}
+              style={{
+                grid: { fill: "none", stroke: "none" }
+              }}
             />
 
             <VictoryAxis
               label="Thời gian"
               style={{
                 axisLabel: { padding: 30 },
-                tickLabels: { padding: 5, angle: 0 }
+                tickLabels: { padding: 5, angle: 0 },
+                grid: { fill: "none", stroke: "none" }
               }}
               tickCount={7}
               fixLabelOverlap
