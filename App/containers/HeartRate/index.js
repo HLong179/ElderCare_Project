@@ -1,7 +1,7 @@
 import React from "React"
 import { View, StyleSheet, TouchableHighlight, BackHandler } from "react-native"
-import firebase from "react-native-firebase";
-import {elderCare} from '../../Constant'
+import firebase from "react-native-firebase"
+import { elderCare } from "../../Constant"
 import {
   Icon,
   Button,
@@ -53,58 +53,61 @@ class HeartRate extends React.Component {
     this.setState({
       isLoading: true
     })
-    let dataDoctorNum = await fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        elderId: jsonData.elderId
-      })
-    });
-    console.log("numPhone Doctor: ", dataDoctorNum.json().doctorPhoneNum );
+    let dataDoctorNum = await fetch(
+      `${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          elderId: jsonData.elderId
+        })
+      }
+    )
+    console.log("numPhone Doctor: ", dataDoctorNum.json().doctorPhoneNum)
     this.setState({ drPhoneNo: dataDoctorNum.json().doctorPhoneNum })
 
-    let Observer = await firebase.app('elder_care_mobile')
+    let Observer = await firebase
+      .app("elder_care_mobile")
       .database()
       .ref("Patients")
       .child(jsonData.elderId)
       .child("HeartRate")
-      .once("value");
-      let rawData = [...Object.values(Observer.val())]
-      rawData.sort(compare)
-      console.log("length", rawData.length)
-      let data = {
-        labels: [],
-        dataSet: []
+      .once("value")
+    let rawData = [...Object.values(Observer.val())]
+    rawData.sort(compare)
+    console.log("length", rawData.length)
+    let data = {
+      labels: [],
+      dataSet: []
+    }
+    let dataDisplay = {
+      labels: [],
+      dataSet: []
+    }
+    for (let patient in rawData) {
+      let timeLabel = moment(rawData[patient]["time"]).format(
+        "DD/MM/YYYY HH:mm:ss"
+      )
+      if (!data.labels.includes(rawData[patient]["time"])) {
+        data.labels.push(rawData[patient]["time"])
+        data.dataSet.push(rawData[patient]["value"])
+        dataDisplay.labels.push(timeLabel)
+        dataDisplay.dataSet.push(rawData[patient]["value"])
       }
-      let dataDisplay = {
-        labels: [],
-        dataSet: []
-      }
-      for (let patient in rawData) {
-        let timeLabel = moment(rawData[patient]["time"]).format(
-          "DD/MM/YYYY HH:mm:ss"
-        )
-        if (!data.labels.includes(rawData[patient]["time"])) {
-          data.labels.push(rawData[patient]["time"])
-          data.dataSet.push(rawData[patient]["value"])
-          dataDisplay.labels.push(timeLabel)
-          dataDisplay.dataSet.push(rawData[patient]["value"])
-        }
-
-        this.setState(
-          {
-            isLoading: false,
-            heartData: data,
-            displayHeartData: dataDisplay
-          },
-          () => this.pressDayBtn()
-        )
-      }
-      // })
-      // .catch(err => console.log(err))
+    }
+    this.setState(
+      {
+        isLoading: false,
+        heartData: data,
+        displayHeartData: dataDisplay
+      },
+      () => this.pressDayBtn()
+    )
+    // })
+    // .catch(err => console.log(err))
   }
 
   pressDayBtn = () => {
@@ -135,8 +138,7 @@ class HeartRate extends React.Component {
       number: this.state.drPhoneNo, // String value with the number to call
       prompt: true // Optional boolean property. Determines if the user should be prompt prior to the call
     }
-    if (args.number)
-      call(args).catch(console.error)
+    if (args.number) call(args).catch(console.error)
     else {
       alert("No Doctor's PhoneNumber provided!")
     }
