@@ -19,6 +19,7 @@ import Chart from "./Chart"
 import moment from "moment"
 import { pressDay, pressWeek, pressMonth } from "../../utils/chartData"
 import { withNavigation } from "react-navigation"
+import Detail from './Details';
 
 class HeartRate extends React.Component {
   constructor(props) {
@@ -28,8 +29,10 @@ class HeartRate extends React.Component {
       heartData: [],
       displayHeartData: null,
       isLoading: false,
-      selected: null,
-      currentPage: 0
+      selectedDate: null,
+      selectedValue: null,
+      showDetail: true,
+      type: '',
     }
   }
 
@@ -74,7 +77,6 @@ class HeartRate extends React.Component {
       .once("value", snapshot => {
         let rawData = [...Object.values(snapshot.val())]
         rawData.sort(compare)
-        console.log("length", rawData.length)
         let data = {
           labels: [],
           dataSet: []
@@ -109,8 +111,13 @@ class HeartRate extends React.Component {
   pressDayBtn = () => {
     const { heartData } = this.state
     let data = pressDay(heartData.labels, heartData.dataSet)
+    let labelLength = data.dataSet.length;
+    let dataLength = data.labels.length;
     this.setState({
-      displayHeartData: data
+      displayHeartData: data,
+      selectedDate: data.labels[labelLength - 1],
+      selectedValue: data.dataSet[dataLength -1],
+      type: 'ngày',
     })
   }
 
@@ -118,7 +125,8 @@ class HeartRate extends React.Component {
     const { heartData } = this.state
     let data = pressWeek(heartData.labels, heartData.dataSet)
     this.setState({
-      displayHeartData: data
+      displayHeartData: data,
+      type: '',
     })
   }
 
@@ -126,7 +134,7 @@ class HeartRate extends React.Component {
     const { heartData } = this.state
     let data = pressMonth(heartData.labels, heartData.dataSet)
     this.setState({
-      displayHeartData: data
+      displayHeartData: data,
     })
   }
   callDoctor = () => {
@@ -140,17 +148,26 @@ class HeartRate extends React.Component {
   onChangeTab = ({ i }) => {
     this.setState({ currentPage: i }, () => {
       if (i === 0) {
+        this.setState({showDetail: true})
         this.pressDayBtn()
       } else if (i === 1) {
+        this.setState({showDetail: true})
         this.pressWeekBtn()
       } else {
+        this.setState({showDetail: false})
         this.pressMonthBtn()
       }
     })
   }
+  handlePointClick = (data) => {
+    this.setState({
+      selectedDate: data.time,
+      selectedValue: data.value,
+    })
+  }
 
   render() {
-    const { displayHeartData } = this.state
+    const { displayHeartData, selectedDate, selectedValue, showDetail } = this.state
     if (this.state.isLoading) {
       return (
         <View style={styles.textStyle}>
@@ -172,7 +189,8 @@ class HeartRate extends React.Component {
             }
             onPress={() => alert("press")}
           >
-            <Chart data={displayHeartData} type="ngày" />
+            <Chart data={displayHeartData} type="ngày" handlePointClick={this.handlePointClick} />
+
           </Tab>
           <Tab
             heading={
@@ -181,7 +199,7 @@ class HeartRate extends React.Component {
               </TabHeading>
             }
           >
-            <Chart data={displayHeartData} type="tuần" />
+            <Chart data={displayHeartData} type="tuần" handlePointClick={this.handlePointClick} />
           </Tab>
           <Tab
             heading={
@@ -193,6 +211,11 @@ class HeartRate extends React.Component {
             <Chart data={displayHeartData} type="tháng" />
           </Tab>
         </Tabs>
+        { showDetail ?
+            <Detail selectedDate={selectedDate} selectedValue={selectedValue} data={displayHeartData} type={this.state.type} ></Detail>
+            :null
+        }
+
 
         <TouchableHighlight style={styles.btn} underlayColor="#fefefe">
           <Button iconLeft block warning onPress={this.callDoctor}>

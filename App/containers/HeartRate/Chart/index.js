@@ -6,9 +6,14 @@ import {
   VictoryTheme,
   VictoryScatter,
   VictoryAxis,
-  VictoryZoomContainer
 } from "victory-native"
 import Svg from "react-native-svg"
+
+import moment from 'moment';
+// let trLocale = require('moment/locale/vi');
+// moment.locale('tr',trLocale);
+// moment.suppressDeprecationWarnings = true;
+
 
 const styles = StyleSheet.create({
   textChart: {
@@ -25,9 +30,11 @@ const styles = StyleSheet.create({
   }
 })
 
-const Chart = props => {
+const Chart = (props) => {
   const rawData = props.data
-  let data = []
+  let self = props;
+  let data = [];
+
   if (rawData) {
     if (rawData.labels.length > 1) {
       for (let i = 0; i < rawData.labels.length; i++) {
@@ -36,13 +43,10 @@ const Chart = props => {
           y: parseFloat(rawData.dataSet[i])
         })
       }
-      if (data.length >= 9) {
-        data = data.slice(data.length - 8, data.length)
-      }
       return (
         <Svg
           width={400}
-          height={450}
+          height={370}
           viewBox="0 0 400 400"
           style={{ width: "100%", height: "auto" }}
         >
@@ -50,9 +54,6 @@ const Chart = props => {
             theme={VictoryTheme.material}
             scale={{ x: "time", y: "linear" }}
             padding={{ top: 30, right: 30, bottom: 50, left: 45 }}
-            containerComponent={
-              <VictoryZoomContainer zoomDimension="x" minimumZoom={{ y: 40 }} />
-            }
           >
             <VictoryAxis
               dependentAxis
@@ -69,36 +70,6 @@ const Chart = props => {
               }}
               interpolation={"monotoneX"}
               data={data}
-              // events={[
-              //   {
-              //     target: "data",
-              //     eventHandlers: {
-              //       onPressIn: () => {
-              //         console.log("clicked  onPressIn")
-              //         return [
-              //           {
-              //             target: "labels",
-              //             mutation: props => {
-              //               // console.log('props', props)
-              //             }
-              //           },
-              //           {
-              //             target: "data",
-              //             mutation: props => {
-              //               // console.log('props', props)
-              //             }
-              //           }
-              //         ]
-              //       },
-              //       onClick: () => {
-              //         console.log("clicked VictoryLine  onClick")
-              //       },
-              //       onPressOut: () => {
-              //         console.log("clicked  onPressOut")
-              //       }
-              //     }
-              //   }
-              // ]}
             />
 
             <VictoryAxis
@@ -115,28 +86,24 @@ const Chart = props => {
               data={data}
               size={5}
               style={{ data: { fill: "#c43a31" } }}
-              // labels={datum => datum.y}
-              // events={[
-              //   {
-              //     target: "data",
-              //     eventHandlers: {
-              //       onPressOut: props => {
-              //         console.log("clicked onPressOut scatter", props)
-              //       },
-              //       onPressIn: () => {
-              //         return [
-              //           {
-              //             target: "labels",
-              //             mutation: props => {
-              //               console.log(props)
-              //               return (props.text = props.datum.x)
-              //             }
-              //           }
-              //         ]
-              //       }
-              //     }
-              //   }
-              // ]}
+              events={[{
+                target: "data",
+                eventHandlers: {
+                  onPressIn: () => {
+                    return [
+                      {
+                        target: "data",
+                        mutation: (props) => {
+                          let time, value;
+                          time = props.datum.x;
+                          value = props.datum.y;
+                          self.handlePointClick({time, value})
+                        }
+                      }
+                    ];
+                  }
+                }
+              }]}
             />
           </VictoryChart>
         </Svg>
