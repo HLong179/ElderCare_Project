@@ -43,56 +43,100 @@ class CalorDetail extends React.Component {
     this.setState({
       isLoading: true
     })
-    let dataDoctorNum = await fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
+    this.fetchAndDraw(jsonData.elderId);
+    this.getDoctorNumPhone(jsonData.elderId);
+    // let dataDoctorNum = await fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
+    //   method: "POST",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({
+    //     elderId: jsonData.elderId
+    //   })
+    // });
+    // this.setState({ drPhoneNo: dataDoctorNum.json().doctorPhoneNum })
+  }
+  getDoctorNumPhone = (elderId) => {
+    fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        elderId: jsonData.elderId
+        elderId: elderId
       })
-    });
-    this.setState({ drPhoneNo: dataDoctorNum.json().doctorPhoneNum })
-
-    
-    
-   
-
-    let Observer = await firebase.app('elder_care_mobile')
-      .database()
-      .ref("Patients")
-      .child(jsonData.elderId)
-      .child("StepCounts")
-      .once("value");
-
-      let stepData = formatData(Observer.val())
-      stepData.sort(compare)
-      console.log("data stepcounts length: ", stepData.length);
-      let data = {
-        labels: [],
-        dataSet: []
+    }).then(
+      dataDoctorNum => {
+       
+        console.log("numPhone Doctor: ", dataDoctorNum.clone().json().doctorPhoneNum );
+        this.setState({ drPhoneNo: dataDoctorNum.clone().json().doctorPhoneNum })
       }
-      let dataDisplay = {
-        labels: [],
-        dataSet: []
+    )
+
+  }
+
+
+  fetchAndDraw = (elderId) => {
+
+
+    fetch(`${SETTINGS.LOCAL_IP}/firebase/getStepCounts`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        elderId: elderId
+      })
+    }).then(
+      Observer => {
+        Observer.clone().json().then(
+          res => {
+            let stepData = formatData(res.data)
+            stepData.sort(compare)
+            console.log("data stepcounts length: ", res.data);
+            let data = {
+              labels: [],
+              dataSet: []
+            }
+            let dataDisplay = {
+              labels: [],
+              dataSet: []
+            }
+            for (let step in stepData) {
+              if (!data.labels.includes(stepData[step]["time"])) {
+                data.labels.push(stepData[step]["time"])
+                data.dataSet.push(stepData[step]["value"])
+                dataDisplay.labels.push(stepData[step]["time"])
+                dataDisplay.dataSet.push(stepData[step]["value"])
+              }
+            }
+            this.setState(
+              {
+                isLoading: false,
+                stepData: data,
+                displayStepData: dataDisplay
+              },
+              () => this.pressDayBtn()
+            )
+          },
+          err => console.log("loi: ", err)
+        )
       }
-      for (let step in stepData) {
-        if (!data.labels.includes(stepData[step]["time"])) {
-          data.labels.push(stepData[step]["time"])
-          data.dataSet.push(stepData[step]["value"])
-          dataDisplay.labels.push(stepData[step]["time"])
-          dataDisplay.dataSet.push(stepData[step]["value"])
-        }
-      }
-      this.setState(
-        {
-          isLoading: false,
-          stepData: data,
-          displayStepData: dataDisplay
-        },
-        () => this.pressDayBtn()
-      )
+    )
+
+
+
+    // let Observer = await firebase.app('elder_care_mobile')
+    //   .database()
+    //   .ref("Patients")
+    //   .child(jsonData.elderId)
+    //   .child("StepCounts")
+    //   .once("value");
+
+      
   }
 
   // Display data of 7d nearest

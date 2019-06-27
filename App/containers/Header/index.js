@@ -8,7 +8,6 @@ import PushNotification from 'react-native-push-notification';
 import firebase from "react-native-firebase";
 import { withNavigation } from 'react-navigation';
 import { Button, Vibration} from 'react-native'
-import {AsyncStorage} from 'react-native';
 const PATTERN = [ 1000, 2000 ] ;
 class HeaderMultipleIcon extends Component {
 

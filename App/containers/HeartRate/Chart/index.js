@@ -70,10 +70,10 @@ const Chart = props => {
               }}
               interpolation={"monotoneX"}
               data={data}
-              animate={{
-                duration: 2000,
-                onLoad: { duration: 1000 }
-              }}
+              // animate={{
+              //   duration: 2000,
+              //   onLoad: { duration: 1000 }
+              // }}
               // events={[
               //   {
               //     target: "data",

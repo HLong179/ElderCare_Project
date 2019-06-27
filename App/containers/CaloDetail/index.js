@@ -43,51 +43,78 @@ class CalorDetail extends React.Component {
     this.setState({
       isLoading: true
     })
-    let dataNumDoctor = await fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
+  
+    this.fetchAndDraw(jsonData.elderId);
+    this.getDoctorNumPhone(jsonData.elderId);
+      
+  }
+
+  fetchAndDraw = (elderId) => {
+    fetch(`${SETTINGS.LOCAL_IP}/firebase/getCalories`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        elderId: jsonData.elderId
+        elderId: elderId
       })
-    });
-    this.setState({ drPhoneNo: dataNumDoctor.json().doctorPhoneNum })
-    let observer = await firebase.app('elder_care_mobile')
-      .database()
-      .ref("Patients")
-      .child(jsonData.elderId)
-      .child("Calories")
-      .once("value");
-      let calorData = formatData(observer.val())
-      calorData.sort(compare)
-      console.log("data calories length: ", calorData.length)
-      let data = {
-        labels: [],
-        dataSet: []
+    }).then(
+      Observer => {
+        Observer.clone().json().then(
+          res => {
+            let calorData = formatData(res.data)
+            calorData.sort(compare)
+            console.log("data calories length: ", res.data)
+            let data = {
+              labels: [],
+              dataSet: []
+            }
+            let dataDisplay = {
+              labels: [],
+              dataSet: []
+            }
+            for (let calor in calorData) {
+              if (!data.labels.includes(calorData[calor]["time"])) {
+                data.labels.push(calorData[calor]["time"])
+                data.dataSet.push(calorData[calor]["value"])
+                dataDisplay.labels.push(calorData[calor]["time"])
+                dataDisplay.dataSet.push(calorData[calor]["value"])
+              }
+            }
+            this.setState(
+              {
+                isLoading: false,
+                calorData: data,
+                displayCalorData: dataDisplay
+              },
+              () => this.pressDayBtn()
+            )
+          },
+          e => console.log("wrong: ", e)
+        )
+      },
+      err => console.log("loi: ", err)
+    )
+  }
+  getDoctorNumPhone = (elderId) => {
+    fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        elderId: elderId
+      })
+    }).then(
+      dataDoctorNum => {
+       
+        console.log("numPhone Doctor: ", dataDoctorNum.clone().json().doctorPhoneNum );
+        this.setState({ drPhoneNo: dataDoctorNum.clone().json().doctorPhoneNum })
       }
-      let dataDisplay = {
-        labels: [],
-        dataSet: []
-      }
-      for (let calor in calorData) {
-        if (!data.labels.includes(calorData[calor]["time"])) {
-          data.labels.push(calorData[calor]["time"])
-          data.dataSet.push(calorData[calor]["value"])
-          dataDisplay.labels.push(calorData[calor]["time"])
-          dataDisplay.dataSet.push(calorData[calor]["value"])
-        }
-      }
-      this.setState(
-        {
-          isLoading: false,
-          calorData: data,
-          displayCalorData: dataDisplay
-        },
-        () => this.pressDayBtn()
-      )
-      
+    )
+
   }
 
   // Display data of 7d nearest

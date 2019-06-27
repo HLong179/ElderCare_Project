@@ -43,7 +43,10 @@ class HeartRate extends React.Component {
   }
 
   onBackPress = () => {
-    const { navigate } = this.props.navigation
+    const { navigate } = this.props.navigation;
+    this.setState({
+      heartData: []
+    })
     navigate("Home")
   }
 
@@ -53,60 +56,88 @@ class HeartRate extends React.Component {
     this.setState({
       isLoading: true
     })
-    let dataDoctorNum = await fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
+    this.fetchAndDraw(jsonData.elderId);
+    this.getDoctorNumPhone(jsonData.elderId);
+   
+  }
+
+  getDoctorNumPhone = (elderId) => {
+    fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        elderId: jsonData.elderId
+        elderId: elderId
       })
-    });
-    console.log("numPhone Doctor: ", dataDoctorNum.json().doctorPhoneNum );
-    this.setState({ drPhoneNo: dataDoctorNum.json().doctorPhoneNum })
+    }).then(
+      dataDoctorNum => {
+       
+        console.log("numPhone Doctor: ", dataDoctorNum.clone().json().doctorPhoneNum );
+        this.setState({ drPhoneNo: dataDoctorNum.clone().json().doctorPhoneNum })
+      }
+    )
 
-    let Observer = await firebase.app('elder_care_mobile')
-      .database()
-      .ref("Patients")
-      .child(jsonData.elderId)
-      .child("HeartRate")
-      .once("value");
-      let rawData = [...Object.values(Observer.val())]
-      rawData.sort(compare)
-      console.log("length", rawData.length)
-      let data = {
-        labels: [],
-        dataSet: []
-      }
-      let dataDisplay = {
-        labels: [],
-        dataSet: []
-      }
-      for (let patient in rawData) {
-        let timeLabel = moment(rawData[patient]["time"]).format(
-          "DD/MM/YYYY HH:mm:ss"
-        )
-        if (!data.labels.includes(rawData[patient]["time"])) {
-          data.labels.push(rawData[patient]["time"])
-          data.dataSet.push(rawData[patient]["value"])
-          dataDisplay.labels.push(timeLabel)
-          dataDisplay.dataSet.push(rawData[patient]["value"])
-        }
-
-        this.setState(
-          {
-            isLoading: false,
-            heartData: data,
-            displayHeartData: dataDisplay
-          },
-          () => this.pressDayBtn()
-        )
-      }
-      // })
-      // .catch(err => console.log(err))
   }
 
+  fetchAndDraw = (elderId) => {
+    
+    try {
+      fetch(`${SETTINGS.LOCAL_IP}/firebase/getHeartRates`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        elderId: elderId
+      })
+    })
+    .then(
+      Observer => {
+        Observer.clone().json().then(
+          res => {
+            console.log("data heart rate? ", res)
+            let rawData = res.data.sort(compare)
+            let data = {
+              labels: [],
+              dataSet: []
+            }
+            let dataDisplay = {
+              labels: [],
+              dataSet: []
+            }
+            for (let patient in rawData) {
+              let timeLabel = moment(rawData[patient]["time"]).format(
+                "DD/MM/YYYY HH:mm:ss"
+              )
+              if (!data.labels.includes(rawData[patient]["time"])) {
+                data.labels.push(rawData[patient]["time"])
+                data.dataSet.push(rawData[patient]["value"])
+                dataDisplay.labels.push(timeLabel)
+                dataDisplay.dataSet.push(rawData[patient]["value"])
+              }
+            }
+            this.setState(
+              {
+                isLoading: false,
+                heartData: data,
+                displayHeartData: dataDisplay
+              },
+              () => this.pressDayBtn()
+            )
+          }
+        )
+        
+        
+      }
+    )
+    .catch(e => console.log("loi: ", e))
+    } catch (error) {
+      console.log("something wrong: ", error);
+    }
+  }
   pressDayBtn = () => {
     const { heartData } = this.state
     let data = pressDay(heartData.labels, heartData.dataSet)

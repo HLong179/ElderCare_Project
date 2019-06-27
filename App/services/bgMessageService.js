@@ -1,8 +1,6 @@
 import type { RemoteMessage } from 'react-native-firebase';
 import PushNotification from 'react-native-push-notification';
-import firebase from 'react-native-firebase';
 import {Vibration} from "react-native";
-import {AsyncStorage} from 'react-native';
 const PATTERN = [ 1000, 2000 ] ;
 export default async (message: RemoteMessage) => {
     // handle your message
@@ -45,6 +43,7 @@ export default async (message: RemoteMessage) => {
             PushNotification.localNotification({
                 title : mTitle, // (optional)
                 message: mMessage, // (required)
+                priority: "max"
                 // vibrate: true,
                 // vibration: 5000
             })
