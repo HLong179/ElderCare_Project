@@ -43,7 +43,7 @@ class CalorDetail extends React.Component {
     this.setState({
       isLoading: true
     })
-    fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
+    let dataNumDoctor = await fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -52,44 +52,42 @@ class CalorDetail extends React.Component {
       body: JSON.stringify({
         elderId: jsonData.elderId
       })
-    }).then(async response => {
-      response = await response.json()
-      this.setState({ drPhoneNo: response.doctorPhoneNum })
-    })
-
-    firebase
+    });
+    this.setState({ drPhoneNo: dataNumDoctor.json().doctorPhoneNum })
+    let observer = await firebase.app('elder_care_mobile')
       .database()
       .ref("Patients")
       .child(jsonData.elderId)
       .child("Calories")
-      .once("value", snapshot => {
-        let calorData = formatData(snapshot.val())
-        calorData.sort(compare)
-        let data = {
-          labels: [],
-          dataSet: []
+      .once("value");
+      let calorData = formatData(observer.val())
+      calorData.sort(compare)
+      console.log("data calories length: ", calorData.length)
+      let data = {
+        labels: [],
+        dataSet: []
+      }
+      let dataDisplay = {
+        labels: [],
+        dataSet: []
+      }
+      for (let calor in calorData) {
+        if (!data.labels.includes(calorData[calor]["time"])) {
+          data.labels.push(calorData[calor]["time"])
+          data.dataSet.push(calorData[calor]["value"])
+          dataDisplay.labels.push(calorData[calor]["time"])
+          dataDisplay.dataSet.push(calorData[calor]["value"])
         }
-        let dataDisplay = {
-          labels: [],
-          dataSet: []
-        }
-        for (let calor in calorData) {
-          if (!data.labels.includes(calorData[calor]["time"])) {
-            data.labels.push(calorData[calor]["time"])
-            data.dataSet.push(calorData[calor]["value"])
-            dataDisplay.labels.push(calorData[calor]["time"])
-            dataDisplay.dataSet.push(calorData[calor]["value"])
-          }
-        }
-        this.setState(
-          {
-            isLoading: false,
-            calorData: data,
-            displayCalorData: dataDisplay
-          },
-          () => this.pressDayBtn()
-        )
-      })
+      }
+      this.setState(
+        {
+          isLoading: false,
+          calorData: data,
+          displayCalorData: dataDisplay
+        },
+        () => this.pressDayBtn()
+      )
+      
   }
 
   // Display data of 7d nearest

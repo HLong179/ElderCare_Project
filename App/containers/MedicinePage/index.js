@@ -2,7 +2,7 @@ import React from "React"
 import { Container, Content } from "native-base"
 import AddMedicine from "./AddMedicine"
 import ListMedicines from "./ListMedicines"
-import firebase from "firebase"
+import firebase from "react-native-firebase"
 import config from "../../Constant"
 import { withNavigation } from "react-navigation"
 import {BackHandler} from "react-native"
@@ -21,9 +21,9 @@ class MedicinePage extends React.Component {
     navigate("Home")
   }
   componentDidMount() {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(config.opt)
-    }
+    // if (!firebase.apps.length) {
+    //   firebase.initializeApp(config.opt)
+    // }
   }
 
   render() {

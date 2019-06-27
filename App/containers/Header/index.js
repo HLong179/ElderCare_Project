@@ -58,7 +58,7 @@ class HeaderMultipleIcon extends Component {
             requestPermissions: true,
         });
 
-         this.messageListener = firebase.messaging().onMessage( async(message: RemoteMessage) => {
+        this.messageListener = firebase.app('elder_care_mobile').messaging().onMessage( async(message: RemoteMessage) => {
         // Process your message as required
         console.log("we create no0tificaton", message, message.data);
          let mTitle, mMessage;
@@ -108,7 +108,7 @@ class HeaderMultipleIcon extends Component {
             <Header>
                 <Left />
                 <Body>
-                    <Title>Health App</Title>
+                    <Title>Trang Chủ</Title>
                 </Body>
                 <Right>
                     {/*<BulbComponent/>*/}

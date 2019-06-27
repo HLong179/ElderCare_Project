@@ -8,7 +8,7 @@ import Button from "../../../components/CommonButton";
 import Wrapper from "../../../components/CommonWrapper";
 import SETTINGS from "../../../settings"
 import firebase from "react-native-firebase";
-import config from "../../../Constant";
+import {elderCare} from "../../../Constant";
 import {submitLogin} from '../action';
 import {compose, bindActionCreators} from 'redux';
 import {connect} from 'react-redux'
@@ -64,37 +64,37 @@ class Login extends Component {
             response = await response.json();
             console.log(response);
             if (response.auth) {
-              
-              console.log("clgt what the fuck is happend?????")
                 const result = await AsyncStorage.multiSet([['curUser', JSON.stringify(response.curUser[0])],['isLogin', 'true']]);
                 console.log("our firebae application already have? : " , firebase.apps)
                 
-                if (!firebase.apps.length) {
-                  console.log('connect to firebase', response.curUser[0].elderId)
-                  
-                    let Side = firebase.initializeApp(config.opt);
-                  console.log("we init firebase???");
-                    Side.onReady().then(app => {
-                   console.log("and we in here", app);
-                      app.messaging().subscribeToTopic(response.curUser[0].elderId);
-
+              
+                  try {
+                      elderCare.onReady()
+                      .then(app => {
+                        app.messaging().subscribeToTopic(response.curUser[0].elderId);
                         this.props.navigation.navigate('Home');
-                    })
+                      })
+                      .catch(err => console.log(err))
+                   
+                  } catch (error) {
+                    console.log('something wrong: ',error);
+                  }
+                  
                     
-                } else {
+              
                     // console.log("wtf :", firebase.apps);
                     
-                    firebase.messaging().subscribeToTopic(response.curUser[0].elderId)
-                    .then(
-                      res => {
-                         this.props.navigation.navigate('Home');
-                      }
-                    )
-                    .catch(e => {
-                      console.log("something wrong here: ", e);
-                    })
+                    // firebase.messaging().subscribeToTopic(response.curUser[0].elderId)
+                    // .then(
+                    //   res => {
+                    //      this.props.navigation.navigate('Home');
+                    //   }
+                    // )
+                    // .catch(e => {
+                    //   console.log("something wrong here: ", e);
+                    // })
                    
-                }
+          
             } else {
               Toast.show({
                 text: `${response.message}`,

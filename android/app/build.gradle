@@ -159,6 +159,7 @@ dependencies {
     //recently add
     implementation "com.google.firebase:firebase-database:17.0.0"
     implementation "com.google.firebase:firebase-messaging:18.0.0"
+    implementation "com.google.firebase:firebase-storage:17.0.0"
     //
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
 }

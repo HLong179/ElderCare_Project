@@ -39,11 +39,11 @@ class HeartCard extends Component {
         <CommonCard >
           <CardItem cardBody>
             <Left>
-              <IconWithText icon="flame" text="Calo" color="tomato"></IconWithText>
+              <IconWithText icon="flame" text="Calo" color="orange"></IconWithText>
             </Left>
           </CardItem>
           <TextWrapper>
-          <CommonText text="Calo"></CommonText>
+          <CommonText text="Lượng Calories tiêu thụ"></CommonText>
           </TextWrapper>
         </CommonCard>
       </TouchableOpacity>

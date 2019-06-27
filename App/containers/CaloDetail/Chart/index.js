@@ -34,8 +34,8 @@ const Chart = props => {
           y: parseFloat(rawData.dataSet[i])
         })
       }
-      if (data.length >= 9) {
-        data = data.slice(data.length - 8, data.length)
+      if (data.length > 7) {
+        data = data.slice(data.length - 7, data.length)
       }
 
       return (
@@ -49,22 +49,28 @@ const Chart = props => {
             theme={VictoryTheme.material}
             padding={{ top: 30, right: 30, bottom: 50, left: 45 }}
             style={{ axis: { grid: "none" } }}
+            domainPadding={20}
           >
             <VictoryBar
               style={{ data: { fill: "#085cdb" }, padding: { right: 50 } }}
               data={data}
-              alignment="start"
+              alignment="middle"
+              labels={d => `${d.y}`}
             />
             <VictoryAxis
               dependentAxis
               tickValues={[500, 1000, 1500, 2000, 2500]}
+              style={{
+                grid: { fill: "none", stroke: "none" }
+              }}
             />
 
             <VictoryAxis
               label="Thời gian"
               style={{
                 axisLabel: { padding: 30 },
-                tickLabels: { padding: 5, angle: 0 }
+                tickLabels: { padding: 5, angle: 0 },
+                grid: { fill: "none", stroke: "none" }
               }}
               tickCount={7}
               fixLabelOverlap
@@ -77,9 +83,10 @@ const Chart = props => {
         return (
           <View>
             <Text style={styles.textChart}>
-              Calories trung bình trong {props.type} {rawData.labels[0]}:{" "}
+              Lượng Calories tiêu thụ trung bình trong {props.type}{" "}
+              {rawData.labels[0]}:{" "}
             </Text>
-            <Text style={styles.bpm}>{rawData.dataSet[0]} BPM</Text>
+            <Text style={styles.bpm}>{rawData.dataSet[0]} Kcal</Text>
           </View>
         )
       }

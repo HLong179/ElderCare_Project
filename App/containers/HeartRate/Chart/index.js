@@ -43,6 +43,12 @@ const Chart = (props) => {
           y: parseFloat(rawData.dataSet[i])
         })
       }
+<<<<<<< HEAD
+=======
+      if (data.length > 7) {
+        data = data.slice(data.length - 7, data.length)
+      }
+>>>>>>> c56bb262189bcebc2d23ec513160940ac804eda3
       return (
         <Svg
           width={400}
@@ -57,7 +63,7 @@ const Chart = (props) => {
           >
             <VictoryAxis
               dependentAxis
-              label="Nhịp tim (BPM)"
+              // label="Nhịp tim (BPM)"
               style={{
                 axisLabel: { padding: -20 }
               }}
@@ -115,7 +121,7 @@ const Chart = (props) => {
             <Text style={styles.textChart}>
               Nhịp tim trung bình trong {props.type} {rawData.labels[0]}:{" "}
             </Text>
-            <Text style={styles.bpm}>{rawData.dataSet[0]} BPM</Text>
+            <Text style={styles.bpm}>{rawData.dataSet[0]} Bpms</Text>
           </View>
         )
       }

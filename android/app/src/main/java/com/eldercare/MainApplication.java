@@ -21,6 +21,7 @@ import com.facebook.soloader.SoLoader;
 //recently add
 import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 
 
 import java.util.Arrays;
@@ -52,7 +53,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFirebasePackage(),
             //recently add
             new RNFirebaseDatabasePackage(),
-            new RNFirebaseMessagingPackage()
+            new RNFirebaseMessagingPackage(),
+            new RNFirebaseStoragePackage()
       );
     }
 

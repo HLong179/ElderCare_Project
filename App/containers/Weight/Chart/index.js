@@ -35,8 +35,8 @@ const Chart = props => {
           y: parseFloat(rawData.dataSet[i])
         })
       }
-      if (data.length >= 9) {
-        data = data.slice(data.length - 8, data.length)
+      if (data.length > 7) {
+        data = data.slice(data.length - 7, data.length)
       }
       return (
         <Svg
@@ -49,22 +49,28 @@ const Chart = props => {
             theme={VictoryTheme.material}
             padding={{ top: 30, right: 30, bottom: 50, left: 45 }}
             style={{ axis: { grid: "none" } }}
+            domainPadding={20}
           >
             <VictoryBar
               style={{ data: { fill: "#085cdb" }, padding: { right: 50 } }}
               data={data}
-              alignment="start"
+              alignment="middle"
+              labels={d => `${d.y}`}
             />
             <VictoryAxis
               dependentAxis
-              tickValues={[100, 200, 300, 500, 600, 800, 1000]}
+              tickValues={[200, 400, 600, 800, 1000, 1200]}
+              style={{
+                grid: { fill: "none", stroke: "none" }
+              }}
             />
 
             <VictoryAxis
               label="Thời gian"
               style={{
                 axisLabel: { padding: 30 },
-                tickLabels: { padding: 5, angle: 0 }
+                tickLabels: { padding: 5, angle: 0 },
+                grid: { fill: "none", stroke: "none" }
               }}
               tickCount={7}
               fixLabelOverlap
@@ -77,9 +83,9 @@ const Chart = props => {
         return (
           <View>
             <Text style={styles.textChart}>
-              Bước đi trung bình trong {props.type} {rawData.labels[0]}:{" "}
+              Số bước đi trung bình trong {props.type} {rawData.labels[0]}:{" "}
             </Text>
-            <Text style={styles.bpm}>{rawData.dataSet[0]} BPM</Text>
+            <Text style={styles.bpm}>{rawData.dataSet[0]} bước</Text>
           </View>
         )
       }

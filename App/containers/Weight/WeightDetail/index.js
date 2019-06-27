@@ -43,7 +43,7 @@ class CalorDetail extends React.Component {
     this.setState({
       isLoading: true
     })
-    fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
+    let dataDoctorNum = await fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -52,45 +52,47 @@ class CalorDetail extends React.Component {
       body: JSON.stringify({
         elderId: jsonData.elderId
       })
-    }).then(async response => {
-      response = await response.json()
-      this.setState({ drPhoneNo: response.doctorPhoneNum })
-    })
+    });
+    this.setState({ drPhoneNo: dataDoctorNum.json().doctorPhoneNum })
 
-    firebase
+    
+    
+   
+
+    let Observer = await firebase.app('elder_care_mobile')
       .database()
       .ref("Patients")
       .child(jsonData.elderId)
       .child("StepCounts")
-      .once("value", snapshot => {
-        let stepData = formatData(snapshot.val())
+      .once("value");
 
-        stepData.sort(compare)
-        let data = {
-          labels: [],
-          dataSet: []
+      let stepData = formatData(Observer.val())
+      stepData.sort(compare)
+      console.log("data stepcounts length: ", stepData.length);
+      let data = {
+        labels: [],
+        dataSet: []
+      }
+      let dataDisplay = {
+        labels: [],
+        dataSet: []
+      }
+      for (let step in stepData) {
+        if (!data.labels.includes(stepData[step]["time"])) {
+          data.labels.push(stepData[step]["time"])
+          data.dataSet.push(stepData[step]["value"])
+          dataDisplay.labels.push(stepData[step]["time"])
+          dataDisplay.dataSet.push(stepData[step]["value"])
         }
-        let dataDisplay = {
-          labels: [],
-          dataSet: []
-        }
-        for (let step in stepData) {
-          if (!data.labels.includes(stepData[step]["time"])) {
-            data.labels.push(stepData[step]["time"])
-            data.dataSet.push(stepData[step]["value"])
-            dataDisplay.labels.push(stepData[step]["time"])
-            dataDisplay.dataSet.push(stepData[step]["value"])
-          }
-        }
-        this.setState(
-          {
-            isLoading: false,
-            stepData: data,
-            displayStepData: dataDisplay
-          },
-          () => this.pressDayBtn()
-        )
-      })
+      }
+      this.setState(
+        {
+          isLoading: false,
+          stepData: data,
+          displayStepData: dataDisplay
+        },
+        () => this.pressDayBtn()
+      )
   }
 
   // Display data of 7d nearest

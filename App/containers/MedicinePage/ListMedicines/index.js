@@ -13,7 +13,7 @@ import {
   Spinner
 } from "native-base"
 import AsyncStorage from "@react-native-community/async-storage"
-import firebase from "firebase"
+import firebase from "react-native-firebase"
 import UpdateMedicine from "./UpdateMedicine"
 
 class ListMedicines extends Component {
@@ -38,7 +38,10 @@ class ListMedicines extends Component {
     const storage = await AsyncStorage.getItem("curUser")
     const objStorage = JSON.parse(storage)
     const elderId = objStorage.elderId
-    const patientsRef = firebase.database().ref("Patients")
+    const patientsRef = await firebase
+      .app("elder_care_mobile")
+      .database()
+      .ref("Patients")
     patientsRef.on("value", snapshot => {
       let patients = snapshot.val()[elderId]
       if (patients) {
@@ -71,9 +74,22 @@ class ListMedicines extends Component {
   deleteRow = (data, secId, rowId, rowMap) => {
     rowMap[`${secId}${rowId}`].props.closeRow()
     firebase
+      .app("elder_care_mobile")
       .database()
       .ref(`Patients/${data.elderId}/Medicines/${data.idMedicineFB}`)
       .remove()
+    const desertRef = firebase
+      .app("elder_care_mobile")
+      .storage()
+      .refFromURL(data.imageUrl)
+    desertRef
+      .delete()
+      .then(function() {
+        // File deleted successfully
+      })
+      .catch(function(error) {
+        // Uh-oh, an error occurred!
+      })
   }
 
   handleVisible = visible => {
@@ -113,7 +129,7 @@ class ListMedicines extends Component {
                     {data.script}
                   </Text>
                   <Text note numberOfLines={1}>
-                    {data.morning ? " Sáng " : null}
+                    {data.morning ? "Sáng " : null}
                     {data.afternoon ? " Trưa " : null}
                     {data.evening ? " Tối " : null}
                   </Text>
