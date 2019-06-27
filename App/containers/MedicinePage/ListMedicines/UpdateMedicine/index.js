@@ -21,6 +21,7 @@ class UpdateMedicine extends React.Component {
     this.state = {
       modalVisible: this.props.modalVisible,
       photo: null,
+      lastImg: this.props.medicineData.imageUrl,
       imageUrl: this.props.medicineData.imageUrl,
       text: this.props.medicineData.script,
       imgName: this.props.medicineData.name,
@@ -86,97 +87,98 @@ class UpdateMedicine extends React.Component {
   }
 
   handleOK = async () => {
-    const { photo, imgName, morning, afternoon, evening } = this.state
+    const { photo, imgName, morning, afternoon, evening, lastImg } = this.state
     if (!imgName) {
       Alert.alert("Lỗi", "Chưa nhập tên thuốc")
     } else if (!morning && !afternoon && !evening) {
       Alert.alert("Lỗi", "Chưa hẹn giờ uống thuốc")
     } else {
-      this.setState({
+      await this.setState({
         spinner: true
       })
+      if (!firebase.apps.length) {
+        firebase.initializeApp({
+          databaseURL: "https://eldercare-5e4c8.firebaseio.com",
+          projectId: "eldercare-5e4c8",
+          apiKey: "AIzaSyBhgCvEUPBxv4JoqairKRVR8ijSnDKED-M",
+          appId: "1:49718683704:android:04076a44890009c8",
+          messagingSenderId: "49718683704",
+          storageBucket: "eldercare-5e4c8.appspot.com",
+          clientId:
+            "49718683704-ipl6t2j9c9rtub3hisae556k4l04fjji.apps.googleusercontent.com",
+          persistence: true
+        })
+      }
       if (photo) {
         let source = this.state.blobFile
-        if (!firebase.apps.length) {
-          firebase.initializeApp({
-            databaseURL: "https://eldercare-5e4c8.firebaseio.com",
-            projectId: "eldercare-5e4c8",
-            apiKey: "AIzaSyBhgCvEUPBxv4JoqairKRVR8ijSnDKED-M",
-            appId: "1:49718683704:android:04076a44890009c8",
-            messagingSenderId: "49718683704",
-            storageBucket: "eldercare-5e4c8.appspot.com",
-            clientId: "49718683704-ipl6t2j9c9rtub3hisae556k4l04fjji.apps.googleusercontent.com",
-            persistence: true,
-          })
-        }
-        let storageRef = firebase
-          .storage()
-          .ref()
-          .child(`${this.props.medicineData.elderId}/${this.state.imgName}.jpg`)
-        storageRef
-          .put(source, {
+        try {
+          let desertRef = firebase.storage().refFromURL(lastImg)
+          // Delete the file
+          await desertRef.delete()
+
+          let storageRef = firebase
+            .storage()
+            .ref()
+            .child(
+              `${this.props.medicineData.elderId}/${this.state.imgName}.jpg`
+            )
+          await storageRef.put(source, {
             contentType: "image/jpeg"
           })
-          .then(snapshot => {
-            storageRef.getDownloadURL().then(url => {
-              firebase
-                .database()
-                .ref(
-                  `Patients/${this.props.medicineData.elderId}/Medicines/${
-                    this.props.medicineData.idMedicineFB
-                  }`
-                )
-                .update({
-                  imageUrl: url,
-                  name: this.state.imgName,
-                  script: this.state.text,
-                  morning: ~~this.state.morning,
-                  afternoon: ~~this.state.afternoon,
-                  evening: ~~this.state.evening
-                })
-                .then(async data => {
-                  //success callback
-                  this.setState({
-                    modalVisible: false,
-                    loading: false,
-                    elderId: "",
-                    photo: null,
-                    text: "",
-                    imgName: "",
-                    morning: false,
-                    afternoon: false,
-                    evening: false,
-                    blobFile: null,
-                    spinner: false
-                  })
-                  this.setModalVisible(false)
-                })
-                .catch(error => {
-                  //error callback
-                  console.log("error ", error)
-                })
+
+          let url = await storageRef.getDownloadURL()
+          await firebase
+            .database()
+            .ref(
+              `Patients/${this.props.medicineData.elderId}/Medicines/${
+                this.props.medicineData.idMedicineFB
+              }`
+            )
+            .update({
+              imageUrl: url,
+              name: this.state.imgName,
+              script: this.state.text,
+              morning: ~~this.state.morning,
+              afternoon: ~~this.state.afternoon,
+              evening: ~~this.state.evening
             })
+
+          this.setState({
+            modalVisible: false,
+            loading: false,
+            elderId: "",
+            photo: null,
+            text: "",
+            imgName: "",
+            morning: false,
+            afternoon: false,
+            evening: false,
+            blobFile: null,
+            spinner: false
           })
-      }
-      if (!photo) {
-        firebase
-          .database()
-          .ref(
-            `Patients/${this.props.medicineData.elderId}/Medicines/${
-              this.props.medicineData.idMedicineFB
-            }`
-          )
-          .update({
-            imageUrl: this.state.imageUrl,
-            name: this.state.imgName,
-            script: this.state.text,
-            morning: ~~this.state.morning,
-            afternoon: ~~this.state.afternoon,
-            evening: ~~this.state.evening
-          })
-          .then(async data => {
-            //success callback
-            this.setState({
+          this.setModalVisible(false)
+        } catch (err) {
+          throw err
+        }
+      } else {
+        try {
+          await firebase
+            .database()
+            .ref(
+              `Patients/${this.props.medicineData.elderId}/Medicines/${
+                this.props.medicineData.idMedicineFB
+              }`
+            )
+            .update({
+              imageUrl: this.state.imageUrl,
+              name: this.state.imgName,
+              script: this.state.text,
+              morning: ~~this.state.morning,
+              afternoon: ~~this.state.afternoon,
+              evening: ~~this.state.evening
+            })
+          this.setState(
+            {
               modalVisible: false,
               loading: false,
               elderId: "",
@@ -188,13 +190,12 @@ class UpdateMedicine extends React.Component {
               evening: false,
               blobFile: null,
               spinner: false
-            })
-            this.setModalVisible(false)
-          })
-          .catch(error => {
-            //error callback
-            console.log("error ", error)
-          })
+            }
+          )
+          this.setModalVisible(false)
+        } catch (error) {
+          throw err
+        }
       }
     }
   }
