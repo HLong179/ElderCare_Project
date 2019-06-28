@@ -1,57 +1,62 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, FlatList,TouchableHighlight } from "react-native";
+import React, { Component } from "react"
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableHighlight
+} from "react-native"
+import moment from "moment"
 
 export default class App extends Component {
   render() {
-    const { data } = this.props;
-    console.log("data", data);
-    let result = [];
-    if (data) {
-      let labelLength = data.labels.length;
-      for (let i = labelLength - 1; i > labelLength - 3; i--) {
+    const { data } = this.props
+    let result = []
+
+    if (data.labels) {
+      let labelLength = data.labels.length
+      for (let i = labelLength - 1; i > labelLength - 6; i--) {
         result.push({
-          time: data.labels[i],
-          value: data.dataSet[i]
-        });
+          time: moment(data.labels[i]).format("DD/MM  HH:mm"),
+          value: data.dataSet[i],
+          key: i
+        })
       }
     }
     if (result) {
       return (
-        <View >
+        <View style={{ marginTop: 10, paddingLeft: 20, paddingRight: 20 }}>
+          <Text>Dữ liệu nhịp tim gần đây:</Text>
           <FlatList
             data={result}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item, separators }) => (
+            renderItem={({ item }) => (
               <View style={styles.flatview}>
                 <Text style={styles.name}>{item.time}</Text>
-                <Text style={styles.email}>{item.value}</Text>
+                <Text style={styles.email}>{item.value}/bpm</Text>
               </View>
             )}
-            keyExtractor={item => item.email}
+            keyExtractor={item => item.key.toString()}
           />
         </View>
-      );
+      )
     }
-    return null;
+    return null
   }
 }
 
 const styles = StyleSheet.create({
-    flatview: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#F5FCFF",
-        flexDirection: "row",
-    },
+  flatview: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 5
+  },
   name: {
     fontFamily: "Verdana",
-    fontSize: 12,
-    marginRight: 10,
-
+    fontSize: 15,
+    color: "#085cdb"
   },
   email: {
     color: "red",
-    marginRight: 10,
+    fontSize: 15,
   }
-});
+})

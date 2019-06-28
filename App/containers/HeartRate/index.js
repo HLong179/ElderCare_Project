@@ -1,5 +1,11 @@
 import React from "React"
-import { View, StyleSheet, TouchableHighlight, BackHandler } from "react-native"
+import {
+  View,
+  StyleSheet,
+  TouchableHighlight,
+  BackHandler,
+  ScrollView
+} from "react-native"
 import firebase from "react-native-firebase"
 import { elderCare } from "../../Constant"
 import {
@@ -20,7 +26,7 @@ import Chart from "./Chart"
 import moment from "moment"
 import { pressDay, pressWeek, pressMonth } from "../../utils/chartData"
 import { withNavigation } from "react-navigation"
-import Detail from './Details';
+import Detail from "./Details"
 
 class HeartRate extends React.Component {
   constructor(props) {
@@ -33,7 +39,7 @@ class HeartRate extends React.Component {
       selectedDate: null,
       selectedValue: null,
       showDetail: true,
-      type: '',
+      type: ""
     }
   }
 
@@ -46,7 +52,7 @@ class HeartRate extends React.Component {
   }
 
   onBackPress = () => {
-    const { navigate } = this.props.navigation;
+    const { navigate } = this.props.navigation
     this.setState({
       heartData: []
     })
@@ -59,12 +65,11 @@ class HeartRate extends React.Component {
     this.setState({
       isLoading: true
     })
-    this.fetchAndDraw(jsonData.elderId);
-    this.getDoctorNumPhone(jsonData.elderId);
-   
+    this.fetchAndDraw(jsonData.elderId)
+    this.getDoctorNumPhone(jsonData.elderId)
   }
 
-  getDoctorNumPhone = (elderId) => {
+  getDoctorNumPhone = elderId => {
     fetch(`${SETTINGS.LOCAL_IP}/account/getDoctorPhoneNum`, {
       method: "POST",
       headers: {
@@ -74,80 +79,73 @@ class HeartRate extends React.Component {
       body: JSON.stringify({
         elderId: elderId
       })
-    }).then(
-      dataDoctorNum => {
-       
-        console.log("numPhone Doctor: ", dataDoctorNum.clone().json().doctorPhoneNum );
-        this.setState({ drPhoneNo: dataDoctorNum.clone().json().doctorPhoneNum })
-      }
-    )
-
+    }).then(dataDoctorNum => {
+      console.log(
+        "numPhone Doctor: ",
+        dataDoctorNum.clone().json().doctorPhoneNum
+      )
+      this.setState({ drPhoneNo: dataDoctorNum.clone().json().doctorPhoneNum })
+    })
   }
-  fetchAndDraw = (elderId) => {
-    
+  fetchAndDraw = elderId => {
     try {
       fetch(`${SETTINGS.LOCAL_IP}/firebase/getHeartRates`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        elderId: elderId
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          elderId: elderId
+        })
       })
-    })
-    .then(
-      Observer => {
-        Observer.clone().json().then(
-          res => {
-            console.log("data heart rate? ", res)
-            let rawData = res.data.sort(compare)
-            let data = {
-              labels: [],
-              dataSet: []
-            }
-            let dataDisplay = {
-              labels: [],
-              dataSet: []
-            }
-            for (let patient in rawData) {
-              let timeLabel = moment(rawData[patient]["time"]).format(
-                "DD/MM/YYYY HH:mm:ss"
-              )
-              if (!data.labels.includes(rawData[patient]["time"])) {
-                data.labels.push(rawData[patient]["time"])
-                data.dataSet.push(rawData[patient]["value"])
-                dataDisplay.labels.push(timeLabel)
-                dataDisplay.dataSet.push(rawData[patient]["value"])
+        .then(Observer => {
+          Observer.clone()
+            .json()
+            .then(res => {
+              let rawData = res.data.sort(compare)
+              let data = {
+                labels: [],
+                dataSet: []
               }
-            }
-            this.setState(
-              {
-                isLoading: false,
-                heartData: data,
-                displayHeartData: dataDisplay
-              },
-              () => this.pressDayBtn()
-            )
-          }
-        ) 
-      }
-    )
-    .catch(e => console.log("loi: ", e))
+              let dataDisplay = {
+                labels: [],
+                dataSet: []
+              }
+              for (let patient in rawData) {
+                let timeLabel = moment(rawData[patient]["time"]).format(
+                  "DD/MM/YYYY HH:mm:ss"
+                )
+                if (!data.labels.includes(rawData[patient]["time"])) {
+                  data.labels.push(rawData[patient]["time"])
+                  data.dataSet.push(rawData[patient]["value"])
+                  dataDisplay.labels.push(timeLabel)
+                  dataDisplay.dataSet.push(rawData[patient]["value"])
+                }
+              }
+              this.setState(
+                {
+                  isLoading: false,
+                  heartData: data,
+                  displayHeartData: dataDisplay
+                },
+                () => this.pressDayBtn()
+              )
+            })
+        })
+        .catch(e => console.log("loi: ", e))
     } catch (error) {
-      console.log("something wrong: ", error);
+      console.log("something wrong: ", error)
     }
   }
   pressDayBtn = () => {
     const { heartData } = this.state
     let data = pressDay(heartData.labels, heartData.dataSet)
-    let labelLength = data.dataSet.length;
-    let dataLength = data.labels.length;
+    let labelLength = data.dataSet.length
+    let dataLength = data.labels.length
     this.setState({
       displayHeartData: data,
-      selectedDate: data.labels[labelLength - 1],
-      selectedValue: data.dataSet[dataLength -1],
-      type: 'ngày',
+      type: "ngày"
     })
   }
 
@@ -156,7 +154,7 @@ class HeartRate extends React.Component {
     let data = pressWeek(heartData.labels, heartData.dataSet)
     this.setState({
       displayHeartData: data,
-      type: '',
+      type: ""
     })
   }
 
@@ -164,7 +162,7 @@ class HeartRate extends React.Component {
     const { heartData } = this.state
     let data = pressMonth(heartData.labels, heartData.dataSet)
     this.setState({
-      displayHeartData: data,
+      displayHeartData: data
     })
   }
   callDoctor = () => {
@@ -181,26 +179,31 @@ class HeartRate extends React.Component {
   onChangeTab = ({ i }) => {
     this.setState({ currentPage: i }, () => {
       if (i === 0) {
-        this.setState({showDetail: true})
+        this.setState({ selectedDate: null, selectedValue: null })
         this.pressDayBtn()
       } else if (i === 1) {
-        this.setState({showDetail: true})
+        this.setState({ selectedDate: null, selectedValue: null })
         this.pressWeekBtn()
       } else {
-        this.setState({showDetail: false})
+        this.setState({ selectedDate: null, selectedValue: null })
         this.pressMonthBtn()
       }
     })
   }
-  handlePointClick = (data) => {
+  handlePointClick = data => {
     this.setState({
       selectedDate: data.time,
-      selectedValue: data.value,
+      selectedValue: data.value
     })
   }
 
   render() {
-    const { displayHeartData, selectedDate, selectedValue, showDetail } = this.state
+    const {
+      displayHeartData,
+      selectedDate,
+      selectedValue,
+      showDetail
+    } = this.state
     if (this.state.isLoading) {
       return (
         <View style={styles.textStyle}>
@@ -210,45 +213,61 @@ class HeartRate extends React.Component {
     }
     return (
       <Container>
-        <Tabs
-          initialPage={this.state.currentPage}
-          onChangeTab={this.onChangeTab}
-        >
-          <Tab
-            heading={
-              <TabHeading>
-                <Text>Ngày</Text>
-              </TabHeading>
-            }
-            onPress={() => alert("press")}
+        <View style={{ minHeight: 370 }}>
+          <Tabs
+            initialPage={this.state.currentPage}
+            onChangeTab={this.onChangeTab}
           >
-            <Chart data={displayHeartData} type="ngày" handlePointClick={this.handlePointClick} />
+            <Tab
+              heading={
+                <TabHeading>
+                  <Text>Ngày</Text>
+                </TabHeading>
+              }
+            >
+              <Chart
+                data={displayHeartData}
+                type="ngày"
+                handlePointClick={this.handlePointClick}
+              />
+            </Tab>
+            <Tab
+              heading={
+                <TabHeading>
+                  <Text>Tuần</Text>
+                </TabHeading>
+              }
+            >
+              <Chart
+                data={displayHeartData}
+                type="tuần"
+                handlePointClick={this.handlePointClick}
+              />
+            </Tab>
+            <Tab
+              heading={
+                <TabHeading>
+                  <Text>Tháng</Text>
+                </TabHeading>
+              }
+            >
+              <Chart
+                data={displayHeartData}
+                type="tháng"
+                handlePointClick={this.handlePointClick}
+              />
+            </Tab>
+          </Tabs>
+        </View>
 
-          </Tab>
-          <Tab
-            heading={
-              <TabHeading>
-                <Text>Tuần</Text>
-              </TabHeading>
-            }
-          >
-            <Chart data={displayHeartData} type="tuần" handlePointClick={this.handlePointClick} />
-          </Tab>
-          <Tab
-            heading={
-              <TabHeading>
-                <Text>Tháng</Text>
-              </TabHeading>
-            }
-          >
-            <Chart data={displayHeartData} type="tháng" />
-          </Tab>
-        </Tabs>
-        { showDetail ?
-            <Detail selectedDate={selectedDate} selectedValue={selectedValue} data={displayHeartData} type={this.state.type} ></Detail>
-            :null
-        }
-
+        <ScrollView style={{ marginTop: 10 }}>
+          <Detail
+            selectedDate={selectedDate}
+            selectedValue={selectedValue}
+            type={this.state.type}
+            rawData={this.state.heartData}
+          />
+        </ScrollView>
 
         <TouchableHighlight style={styles.btn} underlayColor="#fefefe">
           <Button iconLeft block warning onPress={this.callDoctor}>
@@ -262,21 +281,9 @@ class HeartRate extends React.Component {
 }
 export default withNavigation(HeartRate)
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 10,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center"
-  },
   btn: {
     borderRadius: 5,
     padding: 10
-  },
-  btnActive: {
-    backgroundColor: "#f0ad4e"
-  },
-  text: {
-    marginTop: 20
   },
   textStyle: {
     minHeight: 100,
@@ -284,12 +291,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     color: "gray"
-  },
-  picker: {
-    display: "flex",
-    flexDirection: "row",
-    marginTop: 30,
-    alignItems: "center",
-    justifyContent: "center"
   }
 })

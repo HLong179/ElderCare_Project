@@ -5,15 +5,14 @@ import {
   VictoryLine,
   VictoryTheme,
   VictoryScatter,
-  VictoryAxis,
+  VictoryAxis
 } from "victory-native"
 import Svg from "react-native-svg"
 
-import moment from 'moment';
+import moment from "moment"
 // let trLocale = require('moment/locale/vi');
 // moment.locale('tr',trLocale);
 // moment.suppressDeprecationWarnings = true;
-
 
 const styles = StyleSheet.create({
   textChart: {
@@ -30,10 +29,10 @@ const styles = StyleSheet.create({
   }
 })
 
-const Chart = (props) => {
+const Chart = props => {
   const rawData = props.data
-  let self = props;
-  let data = [];
+  let self = props
+  let data = []
 
   if (rawData) {
     if (rawData.labels.length > 1) {
@@ -56,7 +55,7 @@ const Chart = (props) => {
           <VictoryChart
             theme={VictoryTheme.material}
             scale={{ x: "time", y: "linear" }}
-            padding={{ top: 30, right: 30, bottom: 50, left: 45 }}
+            padding={{ top: 30, right: 20, bottom: 50, left: 30 }}
           >
             <VictoryAxis
               dependentAxis
@@ -121,26 +120,29 @@ const Chart = (props) => {
             />
             <VictoryScatter
               data={data}
-              size={5}
+              size={7}
               style={{ data: { fill: "#c43a31" } }}
-              events={[{
-                target: "data",
-                eventHandlers: {
-                  onPressIn: () => {
-                    return [
-                      {
-                        target: "data",
-                        mutation: (props) => {
-                          let time, value;
-                          time = props.datum.x;
-                          value = props.datum.y;
-                          self.handlePointClick({time, value})
+              labels={() => null}
+              events={[
+                {
+                  target: "data",
+                  eventHandlers: {
+                    onPressIn: () => {
+                      return [
+                        {
+                          target: "data",
+                          mutation: props => {
+                            let time, value
+                            time = props.datum.x
+                            value = props.datum.y
+                            self.handlePointClick({ time, value })
+                          }
                         }
-                      }
-                    ];
+                      ]
+                    }
                   }
                 }
-              }]}
+              ]}
             />
           </VictoryChart>
         </Svg>
