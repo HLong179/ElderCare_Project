@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
 })
 
 const Chart = props => {
-  const rawData = props.data
+  const rawData = props.data,
+        type = props.type;
   let self = props
   let data = []
 
@@ -55,14 +56,15 @@ const Chart = props => {
           <VictoryChart
             theme={VictoryTheme.material}
             scale={{ x: "time", y: "linear" }}
-            padding={{ top: 30, right: 20, bottom: 50, left: 30 }}
+            padding={{ top: 30, right: 20, bottom: 50, left: 32 }}
           >
             <VictoryAxis
               dependentAxis
               // label="Nhịp tim (BPM)"
               style={{
-                axisLabel: { padding: -20 }
+                grid: { fill: "none", stroke: "none" }
               }}
+
               tickValues={[40, 60, 80, 100, 120, 140]}
             />
 
@@ -112,15 +114,17 @@ const Chart = props => {
               label="Thời gian"
               style={{
                 axisLabel: { padding: 30 },
-                tickLabels: { padding: 5, angle: 0 }
+                tickLabels: { padding: 5, angle: 0 },
+                // grid: { fill: "none", stroke: "none" }
               }}
+              
               // tickCount={7}
               fixLabelOverlap
               standalone={false}
             />
             <VictoryScatter
               data={data}
-              size={7}
+              size={10}
               style={{ data: { fill: "#c43a31" } }}
               labels={() => null}
               events={[
@@ -133,7 +137,15 @@ const Chart = props => {
                           target: "data",
                           mutation: props => {
                             let time, value
-                            time = props.datum.x
+                            time = props.datum.x;
+                            if (type === "tuần") {
+                              console.log("time selected: ", moment(time, "DD/MM/YYYY").toDate().getDate())
+                              let start =  moment(time, "DD/MM/YYYY").toDate();
+                              var lastday = new Date(new Date().setDate(start.getDate()+6));
+                              console.log("last date: ", lastday);
+                              time = `${start.getDate()}/${start.getMonth() + 1} - ${lastday.getDate()}/${lastday.getMonth() + 1}`
+                            }
+                            
                             value = props.datum.y
                             self.handlePointClick({ time, value })
                           }
@@ -154,7 +166,7 @@ const Chart = props => {
             <Text style={styles.textChart}>
               Nhịp tim trung bình trong {props.type} {rawData.labels[0]}:{" "}
             </Text>
-            <Text style={styles.bpm}>{rawData.dataSet[0]} Bpms</Text>
+            <Text style={styles.bpm}>{rawData.dataSet[0]} Bpm</Text>
           </View>
         )
       }

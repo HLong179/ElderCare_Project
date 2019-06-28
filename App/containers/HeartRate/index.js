@@ -191,6 +191,9 @@ class HeartRate extends React.Component {
     })
   }
   handlePointClick = data => {
+    // let day = moment(data.time).toDate();
+    // var lastday = new Date(day.setDate(day.getDate()+6)).toUTCString();
+    // console.log("time next: ", lastday)
     this.setState({
       selectedDate: data.time,
       selectedValue: data.value

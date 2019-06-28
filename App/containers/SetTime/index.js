@@ -79,7 +79,8 @@ class SetTime extends React.Component {
 
           this.setState({
             hour: fHours.toString(),
-            minute: rMinute.toString()
+            minute: rMinute.toString(),
+            interval: snapshot.val()
           })
         } else return
       })
@@ -163,7 +164,8 @@ class SetTime extends React.Component {
       : parseInt(minute)
     this.setState({
       minute: minute,
-      hour: hour
+      hour: hour,
+      interval: newItv
     })
     // alert(newItv);
 
@@ -175,7 +177,6 @@ class SetTime extends React.Component {
       .database()
       .ref(`Patients/${this.state.elderId}/Config/Interval`)
       .set(+newItv)
-
     socket.emit("data-interval", {
       elderId: this.state.elderId,
       value: newItv
@@ -188,10 +189,24 @@ class SetTime extends React.Component {
   }
 
   onHandleSchedule = value => {
+    const { socket } = this.props
     console.log(value)
     this.setState({
       scheduleJob: value
     })
+    if (value === false) {
+      socket.emit("stop-schedule", {
+        elderId: this.state.elderId,
+      })
+      // disable button set time interval
+    } else {
+      // undisable button set time interval
+      socket.emit("data-interval", {
+        elderId: this.state.elderId,
+        value: this.state.interval
+      })
+    }
+    
   }
 
   render() {

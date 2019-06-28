@@ -26,13 +26,13 @@ export default class App extends Component {
     if (result) {
       return (
         <View style={{ marginTop: 10, paddingLeft: 20, paddingRight: 20 }}>
-          <Text>Dữ liệu nhịp tim gần đây:</Text>
+          <Text style={styles.title}>Dữ liệu gần đây:</Text>
           <FlatList
             data={result}
             renderItem={({ item }) => (
               <View style={styles.flatview}>
                 <Text style={styles.name}>{item.time}</Text>
-                <Text style={styles.email}>{item.value}/bpm</Text>
+                <Text style={styles.email}>{item.value} <Text style = {{fontWeight: "normal"}}>bpm</Text></Text>
               </View>
             )}
             keyExtractor={item => item.key.toString()}
@@ -47,16 +47,29 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   flatview: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    paddingTop: 5
+    justifyContent: "space-around",
+    paddingTop: 7
   },
   name: {
     fontFamily: "Verdana",
-    fontSize: 15,
-    color: "#085cdb"
+    fontSize: 16,
+    color: "black",
+    fontWeight: "bold"
   },
   email: {
     color: "red",
-    fontSize: 15,
+    fontSize: 16,
+    fontWeight: "bold"
+  },
+  title : {
+    paddingTop: 15,
+    width: "70%",
+    alignSelf: "center",
+    borderTopWidth: 1.5,
+    borderTopColor: '#d6d7da',  
+    fontSize: 18,
+    color: "#085cdb",
+    fontWeight: "bold",
+    textAlign: "center"
   }
 })
