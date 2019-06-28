@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, FlatList } from "react-native"
+import { Button, FlatList, Vibration } from "react-native"
 import {
   Container,
   Content,
@@ -19,7 +19,7 @@ import AsyncStorage from "@react-native-community/async-storage"
 import { timeConvert } from "../../utils/timeConvert.util"
 
 import { withSocketContext } from "../../../socketContext"
-
+const PATTERN = [1000, 2000, 3000];
 class SetTime extends React.Component {
   constructor(props) {
     super(props)
@@ -194,17 +194,22 @@ class SetTime extends React.Component {
     this.setState({
       scheduleJob: value
     })
-    if (value === false) {
-      socket.emit("stop-schedule", {
-        elderId: this.state.elderId,
-      })
+    
+    if (value === true) {
+      console.log("vibrate babe")
+      Vibration.vibrate(PATTERN, true) ;
+      // socket.emit("stop-schedule", {
+      //   elderId: this.state.elderId,
+      // })
       // disable button set time interval
     } else {
+      console.log("cancel vibrate")
+      Vibration.cancel();
       // undisable button set time interval
-      socket.emit("data-interval", {
-        elderId: this.state.elderId,
-        value: this.state.interval
-      })
+      // socket.emit("data-interval", {
+      //   elderId: this.state.elderId,
+      //   value: this.state.interval
+      // })
     }
     
   }

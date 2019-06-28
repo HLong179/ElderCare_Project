@@ -76,6 +76,12 @@ const Chart = props => {
               fixLabelOverlap
             />
           </VictoryChart>
+          <Text style= {{
+            paddingTop: 50,
+          fontWeight: "bold",
+          fontSize: 18,
+          textAlign: "center"
+          }}>Lượng Calories trung bình tiêu thụ.</Text>
         </Svg>
       )
     } else {

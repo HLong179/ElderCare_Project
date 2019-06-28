@@ -15,7 +15,7 @@ export default async (message: RemoteMessage) => {
         } else {
             if (message.data.type === "ServiceOff") {
                 mTitle = "Thông báo";
-                mMessage = "Dịch vụ truy cập dữ liệu sức khỏe đã dừng, điều này sẽ ảnh hưởng tới việc nhận thông báo nhịp tim của bệnh nhân!"
+                mMessage = "Dịch vụ truy cập dữ liệu sức khỏe đã dừng, điều này sẽ ảnh hưởng tới việc truy cập dữ liệu cũng như nhận các thông báo!"
             } else {
                 if (message.data.type === "IntervalChanged") {
                     mTitle = "Thông báo";

@@ -76,6 +76,12 @@ const Chart = props => {
               fixLabelOverlap
             />
           </VictoryChart>
+          <Text style= {{
+            paddingTop: 50,
+          fontWeight: "bold",
+          fontSize: 18,
+          textAlign: "center"
+          }}>Số bước đi trung bình.</Text>
         </Svg>
       )
     } else {
