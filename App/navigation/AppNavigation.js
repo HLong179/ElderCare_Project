@@ -110,10 +110,10 @@ const HomeNav = createStackNavigator(
         title: `Biểu đồ bước đi`
       })
     }
+  },
+  {
+    initialRouteName: "SplashScreen"
   }
-  // {
-  //   initialRouteName: "SplashScreen"
-  // }
 )
 
 const AppSwitchNavigator = createSwitchNavigator({

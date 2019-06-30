@@ -13,13 +13,8 @@ class WelcomePage extends React.Component {
                 this.props.navigation.navigate('Home');
             else
                 this.props.navigation.navigate('Login');
-        }, 1000);
-
-        console.log(result);
-
-
+        }, 100);
     }
-
     render() {
         return (
             <View/>

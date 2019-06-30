@@ -142,11 +142,11 @@ class Login extends Component {
                 {props => (
                   <Form>
                     <StyleHeader>
-                      {'Login In'}
+                      {'Đăng nhập'}
                     </StyleHeader>
                     <Item>
                       <Input
-                        placeholder={'Username'}
+                        placeholder={'Tên đăng nhập'}
                         name={"username"}
                         onChangeText={props.handleChange("username")}
                         ref={input => (this._email = input)}
@@ -170,7 +170,7 @@ class Login extends Component {
 
                     <Item>
                       <Input
-                        placeholder={'Password'}
+                        placeholder={'Mật khẩu'}
                         name={"password"}
                         onChangeText={props.handleChange("password")}
                         ref={input => (this._password = input)}
@@ -189,14 +189,14 @@ class Login extends Component {
 
                     <Button style={{marginTop: 10}}
                       onPress={props.handleSubmit}
-                      title={'LOGIN'}
+                      title={'Đăng nhập'}
                     />
-                    <Button
+                    {/* <Button
                       transparent
                       color="gray"
                       title={'Forgot password'}
                       onPress={this.handleForgotPassword}
-                    />
+                    /> */}
                     <Button transparent color={'blue'} primary title={"Đăng kí tài khoản mới"} onPress={this.onClickSignUp} />
                   </Form>
                 )}
