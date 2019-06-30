@@ -15,6 +15,7 @@ import {connect} from 'react-redux'
 import { Formik } from 'formik';
 import getSchema from './validateSchema';
 import TextError from '../../../components/CommonFormError';
+import { BackHandler } from 'react-native'
 
 
 const StyleHeader = styled(Text)`
@@ -38,16 +39,16 @@ class Login extends Component {
             password: '',
             isLogged: ''
         }
-            
+
     }
     handleLogin = (values) => {
-      
+
         const { username, password } = values;
         const data = {
             username: username.trim(),
             password: password.trim(),
         }
-        
+
         console.log('path',`${SETTINGS.LOCAL_IP}/account/login`);
 
         fetch(`${SETTINGS.LOCAL_IP}/account/login`, {
@@ -60,14 +61,14 @@ class Login extends Component {
                 "username": data.username,
                 "password": data.password
             }),
-        }).then(async (response) => { 
+        }).then(async (response) => {
             response = await response.json();
             console.log(response);
             if (response.auth) {
                 const result = await AsyncStorage.multiSet([['curUser', JSON.stringify(response.curUser[0])],['isLogin', 'true']]);
                 console.log("our firebae application already have? : " , firebase.apps)
-                
-              
+
+
                   try {
                       elderCare.onReady()
                       .then(app => {
@@ -75,15 +76,15 @@ class Login extends Component {
                         this.props.navigation.navigate('Home');
                       })
                       .catch(err => console.log(err))
-                   
+
                   } catch (error) {
                     console.log('something wrong: ',error);
                   }
-                  
-                    
-              
+
+
+
                     // console.log("wtf :", firebase.apps);
-                    
+
                     // firebase.messaging().subscribeToTopic(response.curUser[0].elderId)
                     // .then(
                     //   res => {
@@ -93,8 +94,8 @@ class Login extends Component {
                     // .catch(e => {
                     //   console.log("something wrong here: ", e);
                     // })
-                   
-          
+
+
             } else {
               Toast.show({
                 text: `${response.message}`,
@@ -106,7 +107,7 @@ class Login extends Component {
         .catch((error) => {
           console.log(error);
         })
-       
+
     }
 
     onClickSignUp = () => {
@@ -120,7 +121,25 @@ class Login extends Component {
       const { navigate } = this.props.navigation;
       navigate('MainRelativeSignUp');
     }
- 
+
+    componentWillMount() {
+      BackHandler.addEventListener(
+        "hardwareBackPress",
+        this.handleBackButtonClick
+      );
+    }
+
+    componentWillUnmount() {
+      BackHandler.removeEventListener(
+        "hardwareBackPress",
+        this.handleBackButtonClick
+      );
+    }
+
+    handleBackButtonClick = () => {
+      this.props.navigation.goBack(null);
+      return
+    }
     render() {
         const  initialValues  = this.state;
         return (

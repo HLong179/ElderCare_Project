@@ -117,7 +117,7 @@ const Chart = props => {
                 tickLabels: { padding: 5, angle: 0 },
                 // grid: { fill: "none", stroke: "none" }
               }}
-              
+
               // tickCount={7}
               fixLabelOverlap
               standalone={false}
@@ -145,7 +145,7 @@ const Chart = props => {
                               console.log("last date: ", lastday);
                               time = `${start.getDate()}/${start.getMonth() + 1} - ${lastday.getDate()}/${lastday.getMonth() + 1}`
                             }
-                            
+
                             value = props.datum.y
                             self.handlePointClick({ time, value })
                           }

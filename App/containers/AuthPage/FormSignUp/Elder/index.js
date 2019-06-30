@@ -10,6 +10,7 @@ import TextError from '../../../../components/CommonFormError/index';
 // import * as authServices from '../../../services/authServices';
 import { addElder } from '../../../../services/authServices';
 import AsyncStorage from '@react-native-community/async-storage';
+import { BackHandler } from 'react-native'
 import getSchema from './validateSchema';
 const maxAge = 100;
 
@@ -94,6 +95,24 @@ class SignUp extends Component {
       }
       return Items;
     }
+    componentWillMount() {
+      BackHandler.addEventListener(
+        "hardwareBackPress",
+        this.handleBackButtonClick
+      );
+    }
+
+    componentWillUnmount() {
+      BackHandler.removeEventListener(
+        "hardwareBackPress",
+        this.handleBackButtonClick
+      );
+    }
+
+    handleBackButtonClick = () => {
+      this.props.navigation.goBack(null);
+      return
+    }
 
     render() {
         const  initialValues  = this.state;
@@ -177,7 +196,7 @@ class SignUp extends Component {
                           })
                         }}
                       >
-                        
+
                         { this.createPickerItems() }
                       </Picker>
                     </Item>

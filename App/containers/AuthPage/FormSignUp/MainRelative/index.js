@@ -10,6 +10,8 @@ import * as authServices from '../../../../services/authServices';
 import AsyncStorage from '@react-native-community/async-storage';
 import TextError from '../../../../components/CommonFormError';
 import getSchema from './validationSchema';
+import { BackHandler } from 'react-native'
+
 
 
 const StyleHeader = styled(Text)`
@@ -82,7 +84,25 @@ class MainRelative extends React.Component {
             type: 'danger'
           })
         }
-        
+
+    }
+    componentWillMount() {
+      BackHandler.addEventListener(
+        "hardwareBackPress",
+        this.handleBackButtonClick
+      );
+    }
+
+    componentWillUnmount() {
+      BackHandler.removeEventListener(
+        "hardwareBackPress",
+        this.handleBackButtonClick
+      );
+    }
+
+    handleBackButtonClick = () => {
+      this.props.navigation.goBack(null);
+      return
     }
     render() {
         const initialValues = this.state;
@@ -153,7 +173,7 @@ class MainRelative extends React.Component {
                     <TextError>
                       {props.touched.phone && props.errors.phone}
                     </TextError>
-                    
+
                     <Item>
                       <Input
                         placeholder={"Địa chỉ"}
@@ -180,7 +200,7 @@ class MainRelative extends React.Component {
                       <Icon active name="body" />
                     </Item>
 
-                    
+
                     <TextError>
                       {props.touched.username && props.errors.username}
                     </TextError>

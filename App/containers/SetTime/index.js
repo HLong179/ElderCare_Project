@@ -12,6 +12,8 @@ import {
   Right,
   Switch
 } from "native-base"
+import { BackHandler } from 'react-native'
+
 import Dialog from "react-native-dialog"
 import moment from "moment"
 import firebase from "react-native-firebase"
@@ -40,6 +42,7 @@ class SetTime extends React.Component {
       scheduleJob: true
     }
   }
+
 
   componentDidMount = async () => {
     const { socket } = this.props
@@ -194,7 +197,7 @@ class SetTime extends React.Component {
     this.setState({
       scheduleJob: value
     })
-    
+
     if (value === true) {
       console.log("vibrate babe")
       Vibration.vibrate(PATTERN, true) ;
@@ -211,7 +214,25 @@ class SetTime extends React.Component {
       //   value: this.state.interval
       // })
     }
-    
+
+  }
+  componentWillMount() {
+    BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener(
+      "hardwareBackPress",
+      this.handleBackButtonClick
+    );
+  }
+
+  handleBackButtonClick = () => {
+    this.props.navigation.goBack(null);
+    return true;
   }
 
   render() {
