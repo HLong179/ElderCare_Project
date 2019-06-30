@@ -111,7 +111,7 @@ class AddRelative extends Component {
             {props => (
               <Form>
                 <CommonItem stackedLabel>
-                  <Label>Id</Label>
+                  <Label>ID</Label>
                   <Input
                     value={this.state.id}
                     autoCapitalize={"none"}
@@ -160,7 +160,7 @@ class AddRelative extends Component {
                 </TextError>
 
                 <CommonItem stackedLabel>
-                  <Label>Username</Label>
+                  <Label>Tên đăng nhập</Label>
                   <Input
                     name="username"
                     onChangeText={props.handleChange("username")}
@@ -174,12 +174,13 @@ class AddRelative extends Component {
                 </TextError>
 
                 <CommonItem stackedLabel>
-                  <Label>Password</Label>
+                  <Label>Mật khẩu</Label>
                   <Input
                     name="password"
                     onChangeText={props.handleChange("password")}
                     autoCapitalize={"none"}
                     value={props.values.password}
+                    secureTextEntry={true}
                   />
                 </CommonItem>
 
