@@ -110,7 +110,7 @@ class SignUp extends Component {
     }
 
     handleBackButtonClick = () => {
-      this.props.navigation.goBack(null);
+      this.props.navigation.navigate('Login');
       return
     }
 

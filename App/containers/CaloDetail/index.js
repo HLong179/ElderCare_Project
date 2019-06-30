@@ -43,10 +43,10 @@ class CalorDetail extends React.Component {
     this.setState({
       isLoading: true
     })
-  
+
     this.fetchAndDraw(jsonData.elderId);
     this.getDoctorNumPhone(jsonData.elderId);
-      
+
   }
 
   fetchAndDraw = (elderId) => {
@@ -109,7 +109,7 @@ class CalorDetail extends React.Component {
       })
     }).then(
       dataDoctorNum => {
-       
+
         console.log("numPhone Doctor: ", dataDoctorNum.clone().json().doctorPhoneNum );
         this.setState({ drPhoneNo: dataDoctorNum.clone().json().doctorPhoneNum })
       }
