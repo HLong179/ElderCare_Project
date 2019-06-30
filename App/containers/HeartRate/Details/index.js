@@ -12,7 +12,7 @@ class HeartDetail extends React.Component {
       <View>
         {selectedDate ? (
           <View style={{
-            width: "70%",
+            width: "80%",
             alignSelf: "center"
            }}>
             {/* <Text>Dữ liệu nhận được:</Text> */}
@@ -27,7 +27,7 @@ class HeartDetail extends React.Component {
                 style={{
                   fontSize: 25,
                   color: "black",
-                  fontWeight: "bold"
+                  fontWeight: "bold",
                 }}
               >
                 {selectedDate}

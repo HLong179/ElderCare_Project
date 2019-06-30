@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     width: "70%",
     alignSelf: "center",
     borderTopWidth: 1.5,
-    borderTopColor: '#d6d7da',  
+    borderTopColor: '#d6d7da',
     fontSize: 18,
     color: "#085cdb",
     fontWeight: "bold",
