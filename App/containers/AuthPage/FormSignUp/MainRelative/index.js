@@ -42,7 +42,6 @@ class MainRelative extends React.Component {
         this.setState({
             icid: result,
         })
-        alert(result);
     }
 
     handleAddMain = async (values) => {
@@ -101,8 +100,8 @@ class MainRelative extends React.Component {
     }
 
     handleBackButtonClick = () => {
-      this.props.navigation.goBack(null);
-      return
+      this.props.navigation.navigate('Login');
+      return;
     }
     render() {
         const initialValues = this.state;

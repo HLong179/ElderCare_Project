@@ -122,11 +122,8 @@ class Login extends Component {
       navigate('MainRelativeSignUp');
     }
 
-
-
     handleBackButtonClick = () => {
-      this.props.navigation.goBack(null);
-      return
+      return true;
     }
     render() {
         const  initialValues  = this.state;
