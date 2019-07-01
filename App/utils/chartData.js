@@ -36,69 +36,41 @@ const pressWeek = (labels, chartData) => {
     dataSet: []
   }
   let rate = {}
+  let today = moment()
+  let startOfWeek = moment(today).startOf("isoWeek")
+  let endOfWeek = moment(today).endOf("isoWeek")
+  let minTime = Math.min(...labels)
+  today = moment(today).valueOf()
+  while (today >= parseInt(minTime, 10) - 24 * 60 * 60 * 1000 * 7) {
+    rate[moment(startOfWeek).format("DD/MM")] = {
+      start: moment(startOfWeek).format("DD/MM"),
+      end: moment(endOfWeek).format("DD/MM"),
+      data: []
+    }
+    today = moment(today).valueOf() - 24 * 60 * 60 * 1000 * 7
+    startOfWeek = moment(today).startOf("isoWeek")
+    endOfWeek = moment(today).endOf("isoWeek")
+  }
   for (let i = 0; i < labels.length; i++) {
     let timeLabel = labels[i]
-
-    if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
-      let weekTime = `1/${moment(timeLabel).month() + 1}/${moment(
-        timeLabel
-      ).year()}`
-      if (rate[weekTime]) {
-        rate[weekTime].push(chartData[i])
-      } else {
-        rate[weekTime] = [chartData[i]]
-      }
-    } else if (
-      moment(timeLabel).date() >= 8 &&
-      moment(timeLabel).date() <= 14
-    ) {
-      let weekTime = `8/${moment(timeLabel).month() + 1}/${moment(
-        timeLabel
-      ).year()}`
-      if (rate[weekTime]) {
-        rate[weekTime].push(chartData[i])
-      } else {
-        rate[weekTime] = [chartData[i]]
-      }
-    } else if (
-      moment(timeLabel).date() >= 15 &&
-      moment(timeLabel).date() <= 21
-    ) {
-      let weekTime = `15/${moment(timeLabel).month() + 1}/${moment(
-        timeLabel
-      ).year()}`
-      if (rate[weekTime]) {
-        rate[weekTime].push(chartData[i])
-      } else {
-        rate[weekTime] = [chartData[i]]
-      }
-    } else if (
-      moment(timeLabel).date() >= 22 &&
-      moment(timeLabel).date() <= 28
-    ) {
-      let weekTime = `22/${moment(timeLabel).month() + 1}/${moment(
-        timeLabel
-      ).year()}`
-      if (rate[weekTime]) {
-        rate[weekTime].push(chartData[i])
-      } else {
-        rate[weekTime] = [chartData[i]]
-      }
-    } else {
-      let weekTime = `29/${moment(timeLabel).month() + 1}/${moment(
-        timeLabel
-      ).year()}`
-      if (rate[weekTime]) {
-        rate[weekTime].push(chartData[i])
-      } else {
-        rate[weekTime] = [chartData[i]]
-      }
+    let timeStart = moment(timeLabel)
+      .startOf("isoWeek")
+      .format("DD/MM")
+    if (rate[timeStart]) {
+      rate[timeStart].data.push(chartData[i])
     }
   }
+
   for (let y in rate) {
+    if (!rate[y].data[0]) {
+      rate[y].data.push(0)
+    }
     data.labels.push(y)
-    data.dataSet.push(averageOfArray(rate[y]))
+    data.dataSet.push(averageOfArray(rate[y].data))
   }
+
+  data.labels = data.labels.reverse()
+  data.dataSet = data.dataSet.reverse()
   return data
 }
 

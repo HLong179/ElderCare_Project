@@ -11,10 +11,12 @@ class HeartDetail extends React.Component {
     return (
       <View>
         {selectedDate ? (
-          <View style={{
-            width: "80%",
-            alignSelf: "center"
-           }}>
+          <View
+            style={{
+              width: "80%",
+              alignSelf: "center"
+            }}
+          >
             {/* <Text>Dữ liệu nhận được:</Text> */}
             <View
               style={{
@@ -25,14 +27,17 @@ class HeartDetail extends React.Component {
             >
               <Text
                 style={{
-                  fontSize: 25,
+                  fontSize: 20,
                   color: "black",
-                  fontWeight: "bold",
+                  fontWeight: "bold"
                 }}
               >
                 {selectedDate}
               </Text>
-              <Text style={styles.selected}>{`${selectedValue} `} <Text style = {{fontWeight: "normal"}}>bpm</Text></Text>
+              <Text style={styles.selected}>
+                {`${selectedValue} `}{" "}
+                <Text style={{ fontWeight: "normal" }}>bpm</Text>
+              </Text>
             </View>
           </View>
         ) : null}
@@ -49,7 +54,7 @@ export default HeartDetail
 const styles = StyleSheet.create({
   selected: {
     color: "red",
-    fontSize: 25,
-    fontWeight: "bold",
+    fontSize: 20,
+    fontWeight: "bold"
   }
 })

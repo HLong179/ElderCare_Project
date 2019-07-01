@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 
 const Chart = props => {
   const rawData = props.data,
-        type = props.type;
+    type = props.type
   let self = props
   let data = []
 
@@ -64,7 +64,6 @@ const Chart = props => {
               style={{
                 grid: { fill: "none", stroke: "none" }
               }}
-
               tickValues={[40, 60, 80, 100, 120, 140]}
             />
 
@@ -114,10 +113,9 @@ const Chart = props => {
               label="Thời gian"
               style={{
                 axisLabel: { padding: 30 },
-                tickLabels: { padding: 5, angle: 0 },
+                tickLabels: { padding: 5, angle: 0 }
                 // grid: { fill: "none", stroke: "none" }
               }}
-
               // tickCount={7}
               fixLabelOverlap
               standalone={false}
@@ -137,13 +135,16 @@ const Chart = props => {
                           target: "data",
                           mutation: props => {
                             let time, value
-                            time = props.datum.x;
+                            time = props.datum.x + "/" + moment().year()
                             if (type === "tuần") {
-                              console.log("time selected: ", moment(time, "DD/MM/YYYY").toDate().getDate())
-                              let start =  moment(time, "DD/MM/YYYY").toDate();
-                              var lastday = new Date(new Date().setDate(start.getDate()+6));
-                              console.log("last date: ", lastday);
-                              time = `${start.getDate()}/${start.getMonth() + 1} - ${lastday.getDate()}/${lastday.getMonth() + 1}`
+                              time = moment(time, "DD/MM/YYYY").valueOf()
+                              let startOfWeek = moment(time)
+                                .startOf("isoWeek")
+                                .format("DD/MM")
+                              let endOfWeek = moment(time)
+                                .endOf("isoWeek")
+                                .format("DD/MM")
+                              time = `${startOfWeek} - ${endOfWeek}`
                             }
 
                             value = props.datum.y
