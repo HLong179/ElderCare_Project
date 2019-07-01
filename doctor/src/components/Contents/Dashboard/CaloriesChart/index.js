@@ -106,68 +106,38 @@ class CaloriesChart extends Component {
           calories: []
         }
         let rate = {}
+        let today = moment()
+        let startOfWeek = moment(today).startOf("isoWeek")
+        let endOfWeek = moment(today).endOf("isoWeek")
+        let minTime = Math.min(...this.state.labels)
+        today = moment(today).valueOf()
+        while (today >= parseInt(minTime, 10) - 24 * 60 * 60 * 1000 * 7) {
+          rate[moment(startOfWeek).format("DD/MM/YYYY")] = {
+            start: moment(startOfWeek).format("DD/MM/YYYY"),
+            end: moment(endOfWeek).format("DD/MM/YYYY"),
+            data: []
+          }
+          today = moment(today).valueOf() - 24 * 60 * 60 * 1000 * 7
+          startOfWeek = moment(today).startOf("isoWeek")
+          endOfWeek = moment(today).endOf("isoWeek")
+        }
         for (let i = 0; i < this.state.labels.length; i++) {
-          let timeLabel = parseInt(this.state.labels[i], 10)
-          if (moment(timeLabel).date() >= 1 && moment(timeLabel).date() <= 7) {
-            let weekTime = `1/${moment(timeLabel).month() + 1}/${moment(
-              timeLabel
-            ).year()}`
-            if (rate[weekTime]) {
-              rate[weekTime].push(this.state.calories[i])
-            } else {
-              rate[weekTime] = [this.state.calories[i]]
-            }
-          } else if (
-            moment(timeLabel).date() >= 8 &&
-            moment(timeLabel).date() <= 14
-          ) {
-            let weekTime = `8/${moment(timeLabel).month() + 1}/${moment(
-              timeLabel
-            ).year()}`
-            if (rate[weekTime]) {
-              rate[weekTime].push(this.state.calories[i])
-            } else {
-              rate[weekTime] = [this.state.calories[i]]
-            }
-          } else if (
-            moment(timeLabel).date() >= 15 &&
-            moment(timeLabel).date() <= 21
-          ) {
-            let weekTime = `15/${moment(timeLabel).month() + 1}/${moment(
-              timeLabel
-            ).year()}`
-            if (rate[weekTime]) {
-              rate[weekTime].push(this.state.calories[i])
-            } else {
-              rate[weekTime] = [this.state.calories[i]]
-            }
-          } else if (
-            moment(timeLabel).date() >= 22 &&
-            moment(timeLabel).date() <= 28
-          ) {
-            let weekTime = `22/${moment(timeLabel).month() + 1}/${moment(
-              timeLabel
-            ).year()}`
-            if (rate[weekTime]) {
-              rate[weekTime].push(this.state.calories[i])
-            } else {
-              rate[weekTime] = [this.state.calories[i]]
-            }
-          } else {
-            let weekTime = `29/${moment(timeLabel).month() + 1}/${moment(
-              timeLabel
-            ).year()}`
-            if (rate[weekTime]) {
-              rate[weekTime].push(this.state.calories[i])
-            } else {
-              rate[weekTime] = [this.state.calories[i]]
-            }
+          let timeLabel = this.state.labels[i]
+          let timeStart = moment(parseInt(timeLabel, 10))
+            .startOf("isoWeek")
+            .format("DD/MM/YYYY")
+          if (rate[timeStart]) {
+            rate[timeStart].data.push(this.state.calories[i])
           }
         }
+
         for (let y in rate) {
           data.labels.push(y)
-          data.calories.push(this.averageOfArray(rate[y]))
+          data.calories.push(this.averageOfArray(rate[y].data))
         }
+
+        data.labels = data.labels.reverse()
+        data.calories = data.calories.reverse()
 
         this.setState({
           dataChart: data
