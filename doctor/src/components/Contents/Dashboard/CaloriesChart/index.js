@@ -132,6 +132,9 @@ class CaloriesChart extends Component {
         }
 
         for (let y in rate) {
+          if (!rate[y].data[0]) {
+            rate[y].data.push(0)
+          }
           data.labels.push(y)
           data.calories.push(this.averageOfArray(rate[y].data))
         }
