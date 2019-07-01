@@ -43,6 +43,7 @@ const Chart = props => {
           y: parseFloat(rawData.dataSet[i])
         })
       }
+      console.log("data week: ", data)
       if (data.length > 7) {
         data = data.slice(data.length - 7, data.length)
       }
@@ -143,7 +144,13 @@ const Chart = props => {
                               let start =  moment(time, "DD/MM/YYYY").toDate();
                               var lastday = new Date(new Date().setDate(start.getDate()+6));
                               console.log("last date: ", lastday);
-                              time = `${start.getDate()}/${start.getMonth() + 1} - ${lastday.getDate()}/${lastday.getMonth() + 1}`
+                              if (lastday.getMonth() === start.getMonth()) {
+                                time = `${start.getDate()}/${start.getMonth() + 1} - ${lastday.getDate()}/${lastday.getMonth() + 1}`;
+                              } else {
+                                time = `${start.getDate()}/${start.getMonth() + 1} - ${lastday.getDate()}/${lastday.getMonth()}`
+                              }
+                  
+                              
                             }
 
                             value = props.datum.y
