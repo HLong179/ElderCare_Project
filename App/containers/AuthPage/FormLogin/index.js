@@ -121,12 +121,21 @@ class Login extends Component {
       const { navigate } = this.props.navigation;
       navigate('MainRelativeSignUp');
     }
+    componentWillMount() {
+      BackHandler.addEventListener(
+        "hardwareBackPress",
+        this.handleBackButtonClick
+      );
+    }
 
-
-
+    componentWillUnmount() {
+      BackHandler.removeEventListener(
+        "hardwareBackPress",
+        this.handleBackButtonClick
+      );
+    }
     handleBackButtonClick = () => {
-      this.props.navigation.goBack(null);
-      return
+      return true;
     }
     render() {
         const  initialValues  = this.state;

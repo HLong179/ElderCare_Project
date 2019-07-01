@@ -31,19 +31,21 @@ class Home extends Component {
       "Warning: Can't perform a React state",
       "Possible Unhandled"
     ])
-    BackHandler.addEventListener("hardwareBackPress", () => {
-      this.props.navigation.goBack()
-      return true
-    })
   }
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
   componentWillUnmount() {
-    BackHandler.removeEventListener("hardwareBackPress", () => {
-      this.props.navigation.goBack()
-      return true
-    })
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  handleBackButton() {
+    return true;
   }
 
   render() {
+    console.log('HOme')
     // console.log("this socket we've created: ", this.state.socket)
     // console.log("test stringify: ",JSON.stringify(this.state.socket));
     return (

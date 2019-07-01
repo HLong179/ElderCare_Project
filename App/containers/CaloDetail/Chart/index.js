@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
 
 const Chart = props => {
   const rawData = props.data
+  console.log(rawData)
   let data = []
   if (rawData) {
     if (rawData.labels.length > 1) {

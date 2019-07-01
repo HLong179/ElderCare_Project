@@ -12,8 +12,6 @@ import TextError from '../../../../components/CommonFormError';
 import getSchema from './validationSchema';
 import { BackHandler } from 'react-native'
 
-
-
 const StyleHeader = styled(Text)`
     font-size: 30;
     font-weight: bold;
@@ -42,7 +40,6 @@ class MainRelative extends React.Component {
         this.setState({
             icid: result,
         })
-        alert(result);
     }
 
     handleAddMain = async (values) => {
@@ -101,8 +98,8 @@ class MainRelative extends React.Component {
     }
 
     handleBackButtonClick = () => {
-      this.props.navigation.goBack(null);
-      return
+      this.props.navigation.navigate('Home');
+      return true;
     }
     render() {
         const initialValues = this.state;

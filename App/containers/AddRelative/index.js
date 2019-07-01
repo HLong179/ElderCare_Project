@@ -68,7 +68,7 @@ class AddRelative extends Component {
   }
 
   handleBackButtonClick = () => {
-    this.props.navigation.goBack(null);
+    this.props.navigation.navigate("Home");
     return true;
   }
 
