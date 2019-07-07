@@ -8,9 +8,11 @@ import WelcomePage from "../containers/SplashScreen"
 
 import Home from "../containers/Home"
 import Login from "../containers/AuthPage/FormLogin"
+import ForgotInputPhone from "../containers/AuthPage/FormResetPass/ForgotInputPhone"
+import ForgotConfirmOTP from "../containers/AuthPage/FormResetPass/ForgotConfirmOTP"
+import ForgotChangePassword from "../containers/AuthPage/FormResetPass/ForgotChangePassword"
 import SetTime from "../containers/SetTime"
 import HeartRate from "../containers/HeartRate"
-import SleepScreen from "../containers/SleepScreen"
 import MedicinePage from "../containers/MedicinePage"
 import SignUp from "../containers/AuthPage/FormSignUp/Elder"
 import MainRelativeSignUp from "../containers/AuthPage/FormSignUp/MainRelative"
@@ -33,6 +35,24 @@ const HomeNav = createStackNavigator(
       screen: SignUp,
       navigationOptions: () => ({
         title: `Đăng ký`
+      })
+    },
+    ForgotInputPhone: {
+      screen: ForgotInputPhone,
+      navigationOptions: () => ({
+        title: `Quên mật khẩu`
+      })
+    },
+    ForgotConfirmOTP: {
+      screen: ForgotConfirmOTP,
+      navigationOptions: () => ({
+        title: `Quên mật khẩu`
+      })
+    },
+    ForgotChangePassword: {
+      screen: ForgotChangePassword,
+      navigationOptions: () => ({
+        title: `Quên mật khẩu`
       })
     },
 
