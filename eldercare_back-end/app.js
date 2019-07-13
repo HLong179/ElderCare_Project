@@ -250,8 +250,8 @@ var eve = schedule.scheduleJob('setMedicinesEvening','37 17 * * *', () => {
     ref.once("value", (snapshot) => {
         // console.log("the result we get from firebase in shcedule functions: ", Object.keys(snapshot.val()));
         Object.keys(snapshot.val()).forEach(elderId => {
-            // getCalories(elderId);
-            // getStepCounts(elderId);
+            getCalories(elderId);
+            getStepCounts(elderId);
             getMedicines(elderId);
         });
     })

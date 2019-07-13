@@ -1,9 +1,9 @@
 module.exports = Object({
     DB: {
-        HOST: '127.0.0.1',
+        HOST: 'g8r9w9tmspbwmsyo.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
         PORT: '3306',
-        USER: 'root',
-        PWD: '123456',
-        DB_NAME: 'elder_care'
+        USER: 'l7p61dbfbmga35r8',
+        PWD: 'noigcbt8wrmdohbk',
+        DB_NAME: 'ww4u6sptl8q49yrg'
     }
 })
