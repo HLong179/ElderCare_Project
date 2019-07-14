@@ -52,29 +52,45 @@ exports.sendEmail = async () => {
         .startOf("isoweek")
         .toDate()
         .valueOf()
+      let caloriesFB = {}
+      let stepCountFB = {}
+      let heartRateFB = {}
       const patientsRef = firebase.database().ref("Patients")
       const snapshot = await patientsRef.once("value")
-
-      const caloriesFB = snapshot.val()[data.elderId]["Calories"]
-      const stepCountFB = snapshot.val()[data.elderId]["StepCounts"]
-      const heartRateFB = snapshot.val()[data.elderId]["HeartRate"]
-
-      for (let patient in caloriesFB) {
-        if (parseInt(patient, 10) >= startOfWeek) {
-          calories.push(caloriesFB[patient])
+      if (snapshot.val()[data.elderId]) {
+        if (snapshot.val()[data.elderId]["Calories"]) {
+          caloriesFB = snapshot.val()[data.elderId]["Calories"]
         }
-      }
-      for (let patient in stepCountFB) {
-        if (parseInt(patient, 10) >= startOfWeek) {
-          stepCounts.push(stepCountFB[patient])
+        if (snapshot.val()[data.elderId]["StepCounts"]) {
+          stepCountFB = snapshot.val()[data.elderId]["StepCounts"]
         }
-      }
-      for (let patient in heartRateFB) {
-        if (parseInt(heartRateFB[patient]["time"], 10) >= startOfWeek) {
-          heartRate.push(heartRateFB[patient]["value"])
+
+        if (snapshot.val()[data.elderId]["HeartRate"]) {
+          heartRateFB = snapshot.val()[data.elderId]["HeartRate"]
         }
       }
 
+      if (Object.keys(caloriesFB).length !== 0) {
+        for (let patient in caloriesFB) {
+          if (parseInt(patient, 10) >= startOfWeek) {
+            calories.push(caloriesFB[patient])
+          }
+        }
+      }
+      if (Object.keys(stepCountFB).length !== 0) {
+        for (let patient in stepCountFB) {
+          if (parseInt(patient, 10) >= startOfWeek) {
+            stepCounts.push(stepCountFB[patient])
+          }
+        }
+      }
+      if (Object.keys(heartRateFB).length !== 0) {
+        for (let patient in heartRateFB) {
+          if (parseInt(heartRateFB[patient]["time"], 10) >= startOfWeek) {
+            heartRate.push(heartRateFB[patient]["value"])
+          }
+        }
+      }
       let elderDetail = await accountRepo.elderDetail(data.elderId)
       elderDetail = elderDetail[0]
 
@@ -101,23 +117,38 @@ exports.sendEmail = async () => {
         <h3>Thống kê dữ liệu sức khỏe:<h3>
         <div style="font-weight: 300; font-size: 13px">
         <h4>Nhịp tim</h4>
-        <ul>
-          <li>Nhỏ nhất : ${Math.min(...heartRate)} bpm</li>
-          <li>Lớn nhất : ${Math.max(...heartRate)} bpm</li>
-          <li>Trung bình : ${getAvg(heartRate).toFixed(2)} bpm</li>
-        </ul>
+        ${
+          heartRate[0]
+            ? `<ul>
+        <li>Nhỏ nhất : ${Math.min(...heartRate)} bpm</li>
+        <li>Lớn nhất : ${Math.max(...heartRate)} bpm</li>
+        <li>Trung bình : ${getAvg(heartRate).toFixed(2)} bpm</li>
+      </ul>`
+            : `Không có dữ liệu`
+        }
+      
         <h4>Calories</h4>
-        <ul>
+        ${
+          calories[0]
+            ? `<ul>
           <li>Nhỏ nhất : ${Math.min(...calories)}</li>
           <li>Lớn nhất : ${Math.max(...calories)}</li>
           <li>Trung bình : ${getAvg(calories).toFixed(2)}</li>
-        </ul>
+        </ul>`
+            : `Không có dữ liệu`
+        }
+      
         <h4>Bước đi</h4>
-        <ul>
-          <li>Nhỏ nhất : ${Math.min(...stepCounts)}</li>
-          <li>Lớn nhất : ${Math.max(...stepCounts)}</li>
-          <li>Trung bình : ${getAvg(stepCounts).toFixed(2)}</li>
-        </ul>
+        ${
+          stepCounts[0]
+            ? `<ul>
+        <li>Nhỏ nhất : ${Math.min(...stepCounts)}</li>
+        <li>Lớn nhất : ${Math.max(...stepCounts)}</li>
+        <li>Trung bình : ${getAvg(stepCounts).toFixed(2)}</li>
+      </ul>`
+            : `Không có dữ liệu`
+        }
+      
         </div>
         `
       mailOptions.html = htmlCode
