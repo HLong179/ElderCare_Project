@@ -166,7 +166,7 @@ io.sockets.on('connection', (socket) => {
     })
 })
 
-schedule.scheduleJob('SendMail', {hour: 18, minute: 10, dayOfWeek: 0}, () => {
+schedule.scheduleJob('SendMail', {hour: 16, minute: 10, dayOfWeek: 0}, () => {
     console.log("we send email");
     mailer.sendEmail();
 })
